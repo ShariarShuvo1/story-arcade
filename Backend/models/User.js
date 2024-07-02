@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-	username: {
+	email: {
 		type: String,
 		required: true,
 	},
@@ -9,12 +9,6 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	roles: [
-		{
-			type: String,
-			default: "Employee",
-		},
-	],
 	active: {
 		type: Boolean,
 		default: true,
