@@ -51,10 +51,6 @@ const createNewUser = asyncHandler(async (req, res) => {
 		return res.status(400).json({ message: "Invalid email" });
 	}
 
-	// if (!validator.isStrongPassword(password)) {
-	//     return res.status(400).json({ message: "Password is not strong enough" });
-	// }
-
 	const duplicate = await User.findOne({ email }).lean().exec();
 
 	if (duplicate) {
@@ -63,13 +59,17 @@ const createNewUser = asyncHandler(async (req, res) => {
 
 	const hashedPwd = await bcrypt.hash(password, 10);
 
-	const userObject = { email, password: hashedPwd };
+	const userObject = {
+		email,
+		password: hashedPwd,
+		name: req.body.name,
+		dob: req.body.dob,
+	};
 
 	const user = await User.create(userObject);
 
 	if (user) {
 		const token = createToken(user._id);
-
 		res.status(201).json({ token, message: "User created" });
 	} else {
 		res.status(400).json({ message: "Invalid user data received" });

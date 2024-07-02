@@ -6,28 +6,28 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#264653ff',      // Primary color
-        secondary: '#2a9d8fff',    // Secondary color
-        accent: '#e9c46aff',       // Accent color
-        highlight: '#f4a261ff',    // Highlight color
-        danger: '#e76f51ff',       // Danger color
+        primary: '#7DF9FF',      // Electric Blue
+        secondary: '#39FF14',    // Neon Green
+        accent: '#FF69B4',       // Hot Pink
+        highlight: '#FDFF00',    // Lemon Yellow
+        danger: '#00FFFF',       // Cyan
 
-        background: '#f8fafc',     // Background color for the app
+        background: '#FF00FF',   // Magenta
         text: {
-          DEFAULT: '#2d3748',     // Default text color
-          light: '#4a5568',       // Lighter text color for secondary content
-          muted: '#6c757d',       // Muted text color for less important content
+          DEFAULT: '#00FF7F',    // Spring Green
+          light: '#FFA500',      // Orange Peel
+          muted: '#BFFF00',      // Lime
         },
         button: {
-          primary: '#264653ff',   // Primary button color
-          secondary: '#2a9d8fff', // Secondary button color
-          text: '#ffffff',        // Text color for buttons
+          primary: '#FF00FF',    // Fuchsia
+          secondary: '#40E0D0',  // Turquoise
+          text: '#800080',       // Purple
         },
-        success: '#38c172',       // Success color for positive messages
-        error: '#e3342f',         // Error color for error messages
-        warning: '#f6993f',       // Warning color for warnings
-        info: '#4dc0b5',          // Info color for informational messages
-        link: '#1a202c',          // Link color for hyperlinks
+        success: '#00BFFF',      // Deep Sky Blue
+        error: '#7FFF00',        // Chartreuse
+        warning: '#FF7F50',      // Coral
+        info: '#E6E6FA',         // Lavender
+        link: '#00FFFF',         // Aqua
       },
     },
   },
