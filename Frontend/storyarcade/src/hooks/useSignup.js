@@ -1,35 +1,33 @@
-// src/hooks/useSignup.js
-import { useState } from 'react';
-import { useAuthContext } from './useAuthContext';
-import { createNewUser } from '../api/usersAPI';
+import { useState } from "react";
+import { useAuthContext } from "./useAuthContext";
+import { createNewUser } from "../api/usersAPI";
+import { useNavigate} from "react-router-dom";
 
 export const useSignup = () => {
-    const [error, setError] = useState(null);
-    const [isLoading, setIsLoading] = useState(null);
-    const { dispatch } = useAuthContext();
+	const [error, setError] = useState(null);
+	const [isLoading, setIsLoading] = useState(null);
+	const navigate = useNavigate();
 
-    const signup = async (email, password) => {
-        setIsLoading(true);
-        setError(null);
+	const signup = async (email, password, name, dob) => {
+		setIsLoading(true);
+		setError(null);
 
-        try {
-            const response = await createNewUser(email, password);
-            const json = await response.json()
+		try {
+			const response = await createNewUser(email, password, name, dob);
 
-            if (response.status === 201) {
-                localStorage.setItem('user', JSON.stringify(json));
-                dispatch({ type: 'LOGIN', payload: json });
-            } else if (response.status === 400) {
-                setError(response.data.message);
-            } else if (response.status === 409) {
-                setError(response.data.message);
-            }
-            setIsLoading(false);
-        } catch (err) {
-            setIsLoading(false);
-            setError('Network Error');
-        }
-    };
+			if (response.status === 201) {
+				const jwt_token = response.data.token;
+				localStorage.setItem("jwt", JSON.stringify(jwt_token));
+				navigate("/emailVerify")
+			} else{
+				setError(response.data.message);
+			}
+			setIsLoading(false);
+		} catch (err) {
+			setIsLoading(false);
+			setError("Network Error");
+		}
+	};
 
-    return { signup, isLoading, error };
+	return { signup, isLoading, error };
 };

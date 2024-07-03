@@ -1,4 +1,3 @@
-// src/hooks/useLogin.js
 import { useState } from 'react';
 import { useAuthContext } from './useAuthContext';
 import { loginUser } from '../api/usersAPI';
@@ -17,7 +16,7 @@ export const useLogin = () => {
             const json = await response.json()
 
             if (response.status === 200) {
-                localStorage.setItem('user', JSON.stringify(json));
+                localStorage.setItem('jwt', JSON.stringify(json));
                 dispatch({ type: 'LOGIN', payload: json });
             } else if (response.status === 400) {
                 setError(response.data.message);

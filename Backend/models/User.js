@@ -17,10 +17,6 @@ const userSchema = new mongoose.Schema({
 		type: Date,
 		required: true,
 	},
-	active: {
-		type: Boolean,
-		default: true,
-	},
 	email_verified: {
 		type: Boolean,
 		default: false,
@@ -47,6 +43,27 @@ const userSchema = new mongoose.Schema({
 	ban_end_date: {
 		type: Date,
 	},
+	last_otps: [
+		{
+			otp: {
+				type: String,
+				length: 6,
+				required: true,
+			},
+			created_at: {
+				type: Date,
+				default: Date.now,
+			},
+			used: {
+				type: Boolean,
+				default: false,
+			},
+			duration: {
+				type: Number,
+				default: 5, //Minutes
+			},
+		},
+	],
 });
 
 module.exports = mongoose.model("User", userSchema);
