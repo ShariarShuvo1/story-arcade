@@ -5,10 +5,11 @@ import Login from "./components/Auth/Login";
 import Signup from "./components/Auth/Signup";
 import RoutingPage from "./components/RoutingPage";
 import {useAuthContext} from "./hooks/useAuthContext";
+import EmailVerify from "./components/Auth/EmailVerify";
 
 function App() {
 
-	const { user } = useAuthContext();
+	const { jwt } = useAuthContext();
 
 	const router = createBrowserRouter([
 		{
@@ -17,23 +18,27 @@ function App() {
 			children: [
 				{
 					path: "/login",
-					element: user ? <Navigate to="/home" /> : <Login />
+					element: jwt ? <Navigate to="/home" /> : <Login />
 				},
 				{
 					path: "/signup",
-					element: user ? <Navigate to="/home" /> : <Signup />
+					element: jwt ? <Navigate to="/home" /> : <Signup />
 				},
 				{
 					path: "/home",
-					element: user ? <Homepage /> : <Navigate to="/login" />
+					element: jwt ? <Homepage /> : <Navigate to="/login" />
 				},
 				{
 					path: "/",
-					element: user ? <Homepage /> : <Navigate to="/login" />
+					element: jwt ? <Homepage /> : <Navigate to="/login" />
 				},
 				{
 					path: "/homepage",
-					element: user ? <Homepage /> : <Navigate to="/login" />
+					element: jwt ? <Homepage /> : <Navigate to="/login" />
+				},
+				{
+					path: "/emailVerify",
+					element: <EmailVerify />
 				},
 			],
 		},

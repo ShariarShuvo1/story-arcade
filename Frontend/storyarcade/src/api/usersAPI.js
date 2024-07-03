@@ -1,13 +1,21 @@
-import axios from 'axios';
+import axios from "axios";
 
-const BASE_URL = '/users';
+const BASE_URL = "/users";
 
-export const createNewUser = async (email, password) => {
-    const response = await axios.post(`${BASE_URL}/createNewUser`, { email, password });
-    return response;
+export const createNewUser = async (email, password, name, dob) => {
+	const user = {
+		email,
+		password,
+		name,
+		dob,
+	};
+	return await axios.post(`${BASE_URL}/createNewUser`, user, {validateStatus: (status) => {return true;}});
 };
 
 export const loginUser = async (email, password) => {
-    const response = await axios.post(`${BASE_URL}/loginUser`, { email, password });
-    return response;
+	const user = {
+		email,
+		password,
+	};
+	return await axios.post(`${BASE_URL}/loginUser`, user);
 };
