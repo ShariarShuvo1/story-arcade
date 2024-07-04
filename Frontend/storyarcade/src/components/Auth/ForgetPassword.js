@@ -1,11 +1,5 @@
-import React from "react";
-
 function ForgetPassword() {
-	return (
-		<div>
-			<h1>Email Verify</h1>
-		</div>
-	);
+	return <div>ForgetPassword</div>;
 }
 
 export default ForgetPassword;

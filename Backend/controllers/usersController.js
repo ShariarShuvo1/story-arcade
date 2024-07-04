@@ -3,7 +3,7 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
-const { sendOtp } = require("./functions/emailVerification");
+const { sendOtp } = require("./functions/emailVerificationController");
 
 const createToken = (_id, role) => {
 	return jwt.sign({ _id, role }, process.env.JWT_SECRET, {
@@ -63,7 +63,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
 	const token = createToken(user._id);
 	if (!user.email_verified) {
-		sendOtp(email);
+		await sendOtp(email, user.name);
 	}
 	return res.status(201).json({
 		token,
@@ -116,7 +116,7 @@ const createNewUser = asyncHandler(async (req, res) => {
 
 	if (user) {
 		const token = createToken(user._id, user.role);
-		sendOtp(email);
+		await sendOtp(email, user.name);
 		return res.status(201).json({ token, message: "User created" });
 	} else {
 		return res.status(400).json({ message: "Invalid user data received" });
