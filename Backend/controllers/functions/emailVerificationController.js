@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 const User = require("../../models/User");
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const transporter = nodemailer.createTransport({
 	host: "smtp.gmail.com",
@@ -122,7 +123,82 @@ const verifyEmailOTP = asyncHandler(async (req, res) => {
 	}
 });
 
+const checkUserExist = asyncHandler(async (req, res) => {
+	const { email } = req.body;
+
+	try {
+		if (!email) {
+			return res.status(400).json({ message: "Email is required" });
+		}
+
+		const user = await User.findOne({ email });
+
+		if (!user) {
+			return res.status(404).json({ message: "User not found" });
+		}
+		await sendOtp(email, user.name);
+		return res.status(200).json({ message: "User found" });
+	} catch (error) {
+		return res.status(500).json({ message: "Internal server error" });
+	}
+});
+
+const forgetPasswordOtp = asyncHandler(async (req, res) => {
+	const { otp, email, password } = req.body;
+
+	try {
+		if (!otp) {
+			return res.status(400).json({ message: "OTP is required" });
+		}
+
+		if (!email) {
+			return res.status(400).json({ message: "Email is required" });
+		}
+
+		const user = await User.findOne({ email });
+
+		if (!user) {
+			return res.status(404).json({ message: "User not found" });
+		}
+
+		const lastOTP = user.last_otps[user.last_otps.length - 1];
+
+		if (!lastOTP) {
+			return res.status(400).json({ message: "No OTP found" });
+		}
+
+		const otpCreatedAt = new Date(lastOTP.created_at);
+		const otpExpirationTime = new Date(
+			otpCreatedAt.getTime() + lastOTP.duration * 60000
+		);
+
+		if (lastOTP.used || new Date() > otpExpirationTime) {
+			return res
+				.status(400)
+				.json({ message: "OTP is expired or already used" });
+		}
+
+		if (lastOTP.otp !== otp) {
+			return res.status(400).json({ message: "Invalid OTP" });
+		}
+
+		lastOTP.used = true;
+
+		const hashedPassword = await bcrypt.hash(password, 10);
+		user.password = hashedPassword;
+
+		await user.save();
+		return res
+			.status(200)
+			.json({ message: "Password updated successfully" });
+	} catch (error) {
+		return res.status(500).json({ message: "Internal server error" });
+	}
+});
+
 module.exports = {
 	sendOtp,
 	verifyEmailOTP,
+	checkUserExist,
+	forgetPasswordOtp,
 };

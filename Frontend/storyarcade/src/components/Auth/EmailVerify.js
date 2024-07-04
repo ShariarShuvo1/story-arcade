@@ -18,7 +18,7 @@ function EmailVerify() {
 		if (!jwt) {
 			navigate("/login");
 		}
-	}, []);
+	});
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -74,7 +74,7 @@ function EmailVerify() {
 
 				<div className="mb-4">
 					<label
-						htmlFor="email"
+						htmlFor="otp"
 						className="block mb-1 text-sm font-medium text-text-light"
 					>
 						OTP:
