@@ -9,7 +9,11 @@ export const createNewUser = async (email, password, name, dob) => {
 		name,
 		dob,
 	};
-	return await axios.post(`${BASE_URL}/createNewUser`, user, {validateStatus: (status) => {return true;}});
+	return await axios.post(`${BASE_URL}/createNewUser`, user, {
+		validateStatus: (status) => {
+			return true;
+		},
+	});
 };
 
 export const loginUser = async (email, password) => {
@@ -17,5 +21,9 @@ export const loginUser = async (email, password) => {
 		email,
 		password,
 	};
-	return await axios.post(`${BASE_URL}/loginUser`, user);
+	return await axios.post(`${BASE_URL}/loginUser`, user, {
+		validateStatus: (status) => {
+			return true;
+		},
+	});
 };
