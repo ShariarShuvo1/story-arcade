@@ -11,6 +11,7 @@ import RoutingPage from "./components/RoutingPage";
 import { useAuthContext } from "./hooks/useAuthContext";
 import EmailVerify from "./components/Auth/EmailVerify";
 import ForgetPassword from "./components/Auth/ForgetPassword";
+import ForgetPasswordOtp from "./components/Auth/ForgetPasswordOtp";
 
 function App() {
 	const { jwt } = useAuthContext();
@@ -47,6 +48,10 @@ function App() {
 				{
 					path: "/forgetPassword",
 					element: jwt ? <Homepage /> : <ForgetPassword />,
+				},
+				{
+					path: "/forgetPasswordOtp/:email",
+					element: <ForgetPasswordOtp />,
 				},
 			],
 		},

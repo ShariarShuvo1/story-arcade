@@ -1,32 +1,37 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import React, { useState } from "react";
 import { Spin, ConfigProvider } from "antd";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
 
-function ForgetPassword() {
+function ForgetPasswordOtp() {
 	const navigate = useNavigate();
+	let { email } = useParams();
+	email = email.split("=")[1];
 
 	const [isLoading, setIsLoading] = useState(false);
-	const [email, setEmail] = useState("");
+	const [otp, setOtp] = useState("");
 	const [error, setError] = useState("");
+	const [password, setPassword] = useState("");
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setIsLoading(true);
 		const body = {
+			otp,
 			email,
+			password,
 		};
-		const response = await fetch("/emailVerification/checkUserExist", {
+		const response = await fetch("/emailVerification/forgetPasswordOtp", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer`,
+				Authorization: `Bearer `,
 			},
 			body: JSON.stringify(body),
 		});
 		const data = await response.json();
 		if (response.ok) {
-			navigate(`/forgetPasswordOtp/email=${email}`);
+			navigate("/login");
 		} else {
 			setError(data.message);
 		}
@@ -58,23 +63,41 @@ function ForgetPassword() {
 				onSubmit={handleSubmit}
 			>
 				<h3 className="text-2xl font-bold text-center text-primary">
-					Forgot Password
+					Verify Email
 				</h3>
 
 				<div className="mb-4">
 					<label
-						htmlFor="email"
+						htmlFor="top"
 						className="block mb-1 text-sm font-medium text-text-light"
 					>
-						Email Adress:
+						OTP:
 					</label>
 					<input
-						id="email"
-						type="email"
+						id="otp"
+						type="number"
 						className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-						onChange={(e) => setEmail(e.target.value)}
-						value={email}
-						placeholder={"Enter your Email"}
+						onChange={(e) => setOtp(e.target.value)}
+						value={otp}
+						placeholder={"Enter your OTP"}
+						required
+						min="0"
+					/>
+				</div>
+				<div className="mb-4">
+					<label
+						htmlFor="password"
+						className="block mb-1 text-sm font-medium text-text-light"
+					>
+						New Password:
+					</label>
+					<input
+						id="password"
+						type="password"
+						className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+						onChange={(e) => setPassword(e.target.value)}
+						value={password}
+						placeholder={"Enter a new password"}
 						required
 						min="0"
 					/>
@@ -85,7 +108,7 @@ function ForgetPassword() {
 					className="w-full py-3 font-bold bg-button-primary rounded-md hover:bg-button-hover_primary focus:outline-none focus:ring-2 focus:ring-highlight"
 					disabled={isLoading}
 				>
-					Get OTP
+					Submit
 				</button>
 
 				{error && (
@@ -106,4 +129,4 @@ function ForgetPassword() {
 	);
 }
 
-export default ForgetPassword;
+export default ForgetPasswordOtp;
