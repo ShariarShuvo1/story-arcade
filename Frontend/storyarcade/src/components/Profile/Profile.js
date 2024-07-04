@@ -1,16 +1,14 @@
 import React from "react";
-import {useAuthContext} from "../../hooks/useAuthContext";
-
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 function Profile() {
-    const { jwt } = useAuthContext();
+	const { jwt } = useAuthContext();
 
-
-    return (
-        <div>
-            <h1>Profile</h1>
-        </div>
-    );
+	return (
+		<div>
+			<h1>Profile</h1>
+		</div>
+	);
 }
 
 export default Profile;

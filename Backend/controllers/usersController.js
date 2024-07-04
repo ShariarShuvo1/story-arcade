@@ -62,7 +62,14 @@ const loginUser = asyncHandler(async (req, res) => {
 	}
 
 	const token = createToken(user._id);
-	return res.json({ token, message: "User logged in" });
+	if (!user.email_verified) {
+		sendOtp(email);
+	}
+	return res.status(201).json({
+		token,
+		message: "User logged in",
+		verified: user.email_verified,
+	});
 });
 
 const createNewUser = asyncHandler(async (req, res) => {
