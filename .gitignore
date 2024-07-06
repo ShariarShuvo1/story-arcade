@@ -1,2 +1,6 @@
 /Frontend/storyarcade/.idea
 /Frontend/storyarcade/node_modules
+/AI/app/routers/__pycache__
+/AI/app/routers/sd_model.ckpt
+/AI/app/__pycache__
+/AI/app/routers/image.png

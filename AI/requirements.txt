@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+sse-starlette
+accelerate
+diffusers
+langchain
+sse_starlette

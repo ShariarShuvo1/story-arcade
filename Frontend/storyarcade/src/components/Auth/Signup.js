@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useSignup } from "../../hooks/useSignup";
 import { useNavigate } from "react-router-dom";
 import { Spin, ConfigProvider } from "antd";
-import { Loading3QuartersOutlined } from '@ant-design/icons';
+import { Loading3QuartersOutlined } from "@ant-design/icons";
 
 const Signup = () => {
 	const [email, setEmail] = useState("");
@@ -19,17 +19,21 @@ const Signup = () => {
 
 	return (
 		<div className="flex items-center justify-center min-h-screen bg-gradient-to-tr from-purple-200 to-cyan-200">
-
 			{isLoading && (
 				<ConfigProvider
 					theme={{
 						components: {
 							Spin: {
-								dotSizeLG: 128
+								dotSizeLG: 128,
 							},
 						},
-					}}>
-					<Spin indicator={<Loading3QuartersOutlined spin />} size="large" fullscreen/>
+					}}
+				>
+					<Spin
+						indicator={<Loading3QuartersOutlined spin />}
+						size="large"
+						fullscreen
+					/>
 				</ConfigProvider>
 			)}
 
@@ -91,7 +95,11 @@ const Signup = () => {
 						onChange={(e) => setDob(e.target.value)}
 						value={dob}
 						required
-						max={(new Date(new Date().getFullYear() - 10, 0, 1)).toISOString().split('T')[0]}
+						max={
+							new Date(new Date().getFullYear() - 10, 0, 1)
+								.toISOString()
+								.split("T")[0]
+						}
 					/>
 				</div>
 
