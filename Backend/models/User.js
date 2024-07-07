@@ -1,3 +1,4 @@
+const { sub } = require("date-fns");
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
@@ -64,6 +65,10 @@ const userSchema = new mongoose.Schema({
 			},
 		},
 	],
+	points_left: {
+		type: Number,
+		default: 100,
+	},
 });
 
 module.exports = mongoose.model("User", userSchema);

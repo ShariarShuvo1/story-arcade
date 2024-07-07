@@ -5,3 +5,6 @@ accelerate
 diffusers
 langchain
 sse_starlette
+pymongo
+python-dotenv
+PyJWT

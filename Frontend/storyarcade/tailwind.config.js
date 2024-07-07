@@ -21,6 +21,7 @@ module.exports = {
 					primary: "#FF00FF", // Fuchsia
 					hover_primary: "#c600c6", // Fuchsia
 					secondary: "#40E0D0", // Turquoise
+					secondary_hover: "#38cfbf", // Turquoise
 					text: "#800080", // Purple
 				},
 				success: "#00BFFF", // Deep Sky Blue

@@ -8,9 +8,13 @@ const storySchema = new mongoose.Schema({
 	},
 	access_level: {
 		type: String,
-		enum: ["public", "private", "followers_only"],
+		enum: ["public", "private", "followers_only", "paid"],
 		default: "public",
 		required: true,
+	},
+	points_required: {
+		type: Number,
+		required: false,
 	},
 	allow_copy: {
 		type: Boolean,
@@ -52,7 +56,7 @@ const storySchema = new mongoose.Schema({
 			},
 			background_image: {
 				type: String,
-				required: false,
+				required: true,
 			},
 			steps: [
 				{
@@ -62,18 +66,18 @@ const storySchema = new mongoose.Schema({
 					},
 					step_type: {
 						type: String,
-						enum: ["questions", "tasks"],
+						enum: ["choice", "task"],
 						required: true,
 					},
 				},
 			],
-			questions: [
+			choices: [
 				{
-					question_number: {
+					choice_number: {
 						type: Number,
 						required: true,
 					},
-					question: {
+					choice: {
 						type: String,
 						required: true,
 					},
