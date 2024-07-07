@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useLogin } from "../../hooks/useLogin";
 import { Link, useNavigate } from "react-router-dom";
-import { Spin, ConfigProvider } from "antd";
-import { Loading3QuartersOutlined } from "@ant-design/icons";
+import LoadingFullscreen from "../../Tools/Loading";
 
 const Login = () => {
 	const [email, setEmail] = useState("");
@@ -17,23 +16,7 @@ const Login = () => {
 
 	return (
 		<div className="flex px-4 items-center justify-center min-h-screen bg-gradient-to-tr from-purple-200 to-cyan-200">
-			{isLoading && (
-				<ConfigProvider
-					theme={{
-						components: {
-							Spin: {
-								dotSizeLG: 128,
-							},
-						},
-					}}
-				>
-					<Spin
-						indicator={<Loading3QuartersOutlined spin />}
-						size="large"
-						fullscreen
-					/>
-				</ConfigProvider>
-			)}
+			{isLoading && <LoadingFullscreen/>}
 
 			<form
 				className="w-full max-w-md p-8 space-y-6 shadow-md rounded-md bg-gradient-to-tr from-slate-900 via-slate-800 to-zinc-800"

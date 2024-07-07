@@ -6,4 +6,6 @@ router.route("/createNewUser").post(usersController.createNewUser);
 
 router.route("/loginUser").post(usersController.loginUser);
 
+router.route("/getPointsLeft").get(usersController.getPointsLeft);
+
 module.exports = router;

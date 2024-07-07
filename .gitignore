@@ -4,3 +4,4 @@
 /AI/app/routers/sd_model.ckpt
 /AI/app/__pycache__
 /AI/app/routers/image.png
+/AI/app/.env

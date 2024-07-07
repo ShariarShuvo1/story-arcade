@@ -13,7 +13,7 @@ function RouteCreate() {
         },
         {
             path: '/create/createTitle',
-            element: jwt ? <CreateTitle/> : <Navigate to="/login"/>,
+            element: <CreateTitle/>,
         },
     ];
 }

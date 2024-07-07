@@ -27,3 +27,15 @@ export const loginUser = async (email, password) => {
 		},
 	});
 };
+
+export const getPointsLeft = async (jwt) => {
+	return await axios.get(`${BASE_URL}/getPointsLeft`, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+		},
+		validateStatus: (status) => {
+			return true;
+		},
+	});
+};
+
