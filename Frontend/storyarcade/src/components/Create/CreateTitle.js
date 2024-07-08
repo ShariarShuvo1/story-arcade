@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from "react";
 import LoadingFullscreen from "../../Tools/Loading";
 import { getPointsLeft } from "../../api/usersAPI";
-import {
-	ConfigProvider,
-	Modal,
-	notification,
-	Tooltip,
-	Image
-} from "antd";
-import {llamaGetTitle, sdGetImage} from "../../api/aiAPI";
+import { ConfigProvider, Modal, notification, Tooltip, Image } from "antd";
+import { llamaGetTitle, sdGetImage } from "../../api/aiAPI";
 
 function CreateTitle() {
 	const jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -20,15 +14,28 @@ function CreateTitle() {
 	const [ai_image_modal_visible, setAiImageModalVisible] = useState(false);
 	const [base64String, setBase64String] = useState("");
 	const [specificPrompt, setSpecificPrompt] = useState("");
+	const privacy_options = ["Public", "Private", "Followers only", "Paid"];
+	const [selectedPrivacy, setSelectedPrivacy] = useState("Public");
+	const [coinNeeded, setCoinNeeded] = useState(1);
+	const [showCoinNeeded, setShowCoinNeeded] = useState(false);
+	const [allowCopy, setAllowCopy] = useState(true);
+
+	useEffect(() => {
+		if (selectedPrivacy === "Paid") {
+			setShowCoinNeeded(true);
+		} else {
+			setShowCoinNeeded(false);
+		}
+	}, [selectedPrivacy]);
 
 	const convertToBase64 = (file) => {
 		return new Promise((resolve, reject) => {
 			const reader = new FileReader();
 			reader.readAsDataURL(file);
 			reader.onload = () => resolve(reader.result);
-			reader.onerror = error => reject(error);
+			reader.onerror = (error) => reject(error);
 		});
-	}
+	};
 
 	const fetchPointsLeft = async () => {
 		setIsLoading(true);
@@ -46,18 +53,48 @@ function CreateTitle() {
 		fetchPointsLeft();
 	}, []);
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
+	const handleSubmit = async () => {
+		if (!title) {
+			notification.error({
+				description: "Please enter a title",
+			});
+			return;
+		}
+		if (!base64String) {
+			notification.error({
+				description: "Please upload an image",
+			});
+			return;
+		}
+		if (!selectedPrivacy) {
+			notification.error({
+				description: "Please select a privacy option",
+			});
+			return;
+		}
+		if (selectedPrivacy === "Paid" && (!coinNeeded || coinNeeded < 1)) {
+			notification.error({
+				description: "Please enter a valid price",
+			});
+			return;
+		}
+		if (!allowCopy) {
+			notification.error({
+				description: "Please select an option for copying",
+			});
+			return;
+		}
+		setIsLoading(true);
+		setIsLoading(false);
 	};
 
 	const handleImageChange = async (e) => {
 		setIsLoading(true);
 		const file = e.target.files[0];
 		const base64 = await convertToBase64(file);
-		console.log(base64);
 		setBase64String(base64);
 		setIsLoading(false);
-	}
+	};
 
 	const handleGenerateTitle = async () => {
 		setIsLoading(true);
@@ -87,7 +124,7 @@ function CreateTitle() {
 		setIsLoading(true);
 		if (response.status === 200) {
 			let base64 = response.data.image;
-			base64 ="data:image/png;base64," + base64;
+			base64 = "data:image/png;base64," + base64;
 			setBase64String(base64);
 		} else {
 			setAiImageModalVisible(true);
@@ -253,7 +290,7 @@ function CreateTitle() {
 						color="purple"
 					>
 						<button
-							className="ml-2 px-2 py-1 text-white rounded-md"
+							className="ml-2 px-2 py-1 text-white rounded-md hover:rotate-90 transform transition-transform duration-300 hover:scale-110"
 							disabled={pointsLeft === 0}
 							onClick={() => setAiTitleModalVisible(true)}
 						>
@@ -262,23 +299,20 @@ function CreateTitle() {
 								src={require("../../Assets/AI/ai_gen_icon.png")}
 								width={35}
 								height={35}
-								className="hover:rotate-90 transform transition-transform duration-300 hover:scale-110"
 							/>
 						</button>
 					</Tooltip>
 				</div>
-				<div>
-					{base64String && <Image src={base64String}/> }
-				</div>
+				<div>{base64String && <Image src={base64String} />}</div>
 
 				<label
 					htmlFor="image"
-					className="font-bold block text-md text-primary flex-grow"
+					className="font-bold block text-xl text-primary flex-grow"
 				>
 					Background Image:
 				</label>
 
-				<div className="mb-4 flex justify-items-center">
+				<div className=" flex justify-items-center">
 					<input
 						id="image"
 						className="w-full px-3 py-2 border text-xl rounded-md focus:outline-none focus:ring-2 focus:ring-primary hover:bg-slate-800 text-text-muted cursor-pointer"
@@ -292,7 +326,7 @@ function CreateTitle() {
 						color="purple"
 					>
 						<button
-							className="ml-2 px-2 py-1 bg-transparent text-white rounded-md"
+							className="ml-2 px-2 py-1 bg-transparent text-white rounded-md hover:rotate-90 transform transition-transform duration-300 hover:scale-110"
 							disabled={pointsLeft === 0}
 							onClick={() => setAiImageModalVisible(true)}
 						>
@@ -301,10 +335,78 @@ function CreateTitle() {
 								src={require("../../Assets/AI/ai_gen_icon.png")}
 								width={35}
 								height={35}
-								className="hover:rotate-90 transform transition-transform duration-300 hover:scale-110"
 							/>
 						</button>
 					</Tooltip>
+				</div>
+				<div className="mb-4">
+					<label
+						htmlFor="privacy"
+						className="font-bold block text-lg text-primary"
+					>
+						Privacy:
+					</label>
+					<select
+						className=" mt-2 w-full px-3 py-2 border text-xl bg-slate-900 text-text-muted font-bold rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+						id="privacy"
+						onChange={(e) => setSelectedPrivacy(e.target.value)}
+						value={selectedPrivacy}
+					>
+						{privacy_options.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+				</div>
+				{showCoinNeeded && (
+					<div className="mb-4">
+						<label
+							htmlFor="coinsNeeded"
+							className="font-bold block text-lg text-primary"
+						>
+							Price in Coins:
+						</label>
+						<input
+							id="coinsNeeded"
+							type="number"
+							className="w-full mt-2 px-3 py-2 border text-xl rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+							onChange={(e) => setCoinNeeded(e.target.value)}
+							value={coinNeeded}
+							min={1}
+						/>
+					</div>
+				)}
+				<div className="mb-4">
+					<label
+						htmlFor="allowCopy"
+						className="font-bold block text-lg text-primary"
+					>
+						Allow Copy:
+					</label>
+					<select
+						className=" mt-2 w-full px-3 py-2 border text-xl bg-slate-900 text-text-muted font-bold rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+						id="allowCopy"
+						onChange={(e) =>
+							setAllowCopy(e.target.value === "true")
+						}
+						value={allowCopy ? "true" : "false"}
+					>
+						<option key={"true"} value={"true"}>
+							Yes
+						</option>
+						<option key={"false"} value={"false"}>
+							No
+						</option>
+					</select>
+				</div>
+				<div className="mb-4">
+					<button
+						className="w-full px-4 py-2 bg-button-primary hover:bg-button-hover_primary hover:scale-105 text-black text-xl font-bold rounded-md transition-transform duration-300"
+						onClick={handleSubmit}
+					>
+						Create Story
+					</button>
 				</div>
 			</div>
 		</div>
