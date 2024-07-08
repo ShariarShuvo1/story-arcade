@@ -23,7 +23,7 @@ const storySchema = new mongoose.Schema({
 	},
 	cover_image: {
 		type: String,
-		required: true,
+		required: false,
 	},
 	original_uploader: {
 		type: mongoose.Schema.Types.ObjectId,

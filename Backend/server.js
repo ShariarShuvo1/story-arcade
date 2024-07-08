@@ -9,6 +9,7 @@ const cors = require("cors");
 const corsOptions = require("./config/corsOptions");
 const connectDB = require("./config/dbConn");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 const PORT = process.env.PORT || 3500;
 
 connectDB();
@@ -16,6 +17,8 @@ connectDB();
 app.use(logger);
 
 app.use(cors(corsOptions));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 app.use(express.json());
 
