@@ -3,6 +3,7 @@ import LoadingFullscreen from "../../Tools/Loading";
 import { getPointsLeft } from "../../api/usersAPI";
 import { ConfigProvider, Modal, notification, Tooltip, Image } from "antd";
 import { llamaGetTitle, sdGetImage } from "../../api/aiAPI";
+import {createStory} from "../../api/storyAP";
 
 function CreateTitle() {
 	const jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -78,13 +79,27 @@ function CreateTitle() {
 			});
 			return;
 		}
-		if (!allowCopy) {
+		setIsLoading(true);
+
+		const jwt = JSON.parse(localStorage.getItem("jwt"));
+		const body = {
+			title: title,
+			cover_image: base64String,
+			access_level: selectedPrivacy.toLowerCase(),
+			points_required: coinNeeded,
+			allow_copy: allowCopy,
+		};
+		const response = await createStory(jwt, body);
+
+		if (response.status !== 201) {
 			notification.error({
-				description: "Please select an option for copying",
+				description: response.data.message,
 			});
+			setIsLoading(false);
 			return;
 		}
-		setIsLoading(true);
+		console.log(response.data);
+
 		setIsLoading(false);
 	};
 
