@@ -50,13 +50,17 @@ const storySchema = new mongoose.Schema({
 				type: Number,
 				required: true,
 			},
-			page_story: {
-				type: String,
+			is_starting_page: {
+				type: Boolean,
 				required: false,
 			},
 			background_image: {
 				type: String,
-				required: true,
+				required: false,
+			},
+			background_video: {
+				type: String,
+				required: false,
 			},
 			steps: [
 				{
@@ -66,8 +70,28 @@ const storySchema = new mongoose.Schema({
 					},
 					step_type: {
 						type: String,
-						enum: ["choice", "task"],
+						enum: ["choice", "task", "click", "story"],
 						required: true,
+					},
+					child_step_number: {
+						type: Number,
+						required: false,
+					},
+				},
+			],
+			page_story: [
+				{
+					page_story_number: {
+						type: Number,
+						required: true,
+					},
+					story_text: {
+						type: String,
+						required: false,
+					},
+					minimum_duration: {
+						type: Number,
+						required: false,
 					},
 				},
 			],
@@ -105,8 +129,8 @@ const storySchema = new mongoose.Schema({
 					},
 					slider: {
 						type: String,
-						enum: ["left", "right"],
-						default: "left",
+						enum: ["to_left", "to_right"],
+						default: "to_right",
 						required: false,
 					},
 				},
