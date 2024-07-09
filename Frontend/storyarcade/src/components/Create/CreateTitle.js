@@ -3,9 +3,11 @@ import LoadingFullscreen from "../../Tools/Loading";
 import { getPointsLeft } from "../../api/usersAPI";
 import { ConfigProvider, Modal, notification, Tooltip, Image } from "antd";
 import { llamaGetTitle, sdGetImage } from "../../api/aiAPI";
-import {createStory} from "../../api/storyAP";
+import { createStory } from "../../api/storyAPI";
+import { useNavigate } from "react-router-dom";
 
 function CreateTitle() {
+	const navigate = useNavigate();
 	const jwt = JSON.parse(localStorage.getItem("jwt"));
 	const [is_loading, setIsLoading] = useState(false);
 	const [title, setTitle] = useState("");
@@ -98,7 +100,15 @@ function CreateTitle() {
 			setIsLoading(false);
 			return;
 		}
-		console.log(response.data);
+
+		const story_id = response.data.story_id;
+		if (story_id) {
+			navigate(`/create/createPage/${story_id}`);
+		} else {
+			notification.error({
+				description: "Something went wrong",
+			});
+		}
 
 		setIsLoading(false);
 	};
