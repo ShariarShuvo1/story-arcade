@@ -8,6 +8,7 @@ class Page {
 	 * @param {number} page_number - The page number.
 	 * @param {string} [background_image] - The background image URL.
 	 * @param {string} [background_video] - The background video URL.
+	 * @param {boolean} [is_starting_page=false] - Is this the starting page?
 	 * @param {Array<Step>} steps - Array of Step objects.
 	 * @param {Array<PageStory>} page_story - Array of PageStory objects.
 	 * @param {Array<Choice>} choices - Array of Choice objects.
@@ -17,6 +18,7 @@ class Page {
 		page_number,
 		background_image = "",
 		background_video = "",
+		is_starting_page = false,
 		steps = [],
 		page_story = [],
 		choices = [],
@@ -25,6 +27,7 @@ class Page {
 		this.page_number = page_number;
 		this.background_image = background_image;
 		this.background_video = background_video;
+		this.is_starting_page = is_starting_page;
 		this.steps = steps;
 		this.page_story = page_story;
 		this.choices = choices;
