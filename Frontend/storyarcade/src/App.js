@@ -15,6 +15,20 @@ import ForgetPasswordOtp from "./components/Auth/ForgetPasswordOtp";
 import RouteCreate from "./routes/createRoutes";
 import Profile from "./components/Profile/Profile";
 
+import React from 'react';
+import './App.css'; // Ensure this line imports the CSS
+import Profile from './Profile';
+
+function App() {
+  return (
+    <div className="App">
+      <Profile />
+    </div>
+  );
+}
+
+export default App;
+
 function App() {
 	const { jwt } = useAuthContext();
 
