@@ -13,6 +13,7 @@ import EmailVerify from "./components/Auth/EmailVerify";
 import ForgetPassword from "./components/Auth/ForgetPassword";
 import ForgetPasswordOtp from "./components/Auth/ForgetPasswordOtp";
 import RouteCreate from "./routes/createRoutes";
+import Profile from './Profile'; 
 
 function App() {
 	const { jwt } = useAuthContext();
@@ -53,6 +54,10 @@ function App() {
 				{
 					path: "/forgetPasswordOtp/:email",
 					element: <ForgetPasswordOtp />,
+				},
+				{
+					path: "/profile", // Add route for Profile
+					element: jwt ? <Profile /> : <Navigate to="/login" />,
 				},
 				...RouteCreate(),
 			],
