@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import placeholderAvatar from './placeholder-avatar.png'; // Add a placeholder image to your project
+
+// Add this line to import the placeholder image
+import placeholderAvatar from './assets/placeholder-avatar.png'; // Add a placeholder image to your project
 
 function Profile() {
   const [user, setUser] = useState(null);
@@ -44,6 +46,7 @@ function Profile() {
 
   return (
     <div className="profile">
+      {/* Update this line to use the placeholder image if the user's avatar is null */}
       <img src={user.avatar || placeholderAvatar} alt="Profile" className="profile-picture" />
       <h1>{user.name}</h1>
       <p>Age: {calculateAge(user.birthDate)}</p>
