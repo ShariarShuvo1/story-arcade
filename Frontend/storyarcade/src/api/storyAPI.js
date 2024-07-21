@@ -27,12 +27,13 @@ export const getStory = async (jwt, story_id) => {
 	});
 };
 
-export const saveChanges = async (jwt, story, story_id) => {
+
+export const getPage = async (jwt, story_id, page_number) => {
     const body = {
-        story: story,
-		story_id: story_id,
+        story_id: story_id,
+		page_number: page_number,
     };
-	return await axios.post(`${BASE_URL}/saveChanges`, body, {
+	return await axios.post(`${BASE_URL}/getPage`, body, {
 		headers: {
 			Authorization: `Bearer ${jwt}`,
 		},
@@ -41,3 +42,19 @@ export const saveChanges = async (jwt, story, story_id) => {
 		},
 	});
 };
+
+export const saveAPage = async (jwt, page, story_id) => {
+    const body = {
+        page: page,
+		story_id: story_id,
+    };
+	return await axios.post(`${BASE_URL}/saveAPage`, body, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+		},
+		validateStatus: (status) => {
+			return true;
+		},
+	});
+};
+
