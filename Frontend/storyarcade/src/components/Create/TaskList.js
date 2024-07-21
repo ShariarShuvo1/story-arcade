@@ -79,14 +79,13 @@ function TaskList({
 					/>
 				)}
 
-				{step.step_type === "task" &&
-					getTaskType() === "button" && (
-						<img
-							src={add_button_image}
-							alt="Button"
-							className="min-w-6 h-6 mr-4"
-						/>
-					)}
+				{step.step_type === "task" && getTaskType() === "button" && (
+					<img
+						src={add_button_image}
+						alt="Button"
+						className="min-w-6 h-6 mr-4"
+					/>
+				)}
 				{step.step_type === "task" && getTaskType() === "slider" && (
 					<img
 						src={add_slider_image}

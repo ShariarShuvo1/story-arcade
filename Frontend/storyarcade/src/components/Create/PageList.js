@@ -26,7 +26,7 @@ function PageList({
 	jwt,
 	storyId,
 	navigate,
-					  setSelectedItem
+	setSelectedItem,
 }) {
 	const addNewPage = async () => {
 		setIsLoading(true);

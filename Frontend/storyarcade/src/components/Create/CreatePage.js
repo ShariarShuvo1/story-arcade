@@ -10,7 +10,7 @@ import ToolBar from "./ToolBar";
 import TaskList from "./TaskList";
 import Modification from "./Modification";
 import Display from "./Display";
-import {getPointsLeft} from "../../api/usersAPI";
+import { getPointsLeft } from "../../api/usersAPI";
 import AIModal from "./AIModal";
 
 function CreatePage() {
@@ -53,14 +53,23 @@ function CreatePage() {
 	useEffect(() => {
 		const getSpecificPage = async () => {
 			setIsLoading(true);
-			if (selected_page){
+			if (selected_page) {
 				const response = await getPage(jwt, storyId, selected_page);
 				if (response.status === 200) {
 					let response_story = response.data.story;
 					let response_page = response.data.page;
 					if (response_page === null) {
 						let is_start = selected_page === 1;
-						let tempPage = new Page(selected_page, "", "", is_start, [], [], [], []);
+						let tempPage = new Page(
+							selected_page,
+							"",
+							"",
+							is_start,
+							[],
+							[],
+							[],
+							[]
+						);
 						setListOfSteps(tempPage.steps);
 						setListOfPageStory(tempPage.page_story);
 						setListOfChoices(tempPage.choices);

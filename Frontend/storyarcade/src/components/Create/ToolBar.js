@@ -21,12 +21,11 @@ function ToolBar({
 	setSelectedItem,
 	selectedImage,
 	setSelectedImage,
-					 setAiImageModalVisible,
-					 pointsLeft,
-					 listOfTasks,
-					 setListOfTasks,
+	setAiImageModalVisible,
+	pointsLeft,
+	listOfTasks,
+	setListOfTasks,
 }) {
-
 	const handleAddText = () => {
 		if (!selected_page) {
 			return;
@@ -186,7 +185,7 @@ function ToolBar({
 						type="file"
 						className="border-2 border-fuchsia-500 hover:border-fuchsia-600 hover:bg-fuchsia-100 cursor-pointer rounded-lg p-1"
 						accept="image/*"
-                        onChange={handleImageChange}
+						onChange={handleImageChange}
 					/>
 				</Tooltip>
 
@@ -198,7 +197,9 @@ function ToolBar({
 					<button
 						className="bg-transparent text-white rounded-md hover:rotate-90 transform transition-transform duration-300 hover:scale-110"
 						disabled={pointsLeft === 0}
-						onClick={() => {setAiImageModalVisible(true);}}
+						onClick={() => {
+							setAiImageModalVisible(true);
+						}}
 					>
 						<img
 							alt="Ai Genaration Icon"
