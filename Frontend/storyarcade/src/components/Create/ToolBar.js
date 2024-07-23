@@ -1,4 +1,4 @@
-import { Tooltip } from "antd";
+import { Tooltip, notification } from "antd";
 import add_text_image from "../../Assets/Icon/insert_text.png";
 import add_text_image_hover from "../../Assets/Icon/insert_text_hover.png";
 import add_button_image from "../../Assets/Icon/insert_button.png";
@@ -11,6 +11,7 @@ import React from "react";
 import PageStory from "../../Models/PageStory";
 import Step from "../../Models/Step";
 import Task from "../../Models/Task";
+import Choice from "../../Models/Choice";
 
 function ToolBar({
 	selected_page,
@@ -25,6 +26,8 @@ function ToolBar({
 	pointsLeft,
 	listOfTasks,
 	setListOfTasks,
+					 listOfChoices,
+					 setListOfChoices
 }) {
 	const handleAddText = () => {
 		if (!selected_page) {
@@ -119,6 +122,52 @@ function ToolBar({
 		setSelectedItem(newStep);
 	};
 
+	const handleAddChoice = () => {
+		if (!selected_page) {
+			return;
+		}
+
+		let choice_count = 0;
+		for (let i = 0 ; i < listOfSteps.length; i++){
+			if (listOfSteps[i].step_type === "choice"){
+				choice_count++;
+			}
+		}
+
+		if (choice_count >= 3) {
+			notification.error({
+				description: "Maximum Choice for this page has been reached",
+			});
+			return;
+		}
+
+		let max_choice_number = Math.max(
+			...listOfChoices.map((o) => o.choice_number),
+			0
+		);
+
+		const newChoice = new Choice(max_choice_number + 1);
+		let tempChoice = [...listOfChoices, newChoice];
+		setListOfChoices(tempChoice);
+
+		const max_step_number = Math.max(
+			...listOfSteps.map((o) => o.step_number),
+			0
+		);
+
+		let newStep = new Step(
+			max_step_number + 1,
+			"New Choice",
+			"choice",
+			newChoice.choice_number,
+			"page"
+		);
+
+		let tempSteps = [...listOfSteps, newStep];
+		setListOfSteps(tempSteps);
+		setSelectedItem(newStep);
+	};
+
 	const convertToBase64 = (file) => {
 		return new Promise((resolve, reject) => {
 			const reader = new FileReader();
@@ -195,7 +244,10 @@ function ToolBar({
 				</Tooltip>
 
 				<Tooltip title="Add Option" placement="top" color="purple">
-					<button className="border-2 border-fuchsia-500 hover:border-fuchsia-600 hover:bg-fuchsia-100 rounded-lg p-1">
+					<button
+						className="border-2 border-fuchsia-500 hover:border-fuchsia-600 hover:bg-fuchsia-100 rounded-lg p-1"
+						onClick={handleAddChoice}
+					>
 						<img
 							src={add_option_image}
 							alt="Add Option"

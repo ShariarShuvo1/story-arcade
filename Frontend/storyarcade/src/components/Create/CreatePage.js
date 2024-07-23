@@ -157,6 +157,7 @@ function CreatePage() {
 						setSelectedItem={setSelectedItem}
 						listOfTasks={listOfTasks}
 						setListOfTasks={setListOfTasks}
+						listOfChoices={listOfChoices}
 					/>
 
 					<Modification
@@ -172,6 +173,8 @@ function CreatePage() {
 						selected_page={selected_page}
 						storyId={storyId}
 						setIsLoading={setIsLoading}
+						listOfChoices={listOfChoices}
+						setListOfChoices={setListOfChoices}
 					/>
 				</div>
 
@@ -188,6 +191,8 @@ function CreatePage() {
 					pointsLeft={pointsLeft}
 					listOfTasks={listOfTasks}
 					setListOfTasks={setListOfTasks}
+					listOfChoices={listOfChoices}
+					setListOfChoices={setListOfChoices}
 				/>
 
 				<PageList

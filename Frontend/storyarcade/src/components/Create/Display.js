@@ -8,6 +8,7 @@ function Display({
 	setSelectedItem,
 	listOfTasks,
 	setListOfTasks,
+					 listOfChoices
 }) {
 	const [currentSelectedItem, setCurrentSelectedItem] = React.useState(null);
 
@@ -27,6 +28,13 @@ function Display({
 				let index = listOfTasks.indexOf(selectedTask);
 				setCurrentSelectedItem(listOfTasks[index]);
 			}
+			if (selectedItem.step_type === "choice") {
+				let selectedChoice = listOfChoices.find(
+					(choice) => choice.choice_number === selectedItem.child_step_number
+				);
+				let index = listOfChoices.indexOf(selectedChoice);
+				setCurrentSelectedItem(listOfChoices[index]);
+			}
 		} else {
 			setCurrentSelectedItem(null);
 		}
@@ -34,7 +42,7 @@ function Display({
 
 	return (
 		<div
-			className="bg-slate-900 mt-4 lg:mt-0 rounded-xl h-full flex-grow aspect-video relative"
+			className="bg-slate-900 mt-4 lg:mt-0 rounded-xl min-w-96 h-full flex-grow aspect-video relative"
 			style={{
 				backgroundImage: `url(${selectedImage})`,
 				backgroundSize: "cover",
@@ -46,10 +54,10 @@ function Display({
 				selectedItem.step_type === "story" &&
 				currentSelectedItem.story_text && (
 					<div
-						className="absolute w-fit p-2 bg-black bg-opacity-60 rounded-xl"
-						style={{ bottom: "10%", left: "5%", right: "5%" }}
+						className="w-fit p-2 bg-black bg-opacity-80 rounded-xl absolute mx-4 bottom-0 mb-4"
+
 					>
-						<div className="text-text-muted font-semibold text-lg text-center">
+						<div className="text-text-light font-semibold text-lg text-center">
 							{currentSelectedItem.story_text}
 						</div>
 					</div>
@@ -71,6 +79,24 @@ function Display({
 						>
 							{currentSelectedItem.button}
 						</button>
+					</div>
+				)}
+
+			{currentSelectedItem &&
+				selectedItem &&
+				selectedItem.step_type === "choice" &&(
+					<div
+						className="absolute"
+						style={{ bottom: "10%" }}
+					>
+						{listOfChoices.map((choice, index) => (
+							<div
+								key={index}
+								className="p-2 mt-2 bg-opacity-70 bg-black hover:bg-slate-900 text-text-muted cursor-pointer border-2 border-s-0 border-text-light w-fit rounded-lg rounded-s-none text-lg font-semibold"
+							>
+								{choice.choice}
+							</div>
+						))}
 					</div>
 				)}
 		</div>

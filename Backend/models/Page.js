@@ -73,7 +73,7 @@ const pageSchema = new mongoose.Schema({
 			},
 			choice: {
 				type: String,
-				required: true,
+				required: false,
 			},
 		},
 	],

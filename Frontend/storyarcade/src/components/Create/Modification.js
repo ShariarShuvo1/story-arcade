@@ -2,6 +2,7 @@ import React from "react";
 import EditPageStory from "./Edit/EditPageStory";
 import EditButton from "./Edit/EditButton";
 import EditSlider from "./Edit/EditSlider";
+import EditChoice from "./Edit/EditChoice";
 
 function Modification({
 	selectedItem,
@@ -15,12 +16,14 @@ function Modification({
 	jwt,
 						  selected_page,
 						  storyId,
-						  setIsLoading
+						  setIsLoading,
+						  listOfChoices,
+						  setListOfChoices
 }) {
 	return (
 		<div className="mt-4 lg:mt-0">
 			{selectedItem && (
-				<div className="bg-slate-900 rounded-2xl p-4 min-w-96 max-w-96 overflow-y-auto h-screen">
+				<div className="bg-slate-900 rounded-2xl p-4 w-96 overflow-y-auto ">
 					<div className="text-text-muted text-center font-bold text-3xl mb-4">
 						Modification
 					</div>
@@ -61,6 +64,18 @@ function Modification({
 						selected_page={selected_page}
 						storyId={storyId}
 						setIsLoading={setIsLoading}
+					/>
+					<EditChoice
+						selectedItem={selectedItem}
+						listOfSteps={listOfSteps}
+						setListOfSteps={setListOfSteps}
+						setSelectedItem={setSelectedItem}
+						jwt={jwt}
+						selected_page={selected_page}
+						storyId={storyId}
+						setIsLoading={setIsLoading}
+						listOfChoices={listOfChoices}
+						setListOfChoices={setListOfChoices}
 					/>
 				</div>
 			)}
