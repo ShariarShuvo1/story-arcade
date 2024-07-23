@@ -88,6 +88,37 @@ function ToolBar({
 		setSelectedItem(newStep);
 	};
 
+	const handleAddSlider = () => {
+		if (!selected_page) {
+			return;
+		}
+
+		let max_task_number = Math.max(
+			...listOfTasks.map((o) => o.task_number),
+			0
+		);
+
+		const newTask = new Task(max_task_number + 1, "slider");
+		let tempTask = [...listOfTasks, newTask];
+		setListOfTasks(tempTask);
+
+		const max_step_number = Math.max(
+			...listOfSteps.map((o) => o.step_number),
+			0
+		);
+
+		let newStep = new Step(
+			max_step_number + 1,
+			"New Slider",
+			"task",
+			newTask.task_number
+		);
+
+		let tempSteps = [...listOfSteps, newStep];
+		setListOfSteps(tempSteps);
+		setSelectedItem(newStep);
+	};
+
 	const convertToBase64 = (file) => {
 		return new Promise((resolve, reject) => {
 			const reader = new FileReader();
@@ -145,7 +176,10 @@ function ToolBar({
 				</Tooltip>
 
 				<Tooltip title="Add Slider" placement="top" color="purple">
-					<button className="border-2 border-fuchsia-500 hover:border-fuchsia-600 hover:bg-fuchsia-100 rounded-lg p-1">
+					<button
+						className="border-2 border-fuchsia-500 hover:border-fuchsia-600 hover:bg-fuchsia-100 rounded-lg p-1"
+						onClick={handleAddSlider}
+					>
 						<img
 							src={add_slider_image}
 							alt="Add Slider"

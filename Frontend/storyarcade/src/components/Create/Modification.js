@@ -1,6 +1,7 @@
 import React from "react";
 import EditPageStory from "./Edit/EditPageStory";
 import EditButton from "./Edit/EditButton";
+import EditSlider from "./Edit/EditSlider";
 
 function Modification({
 	selectedItem,
@@ -37,6 +38,19 @@ function Modification({
 					/>
 
 					<EditButton
+						selectedItem={selectedItem}
+						listOfTasks={listOfTasks}
+						setListOfTasks={setListOfTasks}
+						listOfSteps={listOfSteps}
+						setListOfSteps={setListOfSteps}
+						setSelectedItem={setSelectedItem}
+						jwt={jwt}
+						selected_page={selected_page}
+						storyId={storyId}
+						setIsLoading={setIsLoading}
+					/>
+
+					<EditSlider
 						selectedItem={selectedItem}
 						listOfTasks={listOfTasks}
 						setListOfTasks={setListOfTasks}
