@@ -8,9 +8,11 @@ function Display({
 	setSelectedItem,
 	listOfTasks,
 	setListOfTasks,
-					 listOfChoices
+					 listOfChoices,
+					 listOfSteps
 }) {
-	const [currentSelectedItem, setCurrentSelectedItem] = React.useState(null);
+	const [currentSelectedItem, setCurrentSelectedItem] = useState(null);
+	const [tempListOfChoice, setTempListOfChoice] = useState(listOfChoices)
 
 	useEffect(() => {
 		if (selectedItem) {
@@ -39,6 +41,24 @@ function Display({
 			setCurrentSelectedItem(null);
 		}
 	}, [selectedItem]);
+
+	useEffect(() => {
+
+		let tempChoices = [];
+
+		for (let i = 0; i < listOfSteps.length; i++){
+			if (listOfSteps[i].step_type === "choice"){
+				for (let j = 0; j < listOfChoices.length; j++){
+					if(listOfChoices[j].choice_number === listOfSteps[i].child_step_number){
+						tempChoices.push(listOfChoices[j]);
+						break;
+					}
+				}
+			}
+		}
+		setTempListOfChoice(tempChoices);
+
+	}, [listOfChoices, listOfSteps]);
 
 	return (
 		<div
@@ -89,10 +109,18 @@ function Display({
 						className="absolute"
 						style={{ bottom: "10%" }}
 					>
-						{listOfChoices.map((choice, index) => (
+						{tempListOfChoice.map((choice, index) => (
 							<div
 								key={index}
-								className="p-2 mt-2 bg-opacity-70 bg-black hover:bg-slate-900 text-text-muted cursor-pointer border-2 border-s-0 border-text-light w-fit rounded-lg rounded-s-none text-lg font-semibold"
+								className="p-2 mt-2 bg-opacity-70 bg-black hover:bg-slate-900 text-text-muted cursor-pointer border-2 border-s-0 border-text-light w-fit rounded-full rounded-s-none text-lg font-semibold"
+								onClick={(e) => {
+									for (let i = 0; i < listOfSteps.length; i++){
+										if(choice.choice_number === listOfSteps[i].child_step_number){
+											setSelectedItem(listOfSteps[i]);
+											break;
+										}
+									}
+								}}
 							>
 								{choice.choice}
 							</div>

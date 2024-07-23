@@ -158,6 +158,7 @@ function CreatePage() {
 						listOfTasks={listOfTasks}
 						setListOfTasks={setListOfTasks}
 						listOfChoices={listOfChoices}
+						listOfSteps={listOfSteps}
 					/>
 
 					<Modification

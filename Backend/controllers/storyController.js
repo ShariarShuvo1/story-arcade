@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const Story = require("../models/Story");
 const Page = require("../models/Page");
+const StoryAccess = require("../models/StoryAccess");
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -49,6 +50,11 @@ const createStory = asyncHandler(async (req, res) => {
 		storyData.points_required = points_required;
 	}
 	const story = await Story.create(storyData);
+
+	await StoryAccess.create({
+		user: user_id,
+		story: story._id,
+	});
 
 	return res
 		.status(201)
