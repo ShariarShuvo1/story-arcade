@@ -218,9 +218,66 @@ const saveAPage = asyncHandler(async (req, res) => {
 		.json({ page: current_page, story: list_of_page_numbers });
 });
 
+const getPageList = asyncHandler(async (req, res) => {
+	const token = req.headers.authorization.split(" ")[1];
+	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	let { page_number, story_id } = req.body;
+
+	if (!story_id) {
+		return res.status(400).json({ message: "Story ID is required" });
+	}
+
+	if (!decoded) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+
+	const user_id = decoded._id;
+	const user = await User.findById(user_id).lean().exec();
+
+	if (!user) {
+		return res.status(404).json({ message: "User not found" });
+	}
+
+	const story_user = await Story.findById(story_id, "uploader").lean().exec();
+
+	if (!story_user) {
+		return res.status(404).json({ message: "Story not found" });
+	}
+
+	if (story_user.uploader.toString() !== user_id) {
+		return res.status(403).json({ message: "Forbidden" });
+	}
+
+	if (!page_number) {
+		return res
+			.status(400)
+			.json({ message: "Current Page Number is required" });
+	}
+
+	const list_of_page_numbers_from_db = await Page.find(
+		{ story: story_id },
+		"page_number"
+	)
+		.lean()
+		.exec();
+
+	let list_of_page_numbers = [];
+	list_of_page_numbers_from_db.forEach((page) => {
+		if (page.page_number !== page_number) {
+			list_of_page_numbers.push({
+				page_number: page.page_number,
+				id: page._id,
+			});
+		}
+	});
+
+	return res.status(200).json(list_of_page_numbers);
+});
+
 module.exports = {
 	createStory,
 	getStory,
 	getPage,
 	saveAPage,
+	getPageList,
 };

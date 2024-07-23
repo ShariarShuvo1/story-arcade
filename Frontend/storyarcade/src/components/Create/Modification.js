@@ -11,6 +11,10 @@ function Modification({
 	listOfSteps,
 	setListOfSteps,
 	setSelectedItem,
+	jwt,
+						  selected_page,
+						  storyId,
+						  setIsLoading
 }) {
 	return (
 		<div className="mt-4 lg:mt-0">
@@ -26,6 +30,10 @@ function Modification({
 						listOfSteps={listOfSteps}
 						setListOfSteps={setListOfSteps}
 						setSelectedItem={setSelectedItem}
+						jwt={jwt}
+						selected_page={selected_page}
+						storyId={storyId}
+						setIsLoading={setIsLoading}
 					/>
 
 					<EditButton
@@ -35,6 +43,10 @@ function Modification({
 						listOfSteps={listOfSteps}
 						setListOfSteps={setListOfSteps}
 						setSelectedItem={setSelectedItem}
+						jwt={jwt}
+						selected_page={selected_page}
+						storyId={storyId}
+						setIsLoading={setIsLoading}
 					/>
 				</div>
 			)}

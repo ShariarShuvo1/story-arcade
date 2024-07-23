@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
-import add_text_image from "../../Assets/Icon/insert_text.png";
-import add_option_image from "../../Assets/Icon/insert_option.png";
-import add_button_image from "../../Assets/Icon/insert_button.png";
-import add_slider_image from "../../Assets/Icon/insert_slider.png";
+import add_text_image from "../../Assets/Icon/insert_text_hover.png";
+import add_option_image from "../../Assets/Icon/insert_option_hover.png";
+import add_button_image from "../../Assets/Icon/insert_button_hover.png";
+import add_slider_image from "../../Assets/Icon/insert_slider_hover.png";
+import link_image from "../../Assets/Icon/link.png";
 
 function TaskList({
 	listOfSteps,
@@ -57,10 +58,10 @@ function TaskList({
 			<div
 				ref={(node) => drag(drop(node))}
 				onClick={() => setSelectedItem(step)}
-				className={` flex p-2 m-2 cursor-move bg-slate-700 rounded-lg text-lg font-semibold hover:bg-slate-800 border-2 ${
+				className={` flex p-2 m-2 cursor-move bg-slate-700 rounded-lg items-center text-lg font-semibold border-2 ${
 					selectedItem === step
-						? "border-green-500 text-green-500"
-						: "border-slate-500 text-text-light hover:border-yellow-300"
+						? "border-green-500 text-green-500 bg-slate-800"
+						: "border-slate-500 text-text-light hover:bg-slate-800 hover:border-yellow-300"
 				}`}
 			>
 				{step.step_type === "story" && (
@@ -113,6 +114,13 @@ function TaskList({
 					}}
 					className="bg-transparent border-none px-2 text-lg font-semibold text-text-light"
 				/>
+				{step.next_type === "page" && (
+					<img
+						src={link_image}
+						alt="link icon"
+						className="max-w-6 max-h-4 ms-4"
+					/>
+				)}
 			</div>
 		);
 	};

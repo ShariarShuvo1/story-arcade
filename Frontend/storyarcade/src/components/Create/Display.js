@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useState} from "react";
 
 function Display({
 	selectedImage,
@@ -6,18 +6,26 @@ function Display({
 	setListOfPageStory,
 	selectedItem,
 	setSelectedItem,
+	listOfTasks,
+	setListOfTasks,
 }) {
 	const [currentSelectedItem, setCurrentSelectedItem] = React.useState(null);
 
 	useEffect(() => {
 		if (selectedItem) {
 			if (selectedItem.step_type === "story") {
-				let child_step_number = selectedItem.child_step_number;
 				let selectedPageStory = listOfPageStory.find(
-					(page) => page.page_story_number === child_step_number
+					(page) => page.page_story_number === selectedItem.child_step_number
 				);
 				let index = listOfPageStory.indexOf(selectedPageStory);
 				setCurrentSelectedItem(listOfPageStory[index]);
+			}
+			if (selectedItem.step_type === "task") {
+				let selectedTask = listOfTasks.find(
+					(task) => task.task_number === selectedItem.child_step_number
+				);
+				let index = listOfTasks.indexOf(selectedTask);
+				setCurrentSelectedItem(listOfTasks[index]);
 			}
 		} else {
 			setCurrentSelectedItem(null);
@@ -44,6 +52,25 @@ function Display({
 						<div className="text-text-muted font-semibold text-lg text-center">
 							{currentSelectedItem.story_text}
 						</div>
+					</div>
+				)}
+
+			{currentSelectedItem &&
+				selectedItem &&
+				selectedItem.step_type === "task" &&
+				currentSelectedItem.task === "button" &&
+				currentSelectedItem.button && (
+					<div className="flex items-center justify-center h-full">
+						<button
+							style={{
+								backgroundColor: `${currentSelectedItem.button_color}`,
+								color: `${currentSelectedItem.button_text_color}`,
+								borderColor: `${currentSelectedItem.button_border_color}`,
+							}}
+							className={`px-10 m-10 py-3 hover:opacity-95 shadow-black shadow-md rounded-lg text-4xl font-bold border-2`}
+						>
+							{currentSelectedItem.button}
+						</button>
 					</div>
 				)}
 		</div>

@@ -58,3 +58,18 @@ export const saveAPage = async (jwt, page, story_id) => {
 	});
 };
 
+export const getPageList = async (jwt, page_number, story_id) => {
+    const body = {
+		page_number: page_number,
+		story_id: story_id,
+    };
+	return await axios.post(`${BASE_URL}/getPageList`, body, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+		},
+		validateStatus: (status) => {
+			return true;
+		},
+	});
+};
+

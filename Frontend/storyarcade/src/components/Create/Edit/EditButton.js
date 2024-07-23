@@ -1,4 +1,5 @@
 import React from "react";
+import NextSelector from "./NextSelector";
 
 function EditButton({
 	selectedItem,
@@ -7,6 +8,10 @@ function EditButton({
 	listOfSteps,
 	setListOfSteps,
 	setSelectedItem,
+						jwt,
+						selected_page,
+						storyId,
+						setIsLoading
 }) {
 	const getTaskType = (step) => {
 		let taskType = "";
@@ -41,14 +46,14 @@ function EditButton({
 	};
 
 	return (
-		<div className="">
+		<div>
 			{selectedItem.step_type === "task" &&
 				getTaskType(selectedItem) === "button" &&
 				listOfTasks.map((task, index) => {
 					if (task.task_number === selectedItem.child_step_number) {
 						return (
 							<div key={index} className="">
-								<div className="text-text-hover text-lg mb-4 font-semibold">
+								<div className="text-text-hover text-lg font-semibold">
 									Enter Text inside button:
 								</div>
 								<input
@@ -59,12 +64,98 @@ function EditButton({
 										tempTask[index].button = e.target.value;
 										setListOfTasks(tempTask);
 									}}
-									className="bg-transparent border-2 w-full border-slate-500 p-2 rounded-lg text-text-light"
+									className="bg-transparent border-2 mt-1 w-full border-slate-500 p-2 rounded-lg text-text-light"
 									placeholder={"Enter Button Text"}
 									maxLength={15}
 								/>
+
+								<div className="text-text-hover text-lg mt-4 font-semibold">
+									Select button color:
+								</div>
+								<div className="flex mt-1 gap-4 items-center">
+									<input
+										value={task.button_color}
+										onChange={(e) => {
+											let tempTask = [...listOfTasks];
+											tempTask[index].button_color = e.target.value;
+											setListOfTasks(tempTask);
+										}}
+										type="color"
+										className="bg-transparent cursor-pointer border-2 rounded-lg h-10 border-slate-500 text-text-light"
+									/>
+									<input
+										value={task.button_color}
+										onChange={(e) => {
+											let tempTask = [...listOfTasks];
+											tempTask[index].button_color = e.target.value;
+											setListOfTasks(tempTask);
+										}}
+										className="bg-transparent border-2 p-2 rounded-lg w-full border-slate-500 text-text-light"
+									/>
+								</div>
+
+								<div className="text-text-hover text-lg mt-4 font-semibold">
+									Select text color:
+								</div>
+								<div className="flex mt-1 gap-4 items-center">
+									<input
+										value={task.button_text_color}
+										onChange={(e) => {
+											let tempTask = [...listOfTasks];
+											tempTask[index].button_text_color = e.target.value;
+											setListOfTasks(tempTask);
+										}}
+										type="color"
+										className="bg-transparent cursor-pointer border-2 rounded-lg h-10 border-slate-500 text-text-light"
+									/>
+									<input
+										value={task.button_text_color}
+										onChange={(e) => {
+											let tempTask = [...listOfTasks];
+											tempTask[index].button_text_color = e.target.value;
+											setListOfTasks(tempTask);
+										}}
+										className="bg-transparent border-2 p-2 rounded-lg w-full border-slate-500 text-text-light"
+									/>
+								</div>
+
+
+								<div className="text-text-hover text-lg mt-4 font-semibold">
+									Select border color:
+								</div>
+								<div className="flex mt-1 gap-4 items-center">
+									<input
+										value={task.button_border_color}
+										onChange={(e) => {
+											let tempTask = [...listOfTasks];
+											tempTask[index].button_border_color = e.target.value;
+											setListOfTasks(tempTask);
+										}}
+										type="color"
+										className="bg-transparent cursor-pointer border-2 rounded-lg h-10 border-slate-500 text-text-light"
+									/>
+									<input
+										value={task.button_border_color}
+										onChange={(e) => {
+											let tempTask = [...listOfTasks];
+											tempTask[index].button_border_color = e.target.value;
+											setListOfTasks(tempTask);
+										}}
+										className="bg-transparent border-2 p-2 rounded-lg w-full border-slate-500 text-text-light"
+									/>
+								</div>
+
+								<NextSelector
+									setIsLoading={setIsLoading}
+									selectedItem={selectedItem}
+									jwt={jwt}
+									selected_page={selected_page}
+									storyId={storyId}
+									setSelectedItem={setSelectedItem}
+								/>
+
 								<button
-									className="py-2 mt-2 rounded-lg bg-red-500 hover:bg-red-600 w-full text-2xl font-bold text-center"
+									className="py-2 mt-4 rounded-lg bg-red-500 hover:bg-red-600 w-full text-2xl font-bold text-center"
 									onClick={() => handleDelete(task)}
 								>
 									Delete

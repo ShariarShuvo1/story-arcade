@@ -155,6 +155,8 @@ function CreatePage() {
 						setListOfPageStory={setListOfPageStory}
 						selectedItem={selectedItem}
 						setSelectedItem={setSelectedItem}
+						listOfTasks={listOfTasks}
+						setListOfTasks={setListOfTasks}
 					/>
 
 					<Modification
@@ -166,6 +168,10 @@ function CreatePage() {
 						listOfSteps={listOfSteps}
 						setListOfSteps={setListOfSteps}
 						setSelectedItem={setSelectedItem}
+						jwt={jwt}
+						selected_page={selected_page}
+						storyId={storyId}
+						setIsLoading={setIsLoading}
 					/>
 				</div>
 

@@ -41,6 +41,16 @@ const pageSchema = new mongoose.Schema({
 				type: Number,
 				required: false,
 			},
+			next_type: {
+				type: String,
+				enum: ["step", "page"],
+				required: true,
+			},
+			next_page: {
+				type: mongoose.Schema.Types.ObjectId,
+				ref: "Page",
+				required: false,
+			},
 		},
 	],
 	page_story: [
@@ -65,11 +75,6 @@ const pageSchema = new mongoose.Schema({
 				type: String,
 				required: true,
 			},
-			next_page: {
-				type: mongoose.Schema.Types.ObjectId,
-				ref: "Page",
-				required: true,
-			},
 		},
 	],
 	tasks: [
@@ -84,6 +89,18 @@ const pageSchema = new mongoose.Schema({
 				required: true,
 			},
 			button: {
+				type: String,
+				required: false,
+			},
+			button_color: {
+				type: String,
+				required: false,
+			},
+			button_text_color: {
+				type: String,
+				required: false,
+			},
+			button_border_color: {
 				type: String,
 				required: false,
 			},
