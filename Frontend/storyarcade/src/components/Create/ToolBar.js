@@ -7,11 +7,14 @@ import add_slider_image from "../../Assets/Icon/insert_slider.png";
 import add_slider_image_hover from "../../Assets/Icon/insert_slider_hover.png";
 import add_option_image from "../../Assets/Icon/insert_option.png";
 import add_option_image_hover from "../../Assets/Icon/insert_option_hover.png";
+import add_mover_image from "../../Assets/Icon/insert_mover.png";
+import add_mover_image_hover from "../../Assets/Icon/insert_mover_hover.png";
 import React from "react";
 import PageStory from "../../Models/PageStory";
 import Step from "../../Models/Step";
 import Task from "../../Models/Task";
 import Choice from "../../Models/Choice";
+import Mover from "../../Models/Mover";
 
 function ToolBar({
 	selected_page,
@@ -27,7 +30,9 @@ function ToolBar({
 	listOfTasks,
 	setListOfTasks,
 					 listOfChoices,
-					 setListOfChoices
+					 setListOfChoices,
+					 listOfMover,
+					 setListOfMover
 }) {
 	const handleAddText = () => {
 		if (!selected_page) {
@@ -115,6 +120,37 @@ function ToolBar({
 			"New Slider",
 			"task",
 			newTask.task_number
+		);
+
+		let tempSteps = [...listOfSteps, newStep];
+		setListOfSteps(tempSteps);
+		setSelectedItem(newStep);
+	};
+
+	const handleAddMover = () => {
+		if (!selected_page) {
+			return;
+		}
+
+		let max_mover_number = Math.max(
+			...listOfMover.map((o) => o.mover_number),
+			0
+		);
+
+		const newMover = new Mover(max_mover_number + 1, 0, "auto");
+		let tempMover = [...listOfMover, newMover];
+		setListOfMover(tempMover);
+
+		const max_step_number = Math.max(
+			...listOfSteps.map((o) => o.step_number),
+			0
+		);
+
+		let newStep = new Step(
+			max_step_number + 1,
+			"New Mover",
+			"mover",
+			newMover.mover_number
 		);
 
 		let tempSteps = [...listOfSteps, newStep];
@@ -257,6 +293,25 @@ function ToolBar({
 							}
 							onMouseOut={(e) =>
 								(e.currentTarget.src = add_option_image)
+							}
+						/>
+					</button>
+				</Tooltip>
+
+				<Tooltip title="Add Mover" placement="top" color="purple">
+					<button
+						className="border-2 border-fuchsia-500 hover:border-fuchsia-600 hover:bg-fuchsia-100 rounded-lg p-1"
+						onClick={handleAddMover}
+					>
+						<img
+							src={add_mover_image}
+							alt="Add Option"
+							className="min-w-8 h-8 cursor-pointer"
+							onMouseOver={(e) =>
+								(e.currentTarget.src = add_mover_image_hover)
+							}
+							onMouseOut={(e) =>
+								(e.currentTarget.src = add_mover_image)
 							}
 						/>
 					</button>

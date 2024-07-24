@@ -1,0 +1,25 @@
+#pageList::-webkit-scrollbar {
+    height: 0.5rem;
+}
+
+#pageList::-webkit-scrollbar-thumb {
+    background-color: #00fced;
+    border-radius: 4px;
+}
+
+#pageList::-webkit-scrollbar-thumb:hover {
+    background-color: #00ffb2;
+}
+
+#taskList::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+#taskList::-webkit-scrollbar-thumb {
+    background-color: #00fced;
+    border-radius: 4px;
+}
+
+#taskList::-webkit-scrollbar-thumb:hover {
+    background-color: #00ffb2;
+}

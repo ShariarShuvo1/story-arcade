@@ -23,6 +23,7 @@ function CreatePage() {
 	const [listOfPageStory, setListOfPageStory] = useState([]);
 	const [listOfChoices, setListOfChoices] = useState([]);
 	const [listOfTasks, setListOfTasks] = useState([]);
+	const [listOfMover, setListOfMover] = useState([]);
 
 	const [selected_page, setSelectedPage] = useState(0);
 	const [currentPage, setCurrentPage] = useState(null);
@@ -68,12 +69,14 @@ function CreatePage() {
 							[],
 							[],
 							[],
+							[],
 							[]
 						);
 						setListOfSteps(tempPage.steps);
 						setListOfPageStory(tempPage.page_story);
 						setListOfChoices(tempPage.choices);
 						setListOfTasks(tempPage.tasks);
+						setListOfMover(tempPage.mover);
 						setSelectedImage(tempPage.background_image);
 						setCurrentPage(tempPage);
 						setStory([...story, selected_page]);
@@ -82,6 +85,7 @@ function CreatePage() {
 						setListOfPageStory(response_page.page_story);
 						setListOfChoices(response_page.choices);
 						setListOfTasks(response_page.tasks);
+						setListOfMover(response_page.mover);
 						setSelectedImage(response_page.background_image);
 						setCurrentPage(response_page);
 						setStory(response_story);
@@ -112,6 +116,7 @@ function CreatePage() {
 					setListOfPageStory(response_page.page_story);
 					setListOfChoices(response_page.choices);
 					setListOfTasks(response_page.tasks);
+					setListOfMover(response_page.mover);
 					setSelectedImage(response_page.background_image);
 					setSelectedPage(response_page.page_number);
 					setCurrentPage(response_page);
@@ -176,6 +181,8 @@ function CreatePage() {
 						setIsLoading={setIsLoading}
 						listOfChoices={listOfChoices}
 						setListOfChoices={setListOfChoices}
+						listOfMover={listOfMover}
+						setListOfMover={setListOfMover}
 					/>
 				</div>
 
@@ -194,6 +201,8 @@ function CreatePage() {
 					setListOfTasks={setListOfTasks}
 					listOfChoices={listOfChoices}
 					setListOfChoices={setListOfChoices}
+					listOfMover={listOfMover}
+					setListOfMover={setListOfMover}
 				/>
 
 				<PageList
@@ -218,6 +227,8 @@ function CreatePage() {
 					storyId={storyId}
 					navigate={navigate}
 					setSelectedItem={setSelectedItem}
+					listOfMover={listOfMover}
+					setListOfMover={setListOfMover}
 				/>
 			</div>
 		</DndProvider>

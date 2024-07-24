@@ -34,7 +34,7 @@ const pageSchema = new mongoose.Schema({
 			},
 			step_type: {
 				type: String,
-				enum: ["choice", "task", "story"],
+				enum: ["choice", "task", "story", "mover"],
 				required: true,
 			},
 			child_step_number: {
@@ -50,6 +50,25 @@ const pageSchema = new mongoose.Schema({
 				type: mongoose.Schema.Types.ObjectId,
 				ref: "Page",
 				required: false,
+			},
+		},
+	],
+	mover: [
+		{
+			mover_number: {
+				type: Number,
+				required: true,
+			},
+			wait_duration: {
+				type: Number,
+				default: 0,
+				required: true,
+			},
+			next_type: {
+				type: String,
+				enum: ["click", "auto"],
+				default: "auto",
+				required: true,
 			},
 		},
 	],

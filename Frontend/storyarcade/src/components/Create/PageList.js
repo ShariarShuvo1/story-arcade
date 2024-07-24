@@ -2,8 +2,8 @@ import { Tooltip } from "antd";
 import add_page_image from "../../Assets/Icon/add_new_page.png";
 import add_page_image_hover from "../../Assets/Icon/add_new_page_hover.png";
 import React from "react";
-import Page from "../../Models/Page";
 import { saveAPage } from "../../api/storyAPI";
+import "./style.css"
 
 function PageList({
 	story,
@@ -27,6 +27,8 @@ function PageList({
 	storyId,
 	navigate,
 	setSelectedItem,
+					  listOfMover,
+					  setListOfMover
 }) {
 	const addNewPage = async () => {
 		setIsLoading(true);
@@ -36,6 +38,7 @@ function PageList({
 			tempPage.page_story = listOfPageStory;
 			tempPage.choices = listOfChoices;
 			tempPage.tasks = listOfTasks;
+			tempPage.mover = listOfMover;
 			tempPage.background_image = selectedImage;
 
 			const response = await saveAPage(jwt, tempPage, storyId);
@@ -54,6 +57,7 @@ function PageList({
 			tempPage.page_story = listOfPageStory;
 			tempPage.choices = listOfChoices;
 			tempPage.tasks = listOfTasks;
+			tempPage.mover = listOfMover;
 			tempPage.background_image = selectedImage;
 
 			const response = await saveAPage(jwt, tempPage, storyId);
@@ -65,6 +69,7 @@ function PageList({
 				setListOfPageStory(response_page.page_story);
 				setListOfChoices(response_page.choices);
 				setListOfTasks(response_page.tasks);
+				setListOfMover(response_page.mover);
 				setSelectedImage(response_page.background_image);
 				setSelectedPage(response_page.page_number);
 				setCurrentPage(response_page);
@@ -85,6 +90,7 @@ function PageList({
 			tempPage.page_story = listOfPageStory;
 			tempPage.choices = listOfChoices;
 			tempPage.tasks = listOfTasks;
+			tempPage.mover = listOfMover;
 			tempPage.background_image = selectedImage;
 
 			const response = await saveAPage(jwt, tempPage, storyId);
@@ -96,7 +102,7 @@ function PageList({
 	return (
 		<div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-purple-400 to-cyan-400 p-2 rounded-t-lg mx-4">
 			<div className=" flex justify-around gap-4">
-				<div className="flex w-full overflow-x-auto gap-2">
+				<div id="pageList" className="flex w-full overflow-x-auto gap-2">
 					{story &&
 						story.map((page, index) => (
 							<Tooltip

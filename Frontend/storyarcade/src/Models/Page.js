@@ -13,6 +13,7 @@ class Page {
 	 * @param {Array<PageStory>} page_story - Array of PageStory objects.
 	 * @param {Array<Choice>} choices - Array of Choice objects.
 	 * @param {Array<Task>} tasks - Array of Task objects.
+	 * @param {Array<Mover>} mover - Array of Mover objects.
 	 */
 	constructor(
 		page_number,
@@ -22,7 +23,8 @@ class Page {
 		steps = [],
 		page_story = [],
 		choices = [],
-		tasks = []
+		tasks = [],
+		mover = [],
 	) {
 		this.page_number = page_number;
 		this.background_image = background_image;
@@ -32,6 +34,7 @@ class Page {
 		this.page_story = page_story;
 		this.choices = choices;
 		this.tasks = tasks;
+		this.mover = mover;
 	}
 
 	/**

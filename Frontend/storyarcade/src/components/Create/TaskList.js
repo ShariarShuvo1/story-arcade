@@ -4,8 +4,10 @@ import add_text_image from "../../Assets/Icon/insert_text_hover.png";
 import add_option_image from "../../Assets/Icon/insert_option_hover.png";
 import add_button_image from "../../Assets/Icon/insert_button_hover.png";
 import add_slider_image from "../../Assets/Icon/insert_slider_hover.png";
+import add_mover_image_hover from "../../Assets/Icon/insert_mover_hover.png";
 import link_image from "../../Assets/Icon/link.png";
 import {Tooltip} from "antd";
+import "./style.css"
 
 function TaskList({
 	listOfSteps,
@@ -73,6 +75,14 @@ function TaskList({
 					/>
 				)}
 
+				{step.step_type === "mover" && (
+					<img
+						src={add_mover_image_hover}
+						alt="Add Mover"
+						className="min-w-6 h-6 mr-4"
+					/>
+				)}
+
 				{step.step_type === "choice" && (
 					<img
 						src={add_option_image}
@@ -129,7 +139,7 @@ function TaskList({
 	};
 
 	return (
-		<div className="bg-slate-900 rounded-2xl p-4 w-96 overflow-y-auto h-screen">
+		<div id="taskList" className="bg-slate-900 rounded-2xl p-4 w-96 overflow-y-auto h-screen">
 			<div className="text-text-muted text-center font-bold text-3xl mb-4">
 				Steps
 			</div>
