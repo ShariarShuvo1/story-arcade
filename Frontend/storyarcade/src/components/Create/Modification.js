@@ -4,7 +4,7 @@ import EditButton from "./Edit/EditButton";
 import EditSlider from "./Edit/EditSlider";
 import EditChoice from "./Edit/EditChoice";
 import EditMover from "./Edit/EditMover";
-import "./style.css"
+import "./style.css";
 
 function Modification({
 	selectedItem,
@@ -16,18 +16,21 @@ function Modification({
 	setListOfSteps,
 	setSelectedItem,
 	jwt,
-						  selected_page,
-						  storyId,
-						  setIsLoading,
-						  listOfChoices,
-						  setListOfChoices,
-						  listOfMover,
-						  setListOfMover
+	selected_page,
+	storyId,
+	setIsLoading,
+	listOfChoices,
+	setListOfChoices,
+	listOfMover,
+	setListOfMover,
 }) {
 	return (
 		<div className="mt-4 lg:mt-0">
 			{selectedItem && (
-				<div id="taskList" className="bg-slate-900 rounded-2xl p-4 w-96 overflow-y-auto ">
+				<div
+					id="taskList"
+					className="bg-slate-900 rounded-2xl p-4 w-96 overflow-y-auto "
+				>
 					<div className="text-text-muted text-center font-bold text-3xl mb-4">
 						Modification
 					</div>

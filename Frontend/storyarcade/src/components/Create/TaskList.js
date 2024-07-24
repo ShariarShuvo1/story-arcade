@@ -6,8 +6,8 @@ import add_button_image from "../../Assets/Icon/insert_button_hover.png";
 import add_slider_image from "../../Assets/Icon/insert_slider_hover.png";
 import add_mover_image_hover from "../../Assets/Icon/insert_mover_hover.png";
 import link_image from "../../Assets/Icon/link.png";
-import {Tooltip} from "antd";
-import "./style.css"
+import { Tooltip } from "antd";
+import "./style.css";
 
 function TaskList({
 	listOfSteps,
@@ -126,7 +126,11 @@ function TaskList({
 					className="bg-transparent border-none px-2 text-lg font-semibold text-text-light"
 				/>
 				{step.next_type === "page" && (
-					<Tooltip title="This Step is linked" placement="top" color="purple">
+					<Tooltip
+						title="This Step is linked"
+						placement="top"
+						color="purple"
+					>
 						<img
 							src={link_image}
 							alt="link icon"
@@ -139,7 +143,10 @@ function TaskList({
 	};
 
 	return (
-		<div id="taskList" className="bg-slate-900 rounded-2xl p-4 w-96 overflow-y-auto h-screen">
+		<div
+			id="taskList"
+			className="bg-slate-900 rounded-2xl p-4 w-96 overflow-y-auto h-screen"
+		>
 			<div className="text-text-muted text-center font-bold text-3xl mb-4">
 				Steps
 			</div>

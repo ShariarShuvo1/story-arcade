@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {getPageList} from "../../../api/storyAPI";
+import React, { useEffect, useState } from "react";
+import { getPageList } from "../../../api/storyAPI";
 import NextSelector from "./NextSelector";
 
 function EditPageStory({
@@ -10,11 +10,10 @@ function EditPageStory({
 	setListOfSteps,
 	setSelectedItem,
 	jwt,
-						   selected_page,
-						   storyId,
-						   setIsLoading
+	selected_page,
+	storyId,
+	setIsLoading,
 }) {
-
 	const handleDelete = (page_story) => {
 		let tempPageStory = [];
 		for (let i = 0; i < listOfPageStory.length; i++) {

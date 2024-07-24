@@ -29,10 +29,10 @@ function ToolBar({
 	pointsLeft,
 	listOfTasks,
 	setListOfTasks,
-					 listOfChoices,
-					 setListOfChoices,
-					 listOfMover,
-					 setListOfMover
+	listOfChoices,
+	setListOfChoices,
+	listOfMover,
+	setListOfMover,
 }) {
 	const handleAddText = () => {
 		if (!selected_page) {
@@ -164,8 +164,8 @@ function ToolBar({
 		}
 
 		let choice_count = 0;
-		for (let i = 0 ; i < listOfSteps.length; i++){
-			if (listOfSteps[i].step_type === "choice"){
+		for (let i = 0; i < listOfSteps.length; i++) {
+			if (listOfSteps[i].step_type === "choice") {
 				choice_count++;
 			}
 		}

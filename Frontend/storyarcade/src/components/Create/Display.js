@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 
 function Display({
 	selectedImage,
@@ -8,31 +8,35 @@ function Display({
 	setSelectedItem,
 	listOfTasks,
 	setListOfTasks,
-					 listOfChoices,
-					 listOfSteps
+	listOfChoices,
+	listOfSteps,
 }) {
 	const [currentSelectedItem, setCurrentSelectedItem] = useState(null);
-	const [tempListOfChoice, setTempListOfChoice] = useState(listOfChoices)
+	const [tempListOfChoice, setTempListOfChoice] = useState(listOfChoices);
 
 	useEffect(() => {
 		if (selectedItem) {
 			if (selectedItem.step_type === "story") {
 				let selectedPageStory = listOfPageStory.find(
-					(page) => page.page_story_number === selectedItem.child_step_number
+					(page) =>
+						page.page_story_number ===
+						selectedItem.child_step_number
 				);
 				let index = listOfPageStory.indexOf(selectedPageStory);
 				setCurrentSelectedItem(listOfPageStory[index]);
 			}
 			if (selectedItem.step_type === "task") {
 				let selectedTask = listOfTasks.find(
-					(task) => task.task_number === selectedItem.child_step_number
+					(task) =>
+						task.task_number === selectedItem.child_step_number
 				);
 				let index = listOfTasks.indexOf(selectedTask);
 				setCurrentSelectedItem(listOfTasks[index]);
 			}
 			if (selectedItem.step_type === "choice") {
 				let selectedChoice = listOfChoices.find(
-					(choice) => choice.choice_number === selectedItem.child_step_number
+					(choice) =>
+						choice.choice_number === selectedItem.child_step_number
 				);
 				let index = listOfChoices.indexOf(selectedChoice);
 				setCurrentSelectedItem(listOfChoices[index]);
@@ -43,13 +47,15 @@ function Display({
 	}, [selectedItem]);
 
 	useEffect(() => {
-
 		let tempChoices = [];
 
-		for (let i = 0; i < listOfSteps.length; i++){
-			if (listOfSteps[i].step_type === "choice"){
-				for (let j = 0; j < listOfChoices.length; j++){
-					if(listOfChoices[j].choice_number === listOfSteps[i].child_step_number){
+		for (let i = 0; i < listOfSteps.length; i++) {
+			if (listOfSteps[i].step_type === "choice") {
+				for (let j = 0; j < listOfChoices.length; j++) {
+					if (
+						listOfChoices[j].choice_number ===
+						listOfSteps[i].child_step_number
+					) {
 						tempChoices.push(listOfChoices[j]);
 						break;
 					}
@@ -57,7 +63,6 @@ function Display({
 			}
 		}
 		setTempListOfChoice(tempChoices);
-
 	}, [listOfChoices, listOfSteps]);
 
 	return (
@@ -73,10 +78,7 @@ function Display({
 				selectedItem &&
 				selectedItem.step_type === "story" &&
 				currentSelectedItem.story_text && (
-					<div
-						className="w-fit p-2 bg-black bg-opacity-80 rounded-xl absolute mx-4 bottom-0 mb-4"
-
-					>
+					<div className="w-fit p-2 bg-black bg-opacity-80 rounded-xl absolute mx-4 bottom-0 mb-4">
 						<div className="text-text-light font-semibold text-lg text-center">
 							{currentSelectedItem.story_text}
 						</div>
@@ -104,18 +106,22 @@ function Display({
 
 			{currentSelectedItem &&
 				selectedItem &&
-				selectedItem.step_type === "choice" &&(
-					<div
-						className="absolute"
-						style={{ bottom: "10%" }}
-					>
+				selectedItem.step_type === "choice" && (
+					<div className="absolute" style={{ bottom: "10%" }}>
 						{tempListOfChoice.map((choice, index) => (
 							<div
 								key={index}
 								className="p-2 mt-2 bg-opacity-70 bg-black hover:bg-slate-900 text-text-muted cursor-pointer border-2 border-s-0 border-text-light w-fit rounded-full rounded-s-none text-lg font-semibold"
 								onClick={(e) => {
-									for (let i = 0; i < listOfSteps.length; i++){
-										if(choice.choice_number === listOfSteps[i].child_step_number){
+									for (
+										let i = 0;
+										i < listOfSteps.length;
+										i++
+									) {
+										if (
+											choice.choice_number ===
+											listOfSteps[i].child_step_number
+										) {
 											setSelectedItem(listOfSteps[i]);
 											break;
 										}

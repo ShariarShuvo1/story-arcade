@@ -8,10 +8,10 @@ function EditButton({
 	listOfSteps,
 	setListOfSteps,
 	setSelectedItem,
-						jwt,
-						selected_page,
-						storyId,
-						setIsLoading
+	jwt,
+	selected_page,
+	storyId,
+	setIsLoading,
 }) {
 	const getTaskType = (step) => {
 		let taskType = "";
@@ -77,7 +77,8 @@ function EditButton({
 										value={task.button_color}
 										onChange={(e) => {
 											let tempTask = [...listOfTasks];
-											tempTask[index].button_color = e.target.value;
+											tempTask[index].button_color =
+												e.target.value;
 											setListOfTasks(tempTask);
 										}}
 										type="color"
@@ -87,7 +88,8 @@ function EditButton({
 										value={task.button_color}
 										onChange={(e) => {
 											let tempTask = [...listOfTasks];
-											tempTask[index].button_color = e.target.value;
+											tempTask[index].button_color =
+												e.target.value;
 											setListOfTasks(tempTask);
 										}}
 										className="bg-transparent border-2 p-2 rounded-lg w-full border-slate-500 text-text-light"
@@ -102,7 +104,8 @@ function EditButton({
 										value={task.button_text_color}
 										onChange={(e) => {
 											let tempTask = [...listOfTasks];
-											tempTask[index].button_text_color = e.target.value;
+											tempTask[index].button_text_color =
+												e.target.value;
 											setListOfTasks(tempTask);
 										}}
 										type="color"
@@ -112,13 +115,13 @@ function EditButton({
 										value={task.button_text_color}
 										onChange={(e) => {
 											let tempTask = [...listOfTasks];
-											tempTask[index].button_text_color = e.target.value;
+											tempTask[index].button_text_color =
+												e.target.value;
 											setListOfTasks(tempTask);
 										}}
 										className="bg-transparent border-2 p-2 rounded-lg w-full border-slate-500 text-text-light"
 									/>
 								</div>
-
 
 								<div className="text-text-hover text-lg mt-4 font-semibold">
 									Select border color:
@@ -128,7 +131,10 @@ function EditButton({
 										value={task.button_border_color}
 										onChange={(e) => {
 											let tempTask = [...listOfTasks];
-											tempTask[index].button_border_color = e.target.value;
+											tempTask[
+												index
+											].button_border_color =
+												e.target.value;
 											setListOfTasks(tempTask);
 										}}
 										type="color"
@@ -138,7 +144,10 @@ function EditButton({
 										value={task.button_border_color}
 										onChange={(e) => {
 											let tempTask = [...listOfTasks];
-											tempTask[index].button_border_color = e.target.value;
+											tempTask[
+												index
+											].button_border_color =
+												e.target.value;
 											setListOfTasks(tempTask);
 										}}
 										className="bg-transparent border-2 p-2 rounded-lg w-full border-slate-500 text-text-light"
