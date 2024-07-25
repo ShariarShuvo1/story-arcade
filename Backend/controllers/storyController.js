@@ -1,10 +1,9 @@
 const User = require("../models/User");
 const Story = require("../models/Story");
+const Page = require("../models/Page");
+const StoryAccess = require("../models/StoryAccess");
 const asyncHandler = require("express-async-handler");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const path = require("path");
-const fs = require("fs");
 
 const createStory = asyncHandler(async (req, res) => {
 	const token = req.headers.authorization.split(" ")[1];
@@ -41,6 +40,7 @@ const createStory = asyncHandler(async (req, res) => {
 		title,
 		access_level,
 		allow_copy,
+		cover_image: cover_image,
 	};
 
 	if (access_level === "paid") {
@@ -48,32 +48,10 @@ const createStory = asyncHandler(async (req, res) => {
 	}
 	const story = await Story.create(storyData);
 
-	const baseDirectory = path.join(__dirname, "..", "filesystem");
-	const userDirectory = path.join(baseDirectory, user_id.toString());
-	const storyDirectory = path.join(userDirectory, "story");
-	const specificStoryDirectory = path.join(
-		storyDirectory,
-		story._id.toString()
-	);
-
-	if (!fs.existsSync(baseDirectory)) {
-		fs.mkdirSync(baseDirectory, { recursive: true });
-	}
-	if (!fs.existsSync(userDirectory)) {
-		fs.mkdirSync(userDirectory, { recursive: true });
-	}
-
-	if (!fs.existsSync(storyDirectory)) {
-		fs.mkdirSync(storyDirectory, { recursive: true });
-	}
-	if (!fs.existsSync(specificStoryDirectory)) {
-		fs.mkdirSync(specificStoryDirectory, { recursive: true });
-	}
-
-	const filePath = path.join(specificStoryDirectory, "cover_image.txt");
-	fs.writeFileSync(filePath, cover_image);
-
-	await Story.findByIdAndUpdate(story._id, { cover_image: filePath }).exec();
+	await StoryAccess.create({
+		user: user_id,
+		story: story._id,
+	});
 
 	return res
 		.status(201)
@@ -113,10 +91,69 @@ const getStory = asyncHandler(async (req, res) => {
 	return res.status(200).json({ story });
 });
 
-const saveChanges = asyncHandler(async (req, res) => {
+const getPage = asyncHandler(async (req, res) => {
+	let story_id = req.body.story_id;
+	let page_number = req.body.page_number;
 	const token = req.headers.authorization.split(" ")[1];
 	const decoded = jwt.verify(token, process.env.JWT_SECRET);
-	let { story, story_id } = req.body;
+
+	if (!story_id) {
+		return res.status(400).json({ message: "Story ID is required" });
+	}
+
+	if (!decoded) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+
+	const user_id = decoded._id;
+	const user = await User.findById(user_id).lean().exec();
+
+	if (!user) {
+		return res.status(404).json({ message: "User not found" });
+	}
+
+	const story_user = await Story.findById(story_id, "uploader").lean().exec();
+
+	if (!story_user) {
+		return res.status(404).json({ message: "Story not found" });
+	}
+	if (story_user.uploader.toString() !== user_id) {
+		return res.status(403).json({ message: "Forbidden" });
+	}
+
+	let page = null;
+	if (page_number) {
+		page = await Page.findOne({ story: story_id, page_number })
+			.lean()
+			.exec();
+	} else {
+		page = await Page.findOne({ story: story_id, is_starting_page: true })
+			.lean()
+			.exec();
+	}
+
+	const list_of_page_numbers_from_db = await Page.find(
+		{ story: story_id },
+		"page_number"
+	)
+		.lean()
+		.exec();
+
+	let list_of_page_numbers = [];
+	list_of_page_numbers_from_db.forEach((page) => {
+		list_of_page_numbers.push(page.page_number);
+	});
+
+	return res.status(200).json({
+		page: page,
+		story: list_of_page_numbers,
+	});
+});
+
+const saveAPage = asyncHandler(async (req, res) => {
+	const token = req.headers.authorization.split(" ")[1];
+	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	let { page, story_id } = req.body;
 
 	if (!story_id) {
 		return res.status(400).json({ message: "Story ID is required" });
@@ -143,19 +180,107 @@ const saveChanges = asyncHandler(async (req, res) => {
 		return res.status(403).json({ message: "Forbidden" });
 	}
 
-	if (!story) {
+	if (!page) {
 		return res.status(400).json({ message: "Story is required" });
 	}
 
-	let pages = story.pages;
-	let current_story = await Story.findById(story_id).exec();
-	current_story.pages = pages;
-	let updated_story = await current_story.save();
-	return res.status(200).json({ updated_story });
+	let current_page = await Page.findOne({
+		story: story_id,
+		page_number: page.page_number,
+	})
+		.lean()
+		.exec();
+
+	if (!current_page) {
+		page.story = story_id;
+		current_page = await Page.create(page);
+	} else {
+		current_page = page;
+		current_page.story = story_id;
+		current_page = await Page.findByIdAndUpdate(
+			current_page._id,
+			current_page,
+			{ new: true }
+		);
+	}
+
+	const list_of_page_numbers_from_db = await Page.find(
+		{ story: story_id },
+		"page_number"
+	)
+		.lean()
+		.exec();
+
+	let list_of_page_numbers = [];
+	list_of_page_numbers_from_db.forEach((page) => {
+		list_of_page_numbers.push(page.page_number);
+	});
+
+	return res
+		.status(200)
+		.json({ page: current_page, story: list_of_page_numbers });
+});
+
+const getPageList = asyncHandler(async (req, res) => {
+	const token = req.headers.authorization.split(" ")[1];
+	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	let { page_number, story_id } = req.body;
+
+	if (!story_id) {
+		return res.status(400).json({ message: "Story ID is required" });
+	}
+
+	if (!decoded) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+
+	const user_id = decoded._id;
+	const user = await User.findById(user_id).lean().exec();
+
+	if (!user) {
+		return res.status(404).json({ message: "User not found" });
+	}
+
+	const story_user = await Story.findById(story_id, "uploader").lean().exec();
+
+	if (!story_user) {
+		return res.status(404).json({ message: "Story not found" });
+	}
+
+	if (story_user.uploader.toString() !== user_id) {
+		return res.status(403).json({ message: "Forbidden" });
+	}
+
+	if (!page_number) {
+		return res
+			.status(400)
+			.json({ message: "Current Page Number is required" });
+	}
+
+	const list_of_page_numbers_from_db = await Page.find(
+		{ story: story_id },
+		"page_number"
+	)
+		.lean()
+		.exec();
+
+	let list_of_page_numbers = [];
+	list_of_page_numbers_from_db.forEach((page) => {
+		if (page.page_number !== page_number) {
+			list_of_page_numbers.push({
+				page_number: page.page_number,
+				id: page._id,
+			});
+		}
+	});
+
+	return res.status(200).json(list_of_page_numbers);
 });
 
 module.exports = {
 	createStory,
 	getStory,
-	saveChanges,
+	getPage,
+	saveAPage,
+	getPageList,
 };

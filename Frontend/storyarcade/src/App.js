@@ -14,6 +14,7 @@ import ForgetPassword from "./components/Auth/ForgetPassword";
 import ForgetPasswordOtp from "./components/Auth/ForgetPasswordOtp";
 import RouteCreate from "./routes/createRoutes";
 import Profile from "./components/Profile/Profile";
+import RouteView from "./routes/viewRoutes";
 
 function App() {
 	const { jwt } = useAuthContext();
@@ -60,6 +61,7 @@ function App() {
 					element: <Profile />,
 				},
 				...RouteCreate(),
+				...RouteView(),
 			],
 		},
 	]);

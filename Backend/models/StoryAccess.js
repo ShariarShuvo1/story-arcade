@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-const upvoteSchema = new mongoose.Schema({
-	upvoter: {
+const storyAccessSchema = new mongoose.Schema({
+	user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "User",
 		required: true,
@@ -11,11 +11,11 @@ const upvoteSchema = new mongoose.Schema({
 		ref: "Story",
 		required: true,
 	},
-	vote_time: {
+	purchase_time: {
 		type: Date,
 		default: Date.now,
 		required: true,
 	},
 });
 
-module.exports = mongoose.model("Upvote", upvoteSchema);
+module.exports = mongoose.model("StoryAccess", storyAccessSchema);

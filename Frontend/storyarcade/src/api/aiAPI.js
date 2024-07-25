@@ -32,3 +32,34 @@ export const sdGetImage = async (jwt, story, specificPrompt) => {
         },
     });
 };
+
+export const imageGenForPage = async (jwt, prompt) => {
+    const body = {
+        prompt: prompt,
+    };
+
+    return await axios.post(`${BASE_URL_AI}/imageGenForPage`, body, {
+        headers: {
+            Authorization: `Bearer ${jwt}`,
+        },
+        validateStatus: (status) => {
+            return true;
+        },
+    });
+};
+
+
+export const gifGenForPage = async (jwt, prompt) => {
+    const body = {
+        prompt: prompt,
+    };
+
+    return await axios.post(`${BASE_URL_AI}/gifGenForPage`, body, {
+        headers: {
+            Authorization: `Bearer ${jwt}`,
+        },
+        validateStatus: (status) => {
+            return true;
+        },
+    });
+};

@@ -3,7 +3,6 @@ import Page from "./Page";
 class Story {
 	/**
 	 * @param {string} title - The title of the story.
-	 * @param {Array<Page>} pages - Array of story pages.
 	 * @param {string} [cover_image] - URL of the cover image.
 	 * @param {boolean} [allow_copy=true] - Whether copying is allowed.
 	 * @param {"public"|"private"|"followers_only"|"paid"} [access_level="public"] - The access level of the story.
@@ -15,7 +14,6 @@ class Story {
 	 */
 	constructor(
 		title,
-		pages = [],
 		cover_image,
 		allow_copy = true,
 		access_level = "public",
@@ -26,7 +24,6 @@ class Story {
 		original_story
 	) {
 		this.title = title;
-		this.pages = pages;
 		this.cover_image = cover_image;
 		this.allow_copy = allow_copy;
 		this.access_level = access_level;
@@ -37,21 +34,6 @@ class Story {
 		this.original_story = original_story;
 	}
 
-	/**
-	 * Add a page to the story.
-	 * @param {Page} page - The page object to add.
-	 */
-	addPage(page) {
-		this.pages.push(page);
-	}
-
-	/**
-	 * Get the number of pages in the story.
-	 * @returns {number} The number of pages.
-	 */
-	getPageCount() {
-		return this.pages.length;
-	}
 }
 
 export default Story;

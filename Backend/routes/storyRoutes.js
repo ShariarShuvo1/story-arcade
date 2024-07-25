@@ -4,6 +4,8 @@ const storyController = require("../controllers/storyController");
 
 router.post("/create", storyController.createStory);
 router.post("/getStory", storyController.getStory);
-router.post("/saveChanges", storyController.saveChanges);
+router.post("/getPage", storyController.getPage);
+router.post("/saveAPage", storyController.saveAPage);
+router.post("/getPageList", storyController.getPageList);
 
 module.exports = router;
