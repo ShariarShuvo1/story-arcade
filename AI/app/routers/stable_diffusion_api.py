@@ -33,7 +33,7 @@ def generate_image(prompt: str):
         model_path, local_files_only=True)
     pipeline.to("cuda")
 
-    image = pipeline(prompt, num_inference_steps=100,
+    image = pipeline(prompt, num_inference_steps=50,
                      height=720, width=1024).images[0]
     return image
 

@@ -78,7 +78,7 @@ function Display({
 				selectedItem &&
 				selectedItem.step_type === "story" &&
 				currentSelectedItem.story_text && (
-					<div className="w-fit p-2 bg-black bg-opacity-80 rounded-xl absolute mx-4 bottom-0 mb-4">
+					<div className="w-fit p-2 bg-black bg-opacity-80 rounded-xl absolute left-1/2 transform -translate-x-1/2 mx-4 bottom-0 mb-4">
 						<div className="text-text-light font-semibold text-lg text-center">
 							{currentSelectedItem.story_text}
 						</div>
@@ -97,7 +97,7 @@ function Display({
 								color: `${currentSelectedItem.button_text_color}`,
 								borderColor: `${currentSelectedItem.button_border_color}`,
 							}}
-							className={`px-10 m-10 py-3 hover:opacity-95 shadow-black shadow-md rounded-lg text-4xl font-bold border-2`}
+							className={`px-10 m-10 py-3 hover:scale-110 transform duration-300 shadow-black shadow-md rounded-lg text-4xl font-bold border-2`}
 						>
 							{currentSelectedItem.button}
 						</button>

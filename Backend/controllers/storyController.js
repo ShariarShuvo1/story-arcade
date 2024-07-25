@@ -3,10 +3,7 @@ const Story = require("../models/Story");
 const Page = require("../models/Page");
 const StoryAccess = require("../models/StoryAccess");
 const asyncHandler = require("express-async-handler");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const path = require("path");
-const fs = require("fs");
 
 const createStory = asyncHandler(async (req, res) => {
 	const token = req.headers.authorization.split(" ")[1];
