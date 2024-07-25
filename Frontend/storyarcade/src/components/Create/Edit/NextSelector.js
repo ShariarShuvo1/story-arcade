@@ -27,6 +27,15 @@ function NextSelector({
 		getAllPageList();
 	}, [trigger, selectedItem]);
 
+	useEffect(() => {
+		if (trigger === "page" && pageList && pageList.length > 0 && !selectedItem.next_page){
+			let tempSelectedItem = selectedItem;
+			tempSelectedItem.next_page = pageList[0].id;
+			setSelectedItem(tempSelectedItem);
+		}
+
+	}, [trigger, selectedItem, pageList]);
+
 	return (
 		<div>
 			<div className="text-text-hover mt-4 text-lg font-semibold">

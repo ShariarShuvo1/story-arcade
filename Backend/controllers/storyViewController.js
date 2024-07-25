@@ -53,27 +53,34 @@ const getInitialPages = asyncHandler(async (req, res) => {
 
 	let initial_steps = initial_pages.steps;
 	let page_found = false;
+	let choice_found = false;
 	for (let i = 0; i < initial_steps.length; i++) {
 		let step = initial_steps[i];
 		if (
 			step.next_type === "page" &&
 			step.step_type !== "choice" &&
-			!page_found
+			!page_found &&
+			!choice_found
 		) {
 			let next_page = await Page.findById(step.next_page).lean().exec();
-			console.log(next_page);
 			if (next_page) {
 				pages.push(next_page);
 				page_found = true;
 			}
 		}
-		if (step.step_type === "choice") {
+		if (step.step_type === "choice" && !page_found) {
 			let next_page = await Page.findById(step.next_page).lean().exec();
 			if (next_page) {
 				pages.push(next_page);
+				choice_found = true;
 			}
 		}
 	}
+
+	pages = pages.filter(
+		(page, index, self) =>
+			index === self.findIndex((p) => p.page_number === page.page_number)
+	);
 
 	return res.status(200).json({ pages: pages });
 });
@@ -122,23 +129,24 @@ const getNextPages = asyncHandler(async (req, res) => {
 
 		let initial_steps = page.steps;
 		let page_found = false;
+		let choice_found = false;
 		for (let i = 0; i < initial_steps.length; i++) {
 			let step = initial_steps[i];
 			if (
 				step.next_type === "page" &&
 				step.step_type !== "choice" &&
-				!page_found
+				!page_found &&
+				!choice_found
 			) {
 				let next_page = await Page.findById(step.next_page)
 					.lean()
 					.exec();
-				console.log(next_page);
 				if (next_page) {
 					pages.push(next_page);
 					page_found = true;
 				}
 			}
-			if (step.step_type === "choice") {
+			if (step.step_type === "choice" && !page_found) {
 				let next_page = await Page.findById(step.next_page)
 					.lean()
 					.exec();
@@ -148,6 +156,11 @@ const getNextPages = asyncHandler(async (req, res) => {
 			}
 		}
 	}
+
+	pages = pages.filter(
+		(page, index, self) =>
+			index === self.findIndex((p) => p.page_number === page.page_number)
+	);
 
 	return res.status(200).json({ pages: pages });
 });

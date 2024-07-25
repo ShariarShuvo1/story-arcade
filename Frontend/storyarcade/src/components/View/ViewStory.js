@@ -1,8 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { notification } from "antd";
 import React, { useEffect, useState } from "react";
-import { getInitialPages } from "../../api/storyViewAPI";
+import { getInitialPages, getNextPages } from "../../api/storyViewAPI";
 import LoadingFullscreen from "../../Tools/Loading";
+import page from "../../Models/Page";
 
 function ViewStory() {
 	const jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -55,6 +56,71 @@ function ViewStory() {
 		};
 		getPages();
 	}, []);
+
+	useEffect(() => {
+		const getNextPage = async () => {
+			if (currentPage) {
+				let child_pages = [];
+				let initial_steps = currentPage.steps;
+				let page_found = false;
+				let choice_found = false;
+				for (let i = 0; i < initial_steps.length; i++) {
+					let step = initial_steps[i];
+					if (
+						step.next_type === "page" &&
+						step.step_type !== "choice" &&
+						!page_found &&
+						!choice_found
+					) {
+						for (let j = 0; j < pages.length; j++) {
+							if (pages[j]._id === step.next_page) {
+								child_pages.push(pages[j].page_number);
+								page_found = true;
+								break;
+							}
+						}
+					}
+					if (step.step_type === "choice" && !page_found) {
+						for (let j = 0; j < pages.length; j++) {
+							if (pages[j]._id === step.next_page) {
+								child_pages.push(pages[j].page_number);
+							}
+						}
+					}
+				}
+
+				child_pages = child_pages.filter(
+					(value, index, self) => self.indexOf(value) === index
+				);
+				if (child_pages.length > 0) {
+					const response = await getNextPages(
+						jwt,
+						storyId,
+						child_pages
+					);
+					let tempPages = [...pages];
+					let received_pages = response.data.pages;
+					for (let i = 0; i < received_pages.length; i++) {
+						let page_found = false;
+						for (let j = 0; j < tempPages.length; j++) {
+							if (
+								received_pages[i].page_number ===
+								tempPages[j].page_number
+							) {
+								page_found = true;
+								break;
+							}
+						}
+						if (!page_found) {
+							tempPages.push(received_pages[i]);
+						}
+					}
+					setPages(tempPages);
+				}
+			}
+		};
+		getNextPage();
+	}, [currentPage]);
 
 	useEffect(() => {
 		if (currentStep && currentStep.step_type === "story") {
