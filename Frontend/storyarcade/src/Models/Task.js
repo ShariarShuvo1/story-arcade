@@ -6,7 +6,7 @@ class Task {
 	 * @param {string} [button_color="#ffffff"] - The button color.
 	 * @param {string} [button_text_color="#000000"] - The button text color.
 	 * @param {string} [button_border_color="#000000"] - The button border color.
-	 * @param {"to_left"|"to_right"} [slider="to_right"] - The slider direction.
+	 * @param {string} slider - The slider direction.
 	 */
 	constructor(
 		task_number,
@@ -15,15 +15,16 @@ class Task {
 		button_color = "#ffffff",
 		button_text_color = "#000000",
 		button_border_color = "#000000",
-		slider = "to_right"
+		slider = ""
 	) {
 		this.task_number = task_number;
 		this.task = task;
-		this.button =
-			task === "button" ? button : undefined;
+		this.button = task === "button" ? button : undefined;
 		this.button_color = task === "button" ? button_color : undefined;
-		this.button_text_color = task === "button" ? button_text_color : undefined;
-		this.button_border_color = task === "button" ? button_border_color : undefined;
+		this.button_text_color =
+			task === "button" ? button_text_color : undefined;
+		this.button_border_color =
+			task === "button" ? button_border_color : undefined;
 		this.slider = task === "slider" ? slider : undefined;
 	}
 }

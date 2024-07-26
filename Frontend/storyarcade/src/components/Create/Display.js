@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import SwipeableButton from "../SwipeableButton/SwipeableButton";
 
 function Display({
 	selectedImage,
@@ -106,6 +107,18 @@ function Display({
 
 			{currentSelectedItem &&
 				selectedItem &&
+				selectedItem.step_type === "task" &&
+				currentSelectedItem.task === "slider" && (
+					<div className="flex items-center justify-center h-full">
+						<SwipeableButton
+							onSuccess={() => {}}
+							text={currentSelectedItem.slider}
+						/>
+					</div>
+				)}
+
+			{currentSelectedItem &&
+				selectedItem &&
 				selectedItem.step_type === "choice" && (
 					<div className="absolute" style={{ bottom: "10%" }}>
 						{tempListOfChoice.map((choice, index) => (
@@ -128,7 +141,7 @@ function Display({
 									}
 								}}
 							>
-								{choice.choice? choice.choice : ". . ."}
+								{choice.choice ? choice.choice : ". . ."}
 							</div>
 						))}
 					</div>

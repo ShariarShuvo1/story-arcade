@@ -125,7 +125,6 @@ const pageSchema = new mongoose.Schema({
 			},
 			slider: {
 				type: String,
-				enum: ["to_left", "to_right"],
 				required: false,
 			},
 		},

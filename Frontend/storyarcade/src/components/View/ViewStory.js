@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { getInitialPages, getNextPages } from "../../api/storyViewAPI";
 import LoadingFullscreen from "../../Tools/Loading";
 import page from "../../Models/Page";
+import SwipeableButton from "../SwipeableButton/SwipeableButton";
 
 function ViewStory() {
 	const jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -131,23 +132,24 @@ function ViewStory() {
 					item.page_story_number === currentStep.child_step_number
 			);
 			setCurrentItem(tempItem);
-		}
-		else if (currentStep && currentStep.step_type === "task") {
+		} else if (currentStep && currentStep.step_type === "task") {
 			const tempItem = listOfTasks.find(
 				(item) => item.task_number === currentStep.child_step_number
 			);
 			setCurrentItem(tempItem);
-		}
-		else if (currentStep && currentStep.step_type === "choice") {
+		} else if (currentStep && currentStep.step_type === "choice") {
 			const tempItem = listOfChoices.find(
 				(item) => item.choice_number === currentStep.child_step_number
 			);
 			setCurrentItem(tempItem);
 			let tempChoices = [];
-			for(let i = 0; i < listOfSteps.length; i++){
-				if (listOfSteps[i].step_type === "choice"){
-					for(let j = 0; j < listOfChoices.length; j++){
-						if (listOfChoices[j].choice_number === listOfSteps[i].child_step_number){
+			for (let i = 0; i < listOfSteps.length; i++) {
+				if (listOfSteps[i].step_type === "choice") {
+					for (let j = 0; j < listOfChoices.length; j++) {
+						if (
+							listOfChoices[j].choice_number ===
+							listOfSteps[i].child_step_number
+						) {
 							tempChoices.push(listOfChoices[j]);
 						}
 					}
@@ -155,11 +157,58 @@ function ViewStory() {
 			}
 			setChoices(tempChoices);
 			setCurrentItem(null);
-		}
-		else{
+		} else if (currentStep && currentStep.step_type === "mover") {
+			const tempItem = listOfMover.find(
+				(item) => item.mover_number === currentStep.child_step_number
+			);
+			setCurrentItem(tempItem);
+		} else {
 			setCurrentItem(null);
 		}
 	}, [currentStep]);
+
+	useEffect(() => {
+		if (
+			currentStep &&
+			currentStep.step_type === "mover" &&
+			currentItem &&
+			currentItem.next_type
+		) {
+			if (currentItem.next_type === "auto") {
+				let wait_time = currentItem.wait_duration;
+				setTimeout(() => {
+					if (currentStep.next_type === "step") {
+						let temp_new_step = getNextStep();
+						if (temp_new_step) {
+							setCurrentStep(temp_new_step);
+						}
+					} else if (currentStep.next_type === "page") {
+						let page_id = currentStep.next_page;
+						changePage(page_id);
+					}
+				}, wait_time);
+			} else if (currentItem.next_type === "click") {
+				let wait_time = currentItem.wait_duration;
+				document.addEventListener("click", () => {
+					let audio = new Audio(
+						require("../../Assets/Sound/click.mp3")
+					);
+					audio.play();
+					setTimeout(() => {
+						if (currentStep.next_type === "step") {
+							let temp_new_step = getNextStep();
+							if (temp_new_step) {
+								setCurrentStep(temp_new_step);
+							}
+						} else if (currentStep.next_type === "page") {
+							let page_id = currentStep.next_page;
+							changePage(page_id);
+						}
+					}, wait_time);
+				});
+			}
+		}
+	}, [currentItem]);
 
 	const getNextStep = () => {
 		let current_found = false;
@@ -180,10 +229,9 @@ function ViewStory() {
 		let next_page = pages.find((page) => page._id === page_id);
 		if (next_page) {
 			setCurrentPage(next_page);
-			if (next_page.steps.length > 0){
+			if (next_page.steps.length > 0) {
 				setCurrentStep(next_page.steps[0]);
-			}
-			else{
+			} else {
 				setCurrentStep(null);
 			}
 			setCurrentItem(null);
@@ -193,7 +241,7 @@ function ViewStory() {
 			setListOfTasks(next_page.tasks);
 			setListOfMover(next_page.mover);
 		}
-	}
+	};
 
 	const handleClick = () => {
 		if (currentStep && currentItem && currentStep.step_type === "story") {
@@ -204,8 +252,7 @@ function ViewStory() {
 					audio.play();
 					setCurrentStep(temp_new_step);
 				}
-			}
-			else if(currentStep.next_type === "page") {
+			} else if (currentStep.next_type === "page") {
 				audio.play();
 				let page_id = currentStep.next_page;
 				changePage(page_id);
@@ -225,13 +272,11 @@ function ViewStory() {
 			);
 			audio.play();
 			if (currentStep.next_type === "step") {
-
 				let temp_new_step = getNextStep();
 				if (temp_new_step) {
 					setCurrentStep(temp_new_step);
 				}
-			}
-			else if(currentStep.next_type === "page") {
+			} else if (currentStep.next_type === "page") {
 				let page_id = currentStep.next_page;
 				changePage(page_id);
 			}
@@ -239,14 +284,35 @@ function ViewStory() {
 	};
 
 	const handleChoiceClicked = (choice) => {
-		let audio = new Audio(
-			require("../../Assets/Sound/button_press.mp3")
-		);
+		let audio = new Audio(require("../../Assets/Sound/button_press.mp3"));
 		audio.play();
-		let tempStep = listOfSteps.find( step => (step.child_step_number === choice.choice_number) && (step.step_type === "choice"));
+		let tempStep = listOfSteps.find(
+			(step) =>
+				step.child_step_number === choice.choice_number &&
+				step.step_type === "choice"
+		);
 		let page_id = tempStep.next_page;
 		changePage(page_id);
-	}
+	};
+
+	const handleSwipe = () => {
+		if (
+			currentStep &&
+			currentItem &&
+			currentStep.step_type === "task" &&
+			currentItem.task === "slider"
+		) {
+			if (currentStep.next_type === "step") {
+				let temp_new_step = getNextStep();
+				if (temp_new_step) {
+					setCurrentStep(temp_new_step);
+				}
+			} else if (currentStep.next_type === "page") {
+				let page_id = currentStep.next_page;
+				changePage(page_id);
+			}
+		}
+	};
 
 	return (
 		<div
@@ -295,17 +361,29 @@ function ViewStory() {
 				)}
 
 			{currentStep &&
+				currentStep.step_type === "task" &&
+				currentItem &&
+				currentItem.task === "slider" && (
+					<div className="flex items-center absolute inset-0 justify-center">
+						<SwipeableButton
+							onSuccess={handleSwipe}
+							text={currentItem.slider}
+						/>
+					</div>
+				)}
+
+			{currentStep &&
 				currentStep.step_type === "choice" &&
 				choices &&
 				choices.length > 0 && (
-					<div className="absolute" style={{bottom: "10%"}}>
+					<div className="absolute" style={{ bottom: "10%" }}>
 						{choices.map((choice, index) => (
 							<div
 								key={index}
 								className="p-2 mt-2 bg-opacity-70 bg-black hover:bg-slate-900 text-text-muted cursor-pointer border-2 border-s-0 border-text-light w-fit rounded-full rounded-s-none text-2xl select-none hover:scale-105 transform duration-300 font-semibold"
 								onClick={() => handleChoiceClicked(choice)}
 							>
-								{choice.choice? choice.choice : ". . ."}
+								{choice.choice ? choice.choice : ". . ."}
 							</div>
 						))}
 					</div>

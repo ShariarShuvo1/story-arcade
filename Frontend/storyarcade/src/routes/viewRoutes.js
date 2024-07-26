@@ -1,5 +1,5 @@
-import { Navigate } from "react-router-dom";
 import ViewStory from "../components/View/ViewStory";
+import Tes from "../components/Test/Tes";
 
 function RouteView() {
 	return [
