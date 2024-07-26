@@ -16,6 +16,8 @@ function ViewStory() {
 	const [currentStep, setCurrentStep] = useState(null);
 	const [currentItem, setCurrentItem] = useState(null);
 
+	const [choices, setChoices] = useState([]);
+
 	const [listOfSteps, setListOfSteps] = useState([]);
 	const [listOfPageStory, setListOfPageStory] = useState([]);
 	const [listOfChoices, setListOfChoices] = useState([]);
@@ -130,11 +132,32 @@ function ViewStory() {
 			);
 			setCurrentItem(tempItem);
 		}
-		if (currentStep && currentStep.step_type === "task") {
+		else if (currentStep && currentStep.step_type === "task") {
 			const tempItem = listOfTasks.find(
 				(item) => item.task_number === currentStep.child_step_number
 			);
 			setCurrentItem(tempItem);
+		}
+		else if (currentStep && currentStep.step_type === "choice") {
+			const tempItem = listOfChoices.find(
+				(item) => item.choice_number === currentStep.child_step_number
+			);
+			setCurrentItem(tempItem);
+			let tempChoices = [];
+			for(let i = 0; i < listOfSteps.length; i++){
+				if (listOfSteps[i].step_type === "choice"){
+					for(let j = 0; j < listOfChoices.length; j++){
+						if (listOfChoices[j].choice_number === listOfSteps[i].child_step_number){
+							tempChoices.push(listOfChoices[j]);
+						}
+					}
+				}
+			}
+			setChoices(tempChoices);
+			setCurrentItem(null);
+		}
+		else{
+			setCurrentItem(null);
 		}
 	}, [currentStep]);
 
@@ -153,16 +176,39 @@ function ViewStory() {
 		return temp_new_step;
 	};
 
+	const changePage = (page_id) => {
+		let next_page = pages.find((page) => page._id === page_id);
+		if (next_page) {
+			setCurrentPage(next_page);
+			if (next_page.steps.length > 0){
+				setCurrentStep(next_page.steps[0]);
+			}
+			else{
+				setCurrentStep(null);
+			}
+			setCurrentItem(null);
+			setListOfSteps(next_page.steps);
+			setListOfPageStory(next_page.page_story);
+			setListOfChoices(next_page.choices);
+			setListOfTasks(next_page.tasks);
+			setListOfMover(next_page.mover);
+		}
+	}
+
 	const handleClick = () => {
 		if (currentStep && currentItem && currentStep.step_type === "story") {
+			let audio = new Audio(require("../../Assets/Sound/click.mp3"));
 			if (currentStep.next_type === "step") {
-				let audio = new Audio(require("../../Assets/Sound/click.mp3"));
 				let temp_new_step = getNextStep();
 				if (temp_new_step) {
 					audio.play();
 					setCurrentStep(temp_new_step);
 				}
-			} else {
+			}
+			else if(currentStep.next_type === "page") {
+				audio.play();
+				let page_id = currentStep.next_page;
+				changePage(page_id);
 			}
 		}
 	};
@@ -174,23 +220,37 @@ function ViewStory() {
 			currentStep.step_type === "task" &&
 			currentItem.task === "button"
 		) {
+			let audio = new Audio(
+				require("../../Assets/Sound/button_press.mp3")
+			);
+			audio.play();
 			if (currentStep.next_type === "step") {
-				let audio = new Audio(
-					require("../../Assets/Sound/button_press.mp3")
-				);
-				audio.play();
 
 				let temp_new_step = getNextStep();
 				if (temp_new_step) {
 					setCurrentStep(temp_new_step);
 				}
 			}
+			else if(currentStep.next_type === "page") {
+				let page_id = currentStep.next_page;
+				changePage(page_id);
+			}
 		}
 	};
 
+	const handleChoiceClicked = (choice) => {
+		let audio = new Audio(
+			require("../../Assets/Sound/button_press.mp3")
+		);
+		audio.play();
+		let tempStep = listOfSteps.find( step => (step.child_step_number === choice.choice_number) && (step.step_type === "choice"));
+		let page_id = tempStep.next_page;
+		changePage(page_id);
+	}
+
 	return (
 		<div
-			className={`min-h-screen bg-gradient-to-tr from-purple-200 to-cyan-200 p-4 ${
+			className={`min-h-screen bg-gradient-to-tr from-purple-200 to-cyan-200 p-4 ps-0 ${
 				currentPage && currentPage.background_image
 					? "bg-cover bg-center"
 					: ""
@@ -231,6 +291,23 @@ function ViewStory() {
 						>
 							{currentItem.button}
 						</button>
+					</div>
+				)}
+
+			{currentStep &&
+				currentStep.step_type === "choice" &&
+				choices &&
+				choices.length > 0 && (
+					<div className="absolute" style={{bottom: "10%"}}>
+						{choices.map((choice, index) => (
+							<div
+								key={index}
+								className="p-2 mt-2 bg-opacity-70 bg-black hover:bg-slate-900 text-text-muted cursor-pointer border-2 border-s-0 border-text-light w-fit rounded-full rounded-s-none text-2xl select-none hover:scale-105 transform duration-300 font-semibold"
+								onClick={() => handleChoiceClicked(choice)}
+							>
+								{choice.choice? choice.choice : ". . ."}
+							</div>
+						))}
 					</div>
 				)}
 		</div>
