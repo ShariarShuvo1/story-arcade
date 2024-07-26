@@ -128,7 +128,7 @@ function Display({
 									}
 								}}
 							>
-								{choice.choice}
+								{choice.choice? choice.choice : ". . ."}
 							</div>
 						))}
 					</div>
