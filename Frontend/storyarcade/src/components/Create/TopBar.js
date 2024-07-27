@@ -62,6 +62,9 @@ function TopBar({
                 setStory(response_story);
                 setSelectedItem(null);
             } else {
+                notification.error({
+                    message: `${response.data.message}`,
+                });
                 navigate("/");
             }
         }
@@ -83,6 +86,9 @@ function TopBar({
                     await handleDelete();
                 }
             } else {
+                notification.error({
+                    message: `${response.data.message}`,
+                });
                 navigate("/");
             }
 
@@ -126,7 +132,7 @@ function TopBar({
                     setSelectedPage(1);
                 }
                 setStory(tempStory);
-                notification.error({
+                notification.success({
                     message: `${response.data.message}`,
                 });
             } else {
@@ -146,10 +152,8 @@ function TopBar({
 
     };
 
-
-
     return (
-        <div className="bg-slate-900 mx-1 p-2 text-text-muted font-extrabold text-2xl rounded-lg flex justify-between">
+        <div className="bg-slate-900 mx-1 p-2 text-text-muted font-extrabold text-2xl content-center items-center rounded-lg flex justify-between">
             <DeleteModal
                 deleteModalVisible={deleteModalVisible}
                 setDeleteModalVisible={setDeleteModalVisible}
@@ -157,14 +161,25 @@ function TopBar({
                 setSelectedPage={setSelectedPage}
                 handleDelete={handleDelete}
             />
-            <div>
-                <h1>{title}</h1>
+            <div className="me-4">
+                {title}
             </div>
-            <div
-                className="bg-red-600 select-none p-1 px-4 font-semibold cursor-pointer hover:bg-red-500 rounded-lg text-lg text-black"
-                onClick={handleInitialDelete}
-            >
-                Delete This Page
+            <div className="flex gap-4">
+                <div
+                    className="bg-blue-600 select-none p-1 px-4 font-semibold cursor-pointer hover:bg-blue-500 rounded-lg text-lg text-black"
+                    onClick={() => {
+                        saveChange();
+                        window.open(`/view/preview/${storyId}/${selected_page}`, '_blank');
+                    }}
+                >
+                    Preview This Page
+                </div>
+                <div
+                    className="bg-red-600 select-none p-1 px-4 font-semibold cursor-pointer hover:bg-red-500 rounded-lg text-lg text-black"
+                    onClick={handleInitialDelete}
+                >
+                    Delete This Page
+                </div>
             </div>
         </div>
     );

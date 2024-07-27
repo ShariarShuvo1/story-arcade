@@ -54,6 +54,7 @@ function ViewStory() {
 					message: "Failed to get pages",
 					description: response.data.message,
 				});
+				navigate("/");
 			}
 			setIsLoading(false);
 		};
@@ -101,24 +102,32 @@ function ViewStory() {
 						storyId,
 						child_pages
 					);
-					let tempPages = [...pages];
-					let received_pages = response.data.pages;
-					for (let i = 0; i < received_pages.length; i++) {
-						let page_found = false;
-						for (let j = 0; j < tempPages.length; j++) {
-							if (
-								received_pages[i].page_number ===
-								tempPages[j].page_number
-							) {
-								page_found = true;
-								break;
+					if (response.status === 200) {
+						let tempPages = [...pages];
+						let received_pages = response.data.pages;
+						for (let i = 0; i < received_pages.length; i++) {
+							let page_found = false;
+							for (let j = 0; j < tempPages.length; j++) {
+								if (
+									received_pages[i].page_number ===
+									tempPages[j].page_number
+								) {
+									page_found = true;
+									break;
+								}
+							}
+							if (!page_found) {
+								tempPages.push(received_pages[i]);
 							}
 						}
-						if (!page_found) {
-							tempPages.push(received_pages[i]);
-						}
+						setPages(tempPages);
 					}
-					setPages(tempPages);
+					else {
+						notification.error({
+							message: `${response.data.message}`,
+						});
+						navigate("/");
+					}
 				}
 			}
 		};

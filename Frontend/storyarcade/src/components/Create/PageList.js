@@ -1,4 +1,4 @@
-import { Tooltip } from "antd";
+import {notification, Tooltip} from "antd";
 import add_page_image from "../../Assets/Icon/add_new_page.png";
 import add_page_image_hover from "../../Assets/Icon/add_new_page_hover.png";
 import React from "react";
@@ -78,6 +78,9 @@ function PageList({
 				setStory(response_story);
 				setSelectedItem(null);
 			} else {
+				notification.error({
+					message: `${response.data.message}`,
+				});
 				navigate("/");
 			}
 		}

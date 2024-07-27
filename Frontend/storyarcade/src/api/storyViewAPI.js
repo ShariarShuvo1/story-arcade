@@ -2,9 +2,10 @@ import axios from "axios";
 
 const BASE_URL = "/storyView";
 
-export const getInitialPages = async (jwt, story_id) => {
+export const getInitialPages = async (jwt, story_id, page_no=null) => {
     const body = {
         story_id: story_id,
+        page_no: page_no,
     };
     return await axios.post(`${BASE_URL}/getInitialPages`, body, {
         headers: {

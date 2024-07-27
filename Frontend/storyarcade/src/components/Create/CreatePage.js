@@ -13,6 +13,7 @@ import Display from "./Display";
 import { getPointsLeft } from "../../api/usersAPI";
 import AIModal from "./AIModal";
 import TopBar from "./TopBar";
+import {notification} from "antd";
 
 function CreatePage() {
 	const jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -94,6 +95,11 @@ function CreatePage() {
 						setStory(response_story);
 					}
 				}
+				else {
+					notification.error({
+						message: `${response.data.message}`,
+					});
+				}
 			}
 			setSelectedItem(null);
 			setIsLoading(false);
@@ -127,6 +133,9 @@ function CreatePage() {
 					setStory(response_story);
 				}
 			} else {
+				notification.error({
+					message: `${response.data.message}`,
+				});
 				navigate("/");
 			}
 			setIsLoading(false);
