@@ -73,3 +73,33 @@ export const getPageList = async (jwt, page_number, story_id) => {
 	});
 };
 
+export const initialPageDeleteCheck = async (jwt, page_number, story_id) => {
+    const body = {
+		page_number: page_number,
+		story_id: story_id,
+    };
+	return await axios.post(`${BASE_URL}/initialPageDeleteCheck`, body, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+		},
+		validateStatus: (status) => {
+			return true;
+		},
+	});
+};
+
+export const pageDelete = async (jwt, page_number, story_id) => {
+    const body = {
+		page_number: page_number,
+		story_id: story_id,
+    };
+	return await axios.post(`${BASE_URL}/pageDelete`, body, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+		},
+		validateStatus: (status) => {
+			return true;
+		},
+	});
+};
+

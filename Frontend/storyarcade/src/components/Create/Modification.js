@@ -29,7 +29,7 @@ function Modification({
 			{selectedItem && (
 				<div
 					id="taskList"
-					className="bg-slate-900 rounded-2xl p-4 w-96 overflow-y-auto "
+					className="bg-slate-900 rounded-2xl p-4 w-96 overflow-y-auto 2xl:max-h-[700px] xl:max-h-[600px] lg:max-h-[500px] md:max-h-[400px] sm:max-h-[300px] max-h-[200px]"
 				>
 					<div className="text-text-muted text-center font-bold text-3xl mb-4">
 						Modification

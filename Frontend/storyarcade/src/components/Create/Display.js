@@ -124,7 +124,7 @@ function Display({
 						{tempListOfChoice.map((choice, index) => (
 							<div
 								key={index}
-								className="p-2 mt-2 bg-opacity-70 bg-black hover:bg-slate-900 text-text-muted cursor-pointer border-2 border-s-0 border-text-light w-fit rounded-full rounded-s-none text-lg font-semibold"
+								className="p-2 mt-2 hover:scale-105 transition duration-300 bg-opacity-70 bg-black hover:bg-slate-900 text-text-muted cursor-pointer border-2 border-s-0 border-text-light w-fit rounded-full rounded-s-none text-lg font-semibold"
 								onClick={(e) => {
 									for (
 										let i = 0;
