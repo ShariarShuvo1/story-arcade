@@ -1,4 +1,4 @@
-import {notification, Tooltip} from "antd";
+import { notification, Tooltip } from "antd";
 import add_page_image from "../../Assets/Icon/add_new_page.png";
 import add_page_image_hover from "../../Assets/Icon/add_new_page_hover.png";
 import React from "react";
@@ -29,7 +29,7 @@ function PageList({
 	setSelectedItem,
 	listOfMover,
 	setListOfMover,
-					  setTitle
+	setTitle,
 }) {
 	const addNewPage = async () => {
 		setIsLoading(true);

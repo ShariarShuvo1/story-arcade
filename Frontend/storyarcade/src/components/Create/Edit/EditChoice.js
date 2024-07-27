@@ -50,12 +50,17 @@ function EditChoice({
 	};
 
 	useEffect(() => {
-		if (pageList && pageList.length > 0 && !selectedItem.next_page && selectedItem.next_type === "page"){
+		if (
+			pageList &&
+			pageList.length > 0 &&
+			!selectedItem.next_page &&
+			selectedItem.next_type === "page"
+		) {
 			let tempSelectedItem = selectedItem;
 			tempSelectedItem.next_page = pageList[0].id;
 			setSelectedItem(tempSelectedItem);
 		}
-	}, [ selectedItem, pageList]);
+	}, [selectedItem, pageList]);
 
 	return (
 		<div>

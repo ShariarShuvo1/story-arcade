@@ -8,7 +8,6 @@ export const llamaGetTitle = async (jwt, story) => {
     };
     return await axios.post(`${BASE_URL_AI}/llamaGetTitle`, body, {
         headers: {
-
             Authorization: `Bearer ${jwt}`,
         },
         validateStatus: (status) => {

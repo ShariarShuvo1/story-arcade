@@ -426,7 +426,7 @@ const pageDelete = asyncHandler(async (req, res) => {
 
 	await Page.deleteOne({ _id: tempPageId }).exec();
 
-    const list_of_page_numbers_from_db = await Page.find(
+	const list_of_page_numbers_from_db = await Page.find(
 		{ story: story_id },
 		"page_number"
 	)
@@ -438,9 +438,10 @@ const pageDelete = asyncHandler(async (req, res) => {
 		list_of_page_numbers.push(page.page_number);
 	});
 
-	return res
-		.status(200)
-		.json({ message: "Page deleted successfully", story: list_of_page_numbers });
+	return res.status(200).json({
+		message: "Page deleted successfully",
+		story: list_of_page_numbers,
+	});
 });
 
 module.exports = {

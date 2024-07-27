@@ -121,8 +121,7 @@ function ViewStory() {
 							}
 						}
 						setPages(tempPages);
-					}
-					else {
+					} else {
 						notification.error({
 							message: `${response.data.message}`,
 						});

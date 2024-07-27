@@ -37,23 +37,22 @@ const getInitialPages = asyncHandler(async (req, res) => {
 	}
 
 	let pages = [];
-    let initial_pages = null;
-    if (!page_no) {
-        initial_pages = await Page.findOne({
-            story: story_id,
-            is_starting_page: true,
-        })
-            .lean()
-            .exec();
-    }
-    else{
-        initial_pages = await Page.findOne({
-            story: story_id,
-            page_number: page_no,
-        })
-            .lean()
-            .exec();
-    }
+	let initial_pages = null;
+	if (!page_no) {
+		initial_pages = await Page.findOne({
+			story: story_id,
+			is_starting_page: true,
+		})
+			.lean()
+			.exec();
+	} else {
+		initial_pages = await Page.findOne({
+			story: story_id,
+			page_number: page_no,
+		})
+			.lean()
+			.exec();
+	}
 
 	if (!initial_pages) {
 		return res.status(404).json({ message: "No pages found" });

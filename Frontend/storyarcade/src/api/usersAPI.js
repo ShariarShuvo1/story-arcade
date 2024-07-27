@@ -39,3 +39,14 @@ export const getPointsLeft = async (jwt) => {
 	});
 };
 
+export const getName = async (jwt) => {
+	return await axios.get(`${BASE_URL}/getName`, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+		},
+		validateStatus: (status) => {
+			return true;
+		},
+	});
+};
+

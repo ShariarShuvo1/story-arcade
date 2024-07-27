@@ -137,8 +137,23 @@ const getPointsLeft = asyncHandler(async (req, res) => {
 	return res.status(200).json({ point: user.points_left });
 });
 
+const getName = asyncHandler(async (req, res) => {
+	const token = req.headers.authorization.split(" ")[1];
+	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	if (!decoded) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+	const user_id = decoded._id;
+	const user = await User.findById(user_id).lean().exec();
+	if (!user) {
+		return res.status(404).json({ message: "User not found" });
+	}
+	return res.status(200).json({ name: user.name });
+});
+
 module.exports = {
 	loginUser,
 	createNewUser,
 	getPointsLeft,
+	getName,
 };

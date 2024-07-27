@@ -13,7 +13,7 @@ import Display from "./Display";
 import { getPointsLeft } from "../../api/usersAPI";
 import AIModal from "./AIModal";
 import TopBar from "./TopBar";
-import {notification} from "antd";
+import { notification } from "antd";
 
 function CreatePage() {
 	const jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -94,8 +94,7 @@ function CreatePage() {
 						setCurrentPage(response_page);
 						setStory(response_story);
 					}
-				}
-				else {
+				} else {
 					notification.error({
 						message: `${response.data.message}`,
 					});

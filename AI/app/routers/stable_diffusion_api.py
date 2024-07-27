@@ -200,7 +200,7 @@ async def gifGenForPage(request: Request):
         if user["points_left"] < 2:
             return JSONResponse(content={"message": "Not enough points"}, status_code=400)
         user_collection.update_one({"_id": user["_id"]}, {
-                                   "$inc": {"points_left": -2}})
+            "$inc": {"points_left": -2}})
         if not prompt:
             return JSONResponse(content={"message": "Prompt Required"}, status_code=400)
 
