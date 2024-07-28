@@ -220,8 +220,8 @@ function ToolBar({
 	};
 
 	return (
-		<div className="flex flex-col items-center">
-			<div className="fixed bottom-20 bg-gradient-to-r from-teal-200 to-orange-200 p-2 rounded-lg mx-64 flex justify-center gap-4">
+		<div className="flex flex-col items-center justify-center">
+			<div className="fixed bottom-20 bg-gradient-to-r from-teal-200 to-orange-200 p-2 rounded-lg flex justify-center gap-2">
 				<Tooltip title="Add Text" placement="top" color="purple">
 					<button
 						className="border-2 border-fuchsia-500 hover:border-fuchsia-600 hover:bg-fuchsia-100 rounded-lg p-1"

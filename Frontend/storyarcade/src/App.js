@@ -26,23 +26,23 @@ function App() {
 			children: [
 				{
 					path: "/login",
-					element: jwt ? <Navigate to="/home" /> : <Login />,
+					element: <Login />,
 				},
 				{
 					path: "/signup",
-					element: jwt ? <Navigate to="/home" /> : <Signup />,
+					element: <Signup />,
 				},
 				{
 					path: "/home",
-					element: jwt ? <Homepage /> : <Navigate to="/login" />,
+					element: <Homepage />,
 				},
 				{
 					path: "/",
-					element: jwt ? <Homepage /> : <Navigate to="/login" />,
+					element: <Homepage /> ,
 				},
 				{
 					path: "/homepage",
-					element: jwt ? <Homepage /> : <Navigate to="/login" />,
+					element: <Homepage />,
 				},
 				{
 					path: "/emailVerify",
@@ -50,14 +50,14 @@ function App() {
 				},
 				{
 					path: "/forgetPassword",
-					element: jwt ? <Homepage /> : <ForgetPassword />,
+					element: <ForgetPassword />,
 				},
 				{
 					path: "/forgetPasswordOtp/:email",
 					element: <ForgetPasswordOtp />,
 				},
 				{
-					path: "/profile", // Add route for Profile
+					path: "/profile",
 					element: <Profile />,
 				},
 				...RouteCreate(),

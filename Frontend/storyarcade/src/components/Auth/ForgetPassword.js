@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import LoadingFullscreen from "../../Tools/Loading";
 
 function ForgetPassword() {
@@ -8,6 +8,13 @@ function ForgetPassword() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [email, setEmail] = useState("");
 	const [error, setError] = useState("");
+	const jwt = localStorage.getItem("jwt");
+
+	useEffect(() => {
+		if (jwt) {
+			navigate("/home");
+		}
+	}, [jwt]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -33,7 +40,7 @@ function ForgetPassword() {
 	};
 
 	return (
-		<div className="flex px-4 items-center justify-center min-h-screen bg-gradient-to-tr from-purple-200 to-cyan-200">
+		<div className="flex px-4 items-center justify-center h-full">
 			{isLoading && <LoadingFullscreen/>}
 
 			<form

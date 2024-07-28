@@ -38,6 +38,12 @@ function CreatePage() {
 	const [prompt, setPrompt] = useState("");
 	const [title, setTitle] = useState("");
 
+	useEffect(() => {
+		if (!jwt) {
+			navigate("/");
+		}
+	}, [jwt]);
+
 	const fetchPointsLeft = async () => {
 		setIsLoading(true);
 		const response = await getPointsLeft(jwt);
@@ -118,7 +124,7 @@ function CreatePage() {
 				let response_story = response.data.story;
 				let response_page = response.data.page;
 				setTitle(response.data.story_title);
-				if (response_story.length === 0) {
+				if (response_story.length === 0 && jwt) {
 					setSelectedPage(1);
 				} else {
 					setListOfSteps(response_page.steps);
@@ -144,7 +150,7 @@ function CreatePage() {
 
 	return (
 		<DndProvider backend={HTML5Backend}>
-			<div className="min-h-screen bg-gradient-to-tr from-purple-200 to-cyan-200 pt-1">
+			<div className="pt-1">
 				<AIModal
 					fetchPointsLeft={fetchPointsLeft}
 					setIsLoading={setIsLoading}
@@ -188,7 +194,7 @@ function CreatePage() {
 					pointsLeft={pointsLeft}
 					setPointsLeft={setPointsLeft}
 				/>
-				<div className="lg:flex gap-4 justify-between p-1">
+				<div className="lg:flex gap-4 justify-between my-1 me-1">
 					<TaskList
 						listOfSteps={listOfSteps}
 						listOfTasks={listOfTasks}

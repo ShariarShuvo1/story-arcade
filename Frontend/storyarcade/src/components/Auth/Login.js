@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { useLogin } from "../../hooks/useLogin";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingFullscreen from "../../Tools/Loading";
@@ -8,6 +8,13 @@ const Login = () => {
 	const [password, setPassword] = useState("");
 	const { login, error, isLoading } = useLogin();
 	const navigate = useNavigate();
+	const jwt = localStorage.getItem("jwt");
+
+	useEffect(() => {
+		if (jwt) {
+			navigate("/home");
+		}
+	}, [jwt]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -15,7 +22,7 @@ const Login = () => {
 	};
 
 	return (
-		<div className="flex px-4 items-center justify-center min-h-screen bg-gradient-to-tr from-purple-200 to-cyan-200">
+		<div className="flex px-4 items-center justify-center h-full">
 			{isLoading && <LoadingFullscreen/>}
 
 			<form
