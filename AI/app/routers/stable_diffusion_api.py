@@ -3,7 +3,7 @@ from diffusers import StableDiffusionPipeline
 import os
 import base64
 from io import BytesIO
-from .llama_api import llama_extract_prompt
+from .llama_api import llama_extract_prompt, get_page_prompt
 from bson import ObjectId
 from fastapi import APIRouter, Request
 from langchain_community.llms import Ollama
@@ -33,7 +33,7 @@ def generate_image(prompt: str):
         model_path, local_files_only=True)
     pipeline.to("cuda")
 
-    image = pipeline(prompt, num_inference_steps=50,
+    image = pipeline(prompt, num_inference_steps=100,
                      height=720, width=1024).images[0]
     return image
 
@@ -166,6 +166,10 @@ async def sdGetImage(request: Request):
 async def imageGenForPage(request: Request):
     body = await request.json()
     prompt = body['prompt']
+
+    story_id = body['storyId']
+    page_number = body['pageNumber']
+
     jwt_token = request.headers.get('Authorization')
     user_jwt = validate_jwt(jwt_token)
     if user_jwt:
@@ -174,10 +178,16 @@ async def imageGenForPage(request: Request):
             return JSONResponse(content={"message": "User not found"}, status_code=404)
         if user["points_left"] < 1:
             return JSONResponse(content={"message": "Not enough points"}, status_code=400)
-        user_collection.update_one({"_id": user["_id"]}, {
-                                   "$inc": {"points_left": -1}})
-        if not prompt:
-            return JSONResponse(content={"message": "Prompt Required"}, status_code=400)
+
+        if story_id and page_number:
+            prompt = get_page_prompt(story_id, page_number)
+            user_collection.update_one({"_id": user["_id"]}, {
+                "$inc": {"points_left": -2}})
+        else:
+            if not prompt:
+                return JSONResponse(content={"message": "Prompt Required"}, status_code=400)
+            user_collection.update_one({"_id": user["_id"]}, {
+                "$inc": {"points_left": -1}})
 
         image = generate_image(prompt)
         encoded_image = get_base64_image(image)
@@ -191,6 +201,10 @@ async def imageGenForPage(request: Request):
 async def gifGenForPage(request: Request):
     body = await request.json()
     prompt = body['prompt']
+
+    story_id = body['storyId']
+    page_number = body['pageNumber']
+
     jwt_token = request.headers.get('Authorization')
     user_jwt = validate_jwt(jwt_token)
     if user_jwt:
@@ -199,10 +213,16 @@ async def gifGenForPage(request: Request):
             return JSONResponse(content={"message": "User not found"}, status_code=404)
         if user["points_left"] < 2:
             return JSONResponse(content={"message": "Not enough points"}, status_code=400)
-        user_collection.update_one({"_id": user["_id"]}, {
-                                   "$inc": {"points_left": -2}})
-        if not prompt:
-            return JSONResponse(content={"message": "Prompt Required"}, status_code=400)
+
+        if story_id and page_number:
+            prompt = get_page_prompt(story_id, page_number, True)
+            user_collection.update_one({"_id": user["_id"]}, {
+                "$inc": {"points_left": -3}})
+        else:
+            if not prompt:
+                return JSONResponse(content={"message": "Prompt Required"}, status_code=400)
+            user_collection.update_one({"_id": user["_id"]}, {
+                "$inc": {"points_left": -2}})
 
         image = generate_gif(prompt)
         encoded_image = get_base64_gif(image[0])

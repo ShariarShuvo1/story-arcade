@@ -8,4 +8,6 @@ router.route("/loginUser").post(usersController.loginUser);
 
 router.route("/getPointsLeft").get(usersController.getPointsLeft);
 
+router.route("/getName").get(usersController.getName);
+
 module.exports = router;

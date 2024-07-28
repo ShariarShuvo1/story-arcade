@@ -6,9 +6,9 @@ import LoadingFullscreen from "../../Tools/Loading";
 import page from "../../Models/Page";
 import SwipeableButton from "../SwipeableButton/SwipeableButton";
 
-function ViewStory() {
+function Preview() {
 	const jwt = JSON.parse(localStorage.getItem("jwt"));
-	const { storyId } = useParams();
+	const { storyId, pageId } = useParams();
 	const navigate = useNavigate();
 	const [is_loading, setIsLoading] = useState(false);
 
@@ -26,15 +26,15 @@ function ViewStory() {
 	const [listOfMover, setListOfMover] = useState([]);
 
 	useEffect(() => {
-		if (!jwt || !storyId) {
+		if (!jwt || !storyId || !pageId) {
 			navigate("/");
 		}
-	}, [jwt, storyId]);
+	}, [jwt, storyId, pageId]);
 
 	useEffect(() => {
 		const getPages = async () => {
 			setIsLoading(true);
-			const response = await getInitialPages(jwt, storyId);
+			const response = await getInitialPages(jwt, storyId, pageId);
 			if (response.status === 200) {
 				let tempPages = response.data.pages;
 				setPages(tempPages);
@@ -400,4 +400,4 @@ function ViewStory() {
 	);
 }
 
-export default ViewStory;
+export default Preview;

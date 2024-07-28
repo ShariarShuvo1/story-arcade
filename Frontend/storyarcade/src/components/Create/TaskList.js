@@ -145,7 +145,7 @@ function TaskList({
 	return (
 		<div
 			id="taskList"
-			className="bg-slate-900 rounded-2xl p-4 w-96 overflow-y-auto h-screen"
+			className="bg-slate-900 rounded-2xl p-4 min-w-96 max-w-96 overflow-y-auto 2xl:h-[700px] xl:h-[600px] lg:h-[500px] md:h-[400px] sm:h-[300px] h-[200px]"
 		>
 			<div className="text-text-muted text-center font-bold text-3xl mb-4">
 				Steps

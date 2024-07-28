@@ -1,11 +1,15 @@
-import { Navigate } from "react-router-dom";
 import ViewStory from "../components/View/ViewStory";
+import Preview from "../components/View/Preview";
 
 function RouteView() {
 	return [
 		{
 			path: "/view/viewStory/:storyId",
 			element: <ViewStory />,
+		},
+		{
+			path: "/view/preview/:storyId/:pageId",
+			element: <Preview />,
 		},
 	];
 }

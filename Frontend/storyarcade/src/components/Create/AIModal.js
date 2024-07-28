@@ -1,4 +1,4 @@
-import { ConfigProvider, Modal, notification } from "antd";
+import { ConfigProvider, Modal, notification, Switch, Tooltip } from "antd";
 import React, { useState } from "react";
 import { gifGenForPage, imageGenForPage, sdGetImage } from "../../api/aiAPI";
 
@@ -12,11 +12,14 @@ function AIModal({
 	prompt,
 	setPrompt,
 	pointsLeft,
+	storyId,
+	selected_page,
 }) {
 	const [selectedMode, setSelectedMode] = useState("image");
+	const [includeStoryInfo, setIncludeStoryInfo] = useState(false);
 
 	const handleGenerateImage = async () => {
-		if (!prompt) {
+		if (!prompt && !includeStoryInfo) {
 			notification.error({
 				description: "Enter Prompt to generate",
 			});
@@ -26,9 +29,27 @@ function AIModal({
 		setAiImageModalVisible(false);
 		let response = null;
 		if (selectedMode === "image") {
-			response = await imageGenForPage(jwt, prompt);
+			if (includeStoryInfo) {
+				response = await imageGenForPage(
+					jwt,
+					prompt,
+					storyId,
+					selected_page
+				);
+			} else {
+				response = await imageGenForPage(jwt, prompt);
+			}
 		} else {
-			response = await gifGenForPage(jwt, prompt);
+			if (includeStoryInfo) {
+				response = await gifGenForPage(
+					jwt,
+					prompt,
+					storyId,
+					selected_page
+				);
+			} else {
+				response = await gifGenForPage(jwt, prompt);
+			}
 		}
 		await fetchPointsLeft();
 		setIsLoading(true);
@@ -67,11 +88,16 @@ function AIModal({
 				closable={false}
 			>
 				<textarea
-					className="w-full mt-4 px-3 py-2 border text-md rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-slate-900 hover:bg-slate-800 text-text-muted"
+					className={`w-full mt-4 px-3 py-2 border text-md rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-slate-900 text-text-muted ${
+						!includeStoryInfo
+							? "hover:bg-slate-800"
+							: "bg-gray-500 text-white"
+					}`}
 					placeholder="Write your prompt"
 					onChange={(e) => setPrompt(e.target.value)}
 					value={prompt}
 					rows={5}
+					disabled={includeStoryInfo}
 				/>
 				<div className="my-4 flex gap-4">
 					<button
@@ -100,6 +126,25 @@ function AIModal({
 						GIF
 					</button>
 				</div>
+
+				<div className="bg-gray-700 p-2 lg:flex rounded-lg font-semibold gap-2 items-center select-none text-white">
+					<Switch
+						defaultValue={includeStoryInfo}
+						onClick={() => setIncludeStoryInfo(!includeStoryInfo)}
+					/>
+
+					<Tooltip
+						title="This can reduce the response time of the AI Chat but can increase the accuracy of the image. Your prompt will be ignored."
+						placement="top"
+						color="purple"
+					>
+						<div>
+							Include This Page Information to Generate Image
+							(Slow)
+						</div>
+					</Tooltip>
+				</div>
+
 				<div className="flex justify-center mt-4">
 					<button
 						className="px-4 py-2 text-2xl text-black font-bold bg-button-secondary rounded-md hover:bg-button-secondary_hover"
@@ -126,7 +171,13 @@ function AIModal({
 						/>
 						Required Points:{" "}
 						<span className="text-text-muted">
-							{selectedMode === "image" ? "1" : "2"}
+							{selectedMode === "image"
+								? includeStoryInfo
+									? "2"
+									: "1"
+								: includeStoryInfo
+								? "3"
+								: "2"}
 						</span>
 					</div>
 					<div>

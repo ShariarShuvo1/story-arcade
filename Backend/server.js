@@ -30,6 +30,7 @@ app.use("/", require("./routes/root"));
 app.use("/users", require("./routes/userRoutes"));
 app.use("/story", require("./routes/storyRoutes"));
 app.use("/storyView", require("./routes/storyViewRoutes"));
+app.use("/aiChats", require("./routes/aiChatRoutes"));
 app.use(
 	"/emailVerification",
 	require("./routes/functionRoutes/emailVerificationRoutes")

@@ -53,21 +53,20 @@ function EditSlider({
 						return (
 							<div key={index} className="">
 								<div className="text-text-hover text-lg font-semibold">
-									Choose direction of the slider:
+									Enter text inside slider:
 								</div>
 
-								<select
-									className="w-full p-2 text-lg mt-1 text-text-light bg-slate-700 rounded-lg"
-									defaultValue={listOfTasks[index].slider}
+								<input
+									value={task.slider}
 									onChange={(e) => {
 										let tempTask = [...listOfTasks];
 										tempTask[index].slider = e.target.value;
 										setListOfTasks(tempTask);
 									}}
-								>
-									<option value="to_right">To Right</option>
-									<option value="to_left">To Left</option>
-								</select>
+									className="bg-transparent border-2 mt-1 w-full border-slate-500 p-2 rounded-lg text-text-light"
+									placeholder={"Enter Slider Text"}
+									maxLength={25}
+								/>
 
 								<NextSelector
 									setIsLoading={setIsLoading}

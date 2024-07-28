@@ -1,12 +1,13 @@
 import axios from "axios";
 
+const BASE_URL = "/aiChats";
 const BASE_URL_AI = "http://127.0.0.1:8000";
 
-export const llamaGetTitle = async (jwt, story) => {
+export const getPreviousChats = async (jwt, story_id) => {
     const body = {
-        story: story,
+        story_id: story_id
     };
-    return await axios.post(`${BASE_URL_AI}/llamaGetTitle`, body, {
+    return await axios.post(`${BASE_URL}/getPreviousChats`, body, {
         headers: {
             Authorization: `Bearer ${jwt}`,
         },
@@ -16,13 +17,11 @@ export const llamaGetTitle = async (jwt, story) => {
     });
 };
 
-export const sdGetImage = async (jwt, story, specificPrompt) => {
+export const clearAiChat = async (jwt, story_id) => {
     const body = {
-        story : story,
-        specificPrompt: specificPrompt,
+        story_id: story_id
     };
-
-    return await axios.post(`${BASE_URL_AI}/sdGetImage`, body, {
+    return await axios.post(`${BASE_URL}/clearAiChat`, body, {
         headers: {
             Authorization: `Bearer ${jwt}`,
         },
@@ -32,14 +31,12 @@ export const sdGetImage = async (jwt, story, specificPrompt) => {
     });
 };
 
-export const imageGenForPage = async (jwt, prompt, storyId=null, pageNumber=null) => {
+export const llamaChat = async (jwt, storyId, message) => {
     const body = {
-        prompt: prompt,
         storyId: storyId,
-        pageNumber: pageNumber,
+        message: message,
     };
-
-    return await axios.post(`${BASE_URL_AI}/imageGenForPage`, body, {
+    return await axios.post(`${BASE_URL_AI}/llamaChat`, body, {
         headers: {
             Authorization: `Bearer ${jwt}`,
         },
@@ -50,14 +47,13 @@ export const imageGenForPage = async (jwt, prompt, storyId=null, pageNumber=null
 };
 
 
-export const gifGenForPage = async (jwt, prompt, storyId=null, pageNumber=null) => {
+export const llamaStoryChat = async (jwt, storyId, message, pageNumber) => {
     const body = {
-        prompt: prompt,
         storyId: storyId,
-        pageNumber: pageNumber,
+        message: message,
+        pageNumber: pageNumber
     };
-
-    return await axios.post(`${BASE_URL_AI}/gifGenForPage`, body, {
+    return await axios.post(`${BASE_URL_AI}/llamaStoryChat`, body, {
         headers: {
             Authorization: `Bearer ${jwt}`,
         },

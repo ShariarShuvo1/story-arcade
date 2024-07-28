@@ -12,6 +12,8 @@ import Modification from "./Modification";
 import Display from "./Display";
 import { getPointsLeft } from "../../api/usersAPI";
 import AIModal from "./AIModal";
+import TopBar from "./TopBar";
+import { notification } from "antd";
 
 function CreatePage() {
 	const jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -34,6 +36,7 @@ function CreatePage() {
 	const [pointsLeft, setPointsLeft] = useState(0);
 	const [ai_image_modal_visible, setAiImageModalVisible] = useState(false);
 	const [prompt, setPrompt] = useState("");
+	const [title, setTitle] = useState("");
 
 	const fetchPointsLeft = async () => {
 		setIsLoading(true);
@@ -59,6 +62,7 @@ function CreatePage() {
 				if (response.status === 200) {
 					let response_story = response.data.story;
 					let response_page = response.data.page;
+					setTitle(response.data.story_title);
 					if (response_page === null) {
 						let is_start = selected_page === 1;
 						let tempPage = new Page(
@@ -90,6 +94,10 @@ function CreatePage() {
 						setCurrentPage(response_page);
 						setStory(response_story);
 					}
+				} else {
+					notification.error({
+						message: `${response.data.message}`,
+					});
 				}
 			}
 			setSelectedItem(null);
@@ -109,6 +117,7 @@ function CreatePage() {
 			if (response.status === 200) {
 				let response_story = response.data.story;
 				let response_page = response.data.page;
+				setTitle(response.data.story_title);
 				if (response_story.length === 0) {
 					setSelectedPage(1);
 				} else {
@@ -123,6 +132,9 @@ function CreatePage() {
 					setStory(response_story);
 				}
 			} else {
+				notification.error({
+					message: `${response.data.message}`,
+				});
 				navigate("/");
 			}
 			setIsLoading(false);
@@ -132,7 +144,7 @@ function CreatePage() {
 
 	return (
 		<DndProvider backend={HTML5Backend}>
-			<div className="min-h-screen bg-gradient-to-tr from-purple-200 to-cyan-200 p-4">
+			<div className="min-h-screen bg-gradient-to-tr from-purple-200 to-cyan-200 pt-1">
 				<AIModal
 					fetchPointsLeft={fetchPointsLeft}
 					setIsLoading={setIsLoading}
@@ -143,9 +155,40 @@ function CreatePage() {
 					prompt={prompt}
 					setPrompt={setPrompt}
 					pointsLeft={pointsLeft}
+					storyId={storyId}
+					selected_page={selected_page}
 				/>
 				{is_loading && <LoadingFullscreen />}
-				<div className="lg:flex gap-4 justify-between max-h-96 ">
+				<TopBar
+					title={title}
+					story={story}
+					selected_page={selected_page}
+					setSelectedPage={setSelectedPage}
+					setIsLoading={setIsLoading}
+					setSelectedItem={setSelectedItem}
+					jwt={jwt}
+					storyId={storyId}
+					currentPage={currentPage}
+					listOfSteps={listOfSteps}
+					setListOfSteps={setListOfSteps}
+					listOfPageStory={listOfPageStory}
+					setListOfPageStory={setListOfPageStory}
+					listOfChoices={listOfChoices}
+					setListOfChoices={setListOfChoices}
+					listOfTasks={listOfTasks}
+					setListOfTasks={setListOfTasks}
+					listOfMover={listOfMover}
+					setListOfMover={setListOfMover}
+					selectedImage={selectedImage}
+					setSelectedImage={setSelectedImage}
+					setCurrentPage={setCurrentPage}
+					setStory={setStory}
+					navigate={navigate}
+					setTitle={setTitle}
+					pointsLeft={pointsLeft}
+					setPointsLeft={setPointsLeft}
+				/>
+				<div className="lg:flex gap-4 justify-between p-1">
 					<TaskList
 						listOfSteps={listOfSteps}
 						listOfTasks={listOfTasks}
@@ -166,24 +209,26 @@ function CreatePage() {
 						listOfSteps={listOfSteps}
 					/>
 
-					<Modification
-						selectedItem={selectedItem}
-						listOfPageStory={listOfPageStory}
-						setListOfPageStory={setListOfPageStory}
-						listOfTasks={listOfTasks}
-						setListOfTasks={setListOfTasks}
-						listOfSteps={listOfSteps}
-						setListOfSteps={setListOfSteps}
-						setSelectedItem={setSelectedItem}
-						jwt={jwt}
-						selected_page={selected_page}
-						storyId={storyId}
-						setIsLoading={setIsLoading}
-						listOfChoices={listOfChoices}
-						setListOfChoices={setListOfChoices}
-						listOfMover={listOfMover}
-						setListOfMover={setListOfMover}
-					/>
+					{selectedItem && (
+						<Modification
+							selectedItem={selectedItem}
+							listOfPageStory={listOfPageStory}
+							setListOfPageStory={setListOfPageStory}
+							listOfTasks={listOfTasks}
+							setListOfTasks={setListOfTasks}
+							listOfSteps={listOfSteps}
+							setListOfSteps={setListOfSteps}
+							setSelectedItem={setSelectedItem}
+							jwt={jwt}
+							selected_page={selected_page}
+							storyId={storyId}
+							setIsLoading={setIsLoading}
+							listOfChoices={listOfChoices}
+							setListOfChoices={setListOfChoices}
+							listOfMover={listOfMover}
+							setListOfMover={setListOfMover}
+						/>
+					)}
 				</div>
 
 				<ToolBar
@@ -229,6 +274,7 @@ function CreatePage() {
 					setSelectedItem={setSelectedItem}
 					listOfMover={listOfMover}
 					setListOfMover={setListOfMover}
+					setTitle={setTitle}
 				/>
 			</div>
 		</DndProvider>

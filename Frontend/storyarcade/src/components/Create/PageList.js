@@ -1,4 +1,4 @@
-import { Tooltip } from "antd";
+import { notification, Tooltip } from "antd";
 import add_page_image from "../../Assets/Icon/add_new_page.png";
 import add_page_image_hover from "../../Assets/Icon/add_new_page_hover.png";
 import React from "react";
@@ -29,6 +29,7 @@ function PageList({
 	setSelectedItem,
 	listOfMover,
 	setListOfMover,
+	setTitle,
 }) {
 	const addNewPage = async () => {
 		setIsLoading(true);
@@ -65,6 +66,7 @@ function PageList({
 			if (response.status === 200) {
 				let response_story = response.data.story;
 				let response_page = response.data.page;
+				setTitle(response.data.story_title);
 				setListOfSteps(response_page.steps);
 				setListOfPageStory(response_page.page_story);
 				setListOfChoices(response_page.choices);
@@ -76,6 +78,9 @@ function PageList({
 				setStory(response_story);
 				setSelectedItem(null);
 			} else {
+				notification.error({
+					message: `${response.data.message}`,
+				});
 				navigate("/");
 			}
 		}
