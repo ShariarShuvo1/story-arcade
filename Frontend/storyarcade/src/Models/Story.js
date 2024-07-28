@@ -33,7 +33,6 @@ class Story {
 		this.original_uploader = original_uploader;
 		this.original_story = original_story;
 	}
-
 }
 
 export default Story;

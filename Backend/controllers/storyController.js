@@ -8,7 +8,12 @@ const mongoose = require("mongoose");
 
 const createStory = asyncHandler(async (req, res) => {
 	const token = req.headers.authorization.split(" ")[1];
-	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
 
 	if (!decoded) {
 		return res.status(401).json({ message: "Invalid Request" });
@@ -62,7 +67,12 @@ const createStory = asyncHandler(async (req, res) => {
 const getStory = asyncHandler(async (req, res) => {
 	let story_id = req.body.story_id;
 	const token = req.headers.authorization.split(" ")[1];
-	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
 
 	if (!story_id) {
 		return res.status(400).json({ message: "Story ID is required" });
@@ -96,7 +106,12 @@ const getPage = asyncHandler(async (req, res) => {
 	let story_id = req.body.story_id;
 	let page_number = req.body.page_number;
 	const token = req.headers.authorization.split(" ")[1];
-	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
 
 	if (!story_id) {
 		return res.status(400).json({ message: "Story ID is required" });
@@ -156,7 +171,12 @@ const getPage = asyncHandler(async (req, res) => {
 
 const saveAPage = asyncHandler(async (req, res) => {
 	const token = req.headers.authorization.split(" ")[1];
-	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
 	let { page, story_id } = req.body;
 
 	if (!story_id) {
@@ -231,7 +251,12 @@ const saveAPage = asyncHandler(async (req, res) => {
 
 const getPageList = asyncHandler(async (req, res) => {
 	const token = req.headers.authorization.split(" ")[1];
-	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
 	let { page_number, story_id } = req.body;
 
 	if (!story_id) {
@@ -289,7 +314,12 @@ const initialPageDeleteCheck = asyncHandler(async (req, res) => {
 	let story_id = req.body.story_id;
 	let page_number = req.body.page_number;
 	const token = req.headers.authorization.split(" ")[1];
-	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
 
 	if (!story_id) {
 		return res.status(400).json({ message: "Story ID is required" });
@@ -355,7 +385,12 @@ const pageDelete = asyncHandler(async (req, res) => {
 	let story_id = req.body.story_id;
 	let page_number = req.body.page_number;
 	const token = req.headers.authorization.split(" ")[1];
-	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
 
 	if (!story_id) {
 		return res.status(400).json({ message: "Story ID is required" });

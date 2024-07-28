@@ -50,3 +50,17 @@ export const getName = async (jwt) => {
 	});
 };
 
+export const addPoints = async (jwt, package_name) => {
+	const body = {
+		package_name: package_name,
+	};
+
+	return await axios.post(`${BASE_URL}/addPoints`, body, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+		},
+		validateStatus: (status) => {
+			return true;
+		},
+	});
+};

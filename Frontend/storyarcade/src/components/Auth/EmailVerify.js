@@ -44,7 +44,7 @@ function EmailVerify() {
 
 	return (
 		<div className="flex px-4 items-center justify-center h-full">
-			{isLoading && <LoadingFullscreen/>}
+			{isLoading && <LoadingFullscreen />}
 
 			<form
 				className="w-full max-w-md p-8 space-y-6 shadow-md rounded-md bg-gradient-to-tr from-slate-900 via-slate-800 to-zinc-800"

@@ -24,7 +24,7 @@ class Page {
 		page_story = [],
 		choices = [],
 		tasks = [],
-		mover = [],
+		mover = []
 	) {
 		this.page_number = page_number;
 		this.background_image = background_image;
