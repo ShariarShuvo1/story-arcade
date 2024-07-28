@@ -7,7 +7,12 @@ const jwt = require("jsonwebtoken");
 
 const getInitialPages = asyncHandler(async (req, res) => {
 	const token = req.headers.authorization.split(" ")[1];
-	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
 	let { story_id, page_no } = req.body;
 
 	if (!story_id) {
@@ -96,7 +101,12 @@ const getInitialPages = asyncHandler(async (req, res) => {
 
 const getNextPages = asyncHandler(async (req, res) => {
 	const token = req.headers.authorization.split(" ")[1];
-	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
 	let { story_id, child_pages } = req.body;
 
 	if (!story_id) {

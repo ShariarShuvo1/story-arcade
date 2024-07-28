@@ -8,7 +8,12 @@ const jwt = require("jsonwebtoken");
 
 const getPreviousChats = asyncHandler(async (req, res) => {
 	const token = req.headers.authorization.split(" ")[1];
-	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
 	let { story_id } = req.body;
 
 	if (!story_id) {
@@ -48,7 +53,12 @@ const getPreviousChats = asyncHandler(async (req, res) => {
 
 const clearAiChat = asyncHandler(async (req, res) => {
 	const token = req.headers.authorization.split(" ")[1];
-	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
 	let { story_id } = req.body;
 
 	if (!story_id) {

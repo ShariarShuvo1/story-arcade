@@ -125,7 +125,12 @@ const createNewUser = asyncHandler(async (req, res) => {
 
 const getPointsLeft = asyncHandler(async (req, res) => {
 	const token = req.headers.authorization.split(" ")[1];
-	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
 	if (!decoded) {
 		return res.status(401).json({ message: "Invalid Request" });
 	}
@@ -139,7 +144,12 @@ const getPointsLeft = asyncHandler(async (req, res) => {
 
 const getName = asyncHandler(async (req, res) => {
 	const token = req.headers.authorization.split(" ")[1];
-	const decoded = jwt.verify(token, process.env.JWT_SECRET);
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
 	if (!decoded) {
 		return res.status(401).json({ message: "Invalid Request" });
 	}
@@ -151,9 +161,50 @@ const getName = asyncHandler(async (req, res) => {
 	return res.status(200).json({ name: user.name });
 });
 
+// This is a dummy and insecure function
+const addPoints = asyncHandler(async (req, res) => {
+	const token = req.headers.authorization.split(" ")[1];
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+	const package_name = req.body.package_name;
+
+	if (!decoded) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+	const user_id = decoded._id;
+	const user = await User.findById(user_id).lean().exec();
+	if (!user) {
+		return res.status(404).json({ message: "User not found" });
+	}
+
+	if (!package_name) {
+		return res.status(400).json({ message: "Package not found" });
+	}
+
+	let points = 0;
+	if (package_name === "sack") {
+		points = 500;
+	} else if (package_name === "pot") {
+		points = 3000;
+	} else if (package_name === "crate") {
+		points = 7000;
+	}
+
+	await User.findByIdAndUpdate(user_id, {
+		$inc: { points_left: points },
+	}).exec();
+
+	return res.status(200).json({ message: "Points added to your account" });
+});
+
 module.exports = {
 	loginUser,
 	createNewUser,
 	getPointsLeft,
 	getName,
+	addPoints,
 };

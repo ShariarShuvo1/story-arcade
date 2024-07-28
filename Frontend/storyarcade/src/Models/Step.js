@@ -7,7 +7,14 @@ class Step {
 	 * @param {"step"|"page"} [next_type = "step"] - The next type.
 	 * @param {string} [next_page] - The next page.
 	 */
-	constructor(step_number, step_name, step_type, child_step_number, next_type= "step", next_page) {
+	constructor(
+		step_number,
+		step_name,
+		step_type,
+		child_step_number,
+		next_type = "step",
+		next_page
+	) {
 		this.step_number = step_number;
 		this.step_name = step_name;
 		this.step_type = step_type;

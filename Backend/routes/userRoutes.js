@@ -10,4 +10,6 @@ router.route("/getPointsLeft").get(usersController.getPointsLeft);
 
 router.route("/getName").get(usersController.getName);
 
+router.route("/addPoints").post(usersController.addPoints);
+
 module.exports = router;

@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useSignup } from "../../hooks/useSignup";
 import { useNavigate } from "react-router-dom";
 import LoadingFullscreen from "../../Tools/Loading";
@@ -25,7 +25,7 @@ const Signup = () => {
 
 	return (
 		<div className="flex items-center justify-center h-full">
-			{isLoading && <LoadingFullscreen/>}
+			{isLoading && <LoadingFullscreen />}
 
 			<form
 				className="w-full max-w-md p-8 space-y-6 shadow-md rounded-md bg-gradient-to-tr from-slate-900 via-slate-800 to-zinc-800"
