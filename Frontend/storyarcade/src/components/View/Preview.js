@@ -324,7 +324,7 @@ function Preview() {
 
 	return (
 		<div
-			className={`min-h-screen bg-gradient-to-tr from-purple-200 to-cyan-200 p-4 ps-0 ${
+			className={`h-full p-4 ps-0 ${
 				currentPage && currentPage.background_image
 					? "bg-cover bg-center"
 					: ""

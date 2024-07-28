@@ -24,6 +24,12 @@ function CreateTitle() {
 	const [allowCopy, setAllowCopy] = useState(true);
 
 	useEffect(() => {
+		if (!jwt) {
+			navigate("/");
+		}
+	}, [jwt]);
+
+	useEffect(() => {
 		if (selectedPrivacy === "Paid") {
 			setShowCoinNeeded(true);
 		} else {
@@ -161,7 +167,7 @@ function CreateTitle() {
 	};
 
 	return (
-		<div className="flex items-center justify-center min-h-screen bg-gradient-to-tr from-purple-200 to-cyan-200 p-4">
+		<div className="flex items-center justify-center h-full p-4">
 			<ConfigProvider
 				theme={{
 					components: {

@@ -156,7 +156,7 @@ function TopBar({
 	};
 
 	return (
-		<div className="bg-slate-900 mx-1 p-2 text-text-muted font-extrabold text-2xl content-center items-center rounded-lg flex justify-between">
+		<div className="bg-slate-900 me-1 p-2 text-text-muted font-extrabold text-2xl content-center items-center rounded-lg flex justify-between">
 			<DeleteModal
 				deleteModalVisible={deleteModalVisible}
 				setDeleteModalVisible={setDeleteModalVisible}

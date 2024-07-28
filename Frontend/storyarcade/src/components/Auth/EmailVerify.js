@@ -7,7 +7,6 @@ function EmailVerify() {
 	const jwt = JSON.parse(localStorage.getItem("jwt"));
 	const navigate = useNavigate();
 	const { dispatch } = useAuthContext();
-	// when finished, call ->     dispatch({ type: "LOGIN", payload: jwt });
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [otp, setOtp] = useState("");
@@ -17,7 +16,7 @@ function EmailVerify() {
 		if (!jwt) {
 			navigate("/login");
 		}
-	});
+	}, [jwt]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -44,7 +43,7 @@ function EmailVerify() {
 	};
 
 	return (
-		<div className="flex px-4 items-center justify-center min-h-screen bg-gradient-to-tr from-purple-200 to-cyan-200">
+		<div className="flex px-4 items-center justify-center h-full">
 			{isLoading && <LoadingFullscreen/>}
 
 			<form
