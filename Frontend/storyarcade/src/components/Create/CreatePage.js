@@ -155,6 +155,8 @@ function CreatePage() {
 					prompt={prompt}
 					setPrompt={setPrompt}
 					pointsLeft={pointsLeft}
+					storyId={storyId}
+					selected_page={selected_page}
 				/>
 				{is_loading && <LoadingFullscreen />}
 				<TopBar

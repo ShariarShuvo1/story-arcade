@@ -41,6 +41,7 @@ function TopBar({
 	const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 	const [conflicts, setConflicts] = useState([]);
 	const [openDrawer, setOpenDrawer] = useState(false);
+	const [includeStoryInfo, setIncludeStoryInfo] = useState(false);
 
 	const saveChange = async () => {
 		let tempPage = currentPage;
@@ -172,6 +173,8 @@ function TopBar({
 					selected_page={selected_page}
 					pointsLeft={pointsLeft}
 					setPointsLeft={setPointsLeft}
+					includeStoryInfo={includeStoryInfo}
+					setIncludeStoryInfo={setIncludeStoryInfo}
 				/>
 			)}
 			<div className="me-4">{title}</div>

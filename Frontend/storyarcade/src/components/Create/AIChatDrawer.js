@@ -27,6 +27,8 @@ function AIChatDrawer({
 	selected_page,
 	pointsLeft,
 	setPointsLeft,
+	includeStoryInfo,
+	setIncludeStoryInfo,
 }) {
 	const [chatList, setChatList] = useState([]);
 	const [initialChatLoading, setInitialChatLoading] = useState(false);
@@ -37,7 +39,6 @@ function AIChatDrawer({
 	const [showDummyLoader, setShowDummyLoader] = useState(false);
 	const bottomRef = useRef(null);
 	const textareaRef = useRef(null);
-	const [includeStoryInfo, setIncludeStoryInfo] = useState(false);
 
 	const showNotification = (message) => {
 		notification.error({
@@ -283,7 +284,7 @@ function AIChatDrawer({
 							</button>
 							<div className="bg-gray-700 p-2 lg:flex rounded-lg font-semibold gap-2 items-center select-none">
 								<Tooltip
-									title="This can reduce the response time of the AI Chat but can increase the accuracy of the AI Chat."
+									title="This can reduce the response time of the AI Chat but can increase the accuracy of the AI Chat"
 									placement="top"
 									color="purple"
 								>
@@ -302,7 +303,7 @@ function AIChatDrawer({
 							</div>
 							<Tooltip
 								className="flex items-center gap-1 select-none"
-								title="Each message costs 1 coin"
+								title={`Each message costs 1 coin. You have a total of ${pointsLeft} coins to spend.`}
 								placement="top"
 								color="purple"
 							>

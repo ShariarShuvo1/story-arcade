@@ -201,3 +201,40 @@ async def llamaStoryChat(request: Request):
         return JSONResponse(content={"answer": generated_response}, status_code=200)
     else:
         return JSONResponse(content={"message": "Invalid token"}, status_code=400)
+
+
+def get_page_prompt(story_id, page_number, is_gif=False):
+
+    page = page_collection.find_one(
+        {"story": ObjectId(story_id), "page_number": page_number},
+        {
+            "_id": 1,
+            "page_number": 1,
+            "is_starting_page": 1,
+            "steps": 1,
+            "mover": 1,
+            "page_story": 1,
+            "choices": 1,
+            "tasks": 1
+        })
+    if is_gif:
+        prompt = (f"You are a helpful and knowledgeable assistant who helps people write and edit stories. You only provide the exact answer and do not greet or socialize. You will be given a story flow in form of JSON, you have to generate a prompt for page's context short video generation. You will analyse the page and generate appropriate prompts so that the prompt can be used in short video generation AI to generate a short video for the story. The prompt has to be exact."
+                  f"This is the story flow of this page: {page}. "
+                  f"each PageStory is the text that will be shown to the user. and other type os step is actions that the user can do in the story to proceed. "
+                  f"Subject of the story should be in high priority. "
+                  f"make the prompt as specific as possible. "
+                  f"focus more on StoryText. Background should be less focused but should be mentioned. "
+                  f"only generate the exect prompt without any qoute. "
+                  f"Write a detailed prompt for the page's topic short video generation. ")
+    else:
+        prompt = (f"You are a helpful and knowledgeable assistant who helps people write and edit stories. You only provide the exact answer and do not greet or socialize. You will be given a story flow in form of JSON, you have to generate a prompt for page's context image generation. You will analyse the page and generate appropriate prompts so that the prompt can be used in image generation AI to generate a image for the story. The prompt has to be exact."
+                  f"This is the story flow of this page: {page}. "
+                  f"each PageStory is the text that will be shown to the user. and other type os step is actions that the user can do in the story to proceed. "
+                  f"Subject of the story should be in high priority. "
+                  f"make the prompt as specific as possible. "
+                  f"focus more on StoryText. Background should be less focused but should be mentioned. "
+                  f"only generate the exect prompt without any qoute. "
+                  f"Write a detailed prompt for the page's topic image generation. ")
+
+    generated_prompt = llm(prompt)
+    return generated_prompt

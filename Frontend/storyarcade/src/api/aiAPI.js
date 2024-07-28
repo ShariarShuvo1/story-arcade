@@ -32,9 +32,11 @@ export const sdGetImage = async (jwt, story, specificPrompt) => {
     });
 };
 
-export const imageGenForPage = async (jwt, prompt) => {
+export const imageGenForPage = async (jwt, prompt, storyId=null, pageNumber=null) => {
     const body = {
         prompt: prompt,
+        storyId: storyId,
+        pageNumber: pageNumber,
     };
 
     return await axios.post(`${BASE_URL_AI}/imageGenForPage`, body, {
@@ -48,9 +50,11 @@ export const imageGenForPage = async (jwt, prompt) => {
 };
 
 
-export const gifGenForPage = async (jwt, prompt) => {
+export const gifGenForPage = async (jwt, prompt, storyId=null, pageNumber=null) => {
     const body = {
         prompt: prompt,
+        storyId: storyId,
+        pageNumber: pageNumber,
     };
 
     return await axios.post(`${BASE_URL_AI}/gifGenForPage`, body, {
