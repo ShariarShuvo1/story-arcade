@@ -4,7 +4,7 @@ import {
 	pageDelete,
 	saveAPage,
 } from "../../api/storyAPI";
-import {notification, Tooltip} from "antd";
+import { notification, Tooltip } from "antd";
 import DeleteModal from "./DeleteModal";
 import ai_chat_icon from "../../Assets/AI/ai_chat_icon.png";
 import AIChatDrawer from "./AIChatDrawer";
@@ -35,10 +35,12 @@ function TopBar({
 	setStory,
 	navigate,
 	setTitle,
+	pointsLeft,
+	setPointsLeft,
 }) {
 	const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 	const [conflicts, setConflicts] = useState([]);
-    const [openDrawer, setOpenDrawer] = useState(false);
+	const [openDrawer, setOpenDrawer] = useState(false);
 
 	const saveChange = async () => {
 		let tempPage = currentPage;
@@ -161,33 +163,31 @@ function TopBar({
 				setSelectedPage={setSelectedPage}
 				handleDelete={handleDelete}
 			/>
-            {openDrawer &&
-                <AIChatDrawer
-                    openDrawer={openDrawer}
-                    setOpenDrawer={setOpenDrawer}
+			{openDrawer && (
+				<AIChatDrawer
+					openDrawer={openDrawer}
+					setOpenDrawer={setOpenDrawer}
 					storyId={storyId}
 					jwt={jwt}
 					selected_page={selected_page}
-                />
-            }
+					pointsLeft={pointsLeft}
+					setPointsLeft={setPointsLeft}
+				/>
+			)}
 			<div className="me-4">{title}</div>
 			<div className="flex gap-4">
-                <Tooltip
-                    title="AI Chat"
-                    color="purple"
-                    placement="bottom"
-                >
-                    <div
-                        className="flex items-center cursor-pointer hover:scale-110 transition duration-300 hover:rotate-12"
-                        onClick={() => setOpenDrawer(true)}
-                    >
-                        <img
-                            src={ai_chat_icon}
-                            alt="AI Chat"
-                            className="min-w-8 h-8"
-                        />
-                    </div>
-                </Tooltip>
+				<Tooltip title="AI Chat" color="purple" placement="bottom">
+					<div
+						className="flex items-center cursor-pointer hover:scale-110 transition duration-300 hover:rotate-12"
+						onClick={() => setOpenDrawer(true)}
+					>
+						<img
+							src={ai_chat_icon}
+							alt="AI Chat"
+							className="min-w-8 h-8"
+						/>
+					</div>
+				</Tooltip>
 				<div
 					className="bg-blue-600 select-none p-1 px-4 font-semibold cursor-pointer hover:bg-blue-500 rounded-lg text-lg text-black"
 					onClick={() => {

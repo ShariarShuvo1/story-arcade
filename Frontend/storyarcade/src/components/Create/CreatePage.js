@@ -183,6 +183,8 @@ function CreatePage() {
 					setStory={setStory}
 					navigate={navigate}
 					setTitle={setTitle}
+					pointsLeft={pointsLeft}
+					setPointsLeft={setPointsLeft}
 				/>
 				<div className="lg:flex gap-4 justify-between p-1">
 					<TaskList

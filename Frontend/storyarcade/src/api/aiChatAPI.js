@@ -45,3 +45,20 @@ export const llamaChat = async (jwt, storyId, message) => {
         },
     });
 };
+
+
+export const llamaStoryChat = async (jwt, storyId, message, pageNumber) => {
+    const body = {
+        storyId: storyId,
+        message: message,
+        pageNumber: pageNumber
+    };
+    return await axios.post(`${BASE_URL_AI}/llamaStoryChat`, body, {
+        headers: {
+            Authorization: `Bearer ${jwt}`,
+        },
+        validateStatus: (status) => {
+            return true;
+        },
+    });
+};

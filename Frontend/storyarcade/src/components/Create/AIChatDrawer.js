@@ -1,18 +1,33 @@
-import {ConfigProvider, Drawer, Empty, Spin, Switch, Tooltip} from "antd";
+import {
+	ConfigProvider,
+	Drawer,
+	Empty,
+	notification,
+	Spin,
+	Switch,
+	Tooltip,
+} from "antd";
 import send_icon from "../../Assets/Icon/send_icon.png";
 import ai_icon from "../../Assets/AI/ai_gen_icon.png";
 import "./style.css";
 import React, { useEffect, useRef, useState } from "react";
-import {clearAiChat, getPreviousChats, llamaChat} from "../../api/aiChatAPI";
+import {
+	clearAiChat,
+	getPreviousChats,
+	llamaChat,
+	llamaStoryChat,
+} from "../../api/aiChatAPI";
 import { getName } from "../../api/usersAPI";
 
 function AIChatDrawer({
-						  openDrawer,
-						  setOpenDrawer,
-						  storyId,
-						  jwt,
-						  selected_page,
-					  }) {
+	openDrawer,
+	setOpenDrawer,
+	storyId,
+	jwt,
+	selected_page,
+	pointsLeft,
+	setPointsLeft,
+}) {
 	const [chatList, setChatList] = useState([]);
 	const [initialChatLoading, setInitialChatLoading] = useState(false);
 	const [message, setMessage] = useState("");
@@ -24,16 +39,26 @@ function AIChatDrawer({
 	const textareaRef = useRef(null);
 	const [includeStoryInfo, setIncludeStoryInfo] = useState(false);
 
+	const showNotification = (message) => {
+		notification.error({
+			message: `${message}`,
+		});
+	};
+
 	useEffect(() => {
 		const getPreviousChat = async () => {
 			setInitialChatLoading(true);
 			const name_response = await getName(jwt);
 			if (name_response.status === 200) {
 				setName(name_response.data.name);
+			} else {
+				showNotification(name_response.data.message);
 			}
 			const response = await getPreviousChats(jwt, storyId);
 			if (response.status === 200) {
 				setChatList(response.data.chats);
+			} else {
+				showNotification(response.data.message);
 			}
 			setInitialChatLoading(false);
 		};
@@ -44,7 +69,18 @@ function AIChatDrawer({
 	useEffect(() => {
 		const sendMessage = async () => {
 			if (chatTrigger && backupMessage) {
-				const response = await llamaChat(jwt, storyId, backupMessage);
+				let response;
+				if (includeStoryInfo) {
+					response = await llamaStoryChat(
+						jwt,
+						storyId,
+						backupMessage,
+						selected_page
+					);
+				} else {
+					response = await llamaChat(jwt, storyId, backupMessage);
+				}
+				setPointsLeft(pointsLeft - 1);
 				if (response.status === 200) {
 					let tempChatList = [...chatList];
 					tempChatList.push({
@@ -55,6 +91,9 @@ function AIChatDrawer({
 					setChatList(tempChatList);
 					setShowDummyLoader(false);
 					setBackupMessage("");
+				} else {
+					showNotification(response.data.message);
+					setShowDummyLoader(false);
 				}
 			}
 		};
@@ -62,12 +101,12 @@ function AIChatDrawer({
 	}, [chatTrigger]);
 
 	useEffect(() => {
-		bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+		bottomRef.current?.scrollIntoView({ behavior: "smooth" });
 	}, [chatList, showDummyLoader]);
 
 	useEffect(() => {
 		const handleKeyDown = (event) => {
-			if (event.key === 'Enter' && !event.shiftKey) {
+			if (event.key === "Enter" && !event.shiftKey) {
 				event.preventDefault();
 				handleSendMessage();
 			}
@@ -75,17 +114,22 @@ function AIChatDrawer({
 
 		const textarea = textareaRef.current;
 		if (textarea) {
-			textarea.addEventListener('keydown', handleKeyDown);
+			textarea.addEventListener("keydown", handleKeyDown);
 		}
 
 		return () => {
 			if (textarea) {
-				textarea.removeEventListener('keydown', handleKeyDown);
+				textarea.removeEventListener("keydown", handleKeyDown);
 			}
 		};
 	}, [message]);
 
 	const handleSendMessage = async () => {
+		if (pointsLeft < 1) {
+			setShowDummyLoader(false);
+			showNotification("You don't have enough coins to send a message");
+			return;
+		}
 		if (!initialChatLoading && message && !showDummyLoader) {
 			let tempMessage = message;
 			let tempChatList = [...chatList];
@@ -153,7 +197,7 @@ function AIChatDrawer({
 								{chatList.length === 0 && (
 									<div className="flex gap-2">
 										<div className="flex-grow p-2">
-											<Empty description={false}/>
+											<Empty description={false} />
 										</div>
 									</div>
 								)}
@@ -161,7 +205,11 @@ function AIChatDrawer({
 									<div key={index} className="flex gap-1">
 										{chat.sender === "ai" && (
 											<div className="flex gap-2">
-												<img src={ai_icon} alt="AI" className="w-8 h-8" />
+												<img
+													src={ai_icon}
+													alt="AI"
+													className="w-8 h-8"
+												/>
 												<div className="flex flex-col gap-1">
 													<div className="bg-slate-950 p-2 rounded-lg font-semibold text-purple-400">
 														{chat.text}
@@ -185,8 +233,15 @@ function AIChatDrawer({
 								))}
 								{showDummyLoader && (
 									<div className="flex gap-2">
-										<img src={ai_icon} alt="AI" className="w-8 h-8" />
-										<Spin size="large" className="text-purple-400" />
+										<img
+											src={ai_icon}
+											alt="AI"
+											className="w-8 h-8"
+										/>
+										<Spin
+											size="large"
+											className="text-purple-400"
+										/>
 									</div>
 								)}
 								<div ref={bottomRef} />
@@ -194,58 +249,74 @@ function AIChatDrawer({
 						)}
 					</div>
 					<div>
-						<div className="flex items-center gap-1 p-1 mt-2">
-						<textarea
-							id="taskList"
-							className="flex-grow bg-slate-900 text-text-muted p-2 border-2 border-text-light rounded-lg resize-none"
-							rows={4}
-							placeholder="Type your message here..."
-							autoFocus={true}
-							maxLength={4000}
-							value={message}
-							ref={textareaRef}
-							onChange={(e) => setMessage(e.target.value)}
-						/>
-							<Tooltip title="Send" placement="top" color="purple">
+						<div className="flex items-end gap-1 p-1 mt-2">
+							<textarea
+								id="taskList"
+								className="flex-grow bg-slate-900 text-text-muted p-2 border-2 border-text-light rounded-lg resize-none"
+								rows={4}
+								placeholder="Type your message here..."
+								autoFocus={true}
+								maxLength={4000}
+								value={message}
+								ref={textareaRef}
+								onChange={(e) => setMessage(e.target.value)}
+							/>
+							<Tooltip
+								title="Send"
+								placement="top"
+								color="purple"
+							>
 								<img
 									src={send_icon}
 									alt="Send"
-									className="w-16 h-16 hover:scale-110 transition duration-300 cursor-pointer"
+									className="w-12 h-12 hover:scale-110 transition duration-300 cursor-pointer"
 									onClick={handleSendMessage}
 								/>
 							</Tooltip>
 						</div>
-						<div
-							className="flex items-center gap-1 p-1 mt-2"
-						>
+						<div className="flex items-center gap-1 p-1">
 							<button
 								className="text-white bg-gray-700 p-2 rounded-lg font-semibold hover:bg-gray-800"
 								onClick={clearChatHandle}
 							>
 								Clear Chat History
 							</button>
-							<div
-								className="bg-gray-700 p-2 flex rounded-lg font-semibold gap-2 items-center select-none"
-							>
+							<div className="bg-gray-700 p-2 lg:flex rounded-lg font-semibold gap-2 items-center select-none">
 								<Tooltip
 									title="This can reduce the response time of the AI Chat but can increase the accuracy of the AI Chat."
 									placement="top"
 									color="purple"
 								>
 									<div>
-										Include Story Information in AI Chat (Slow)
+										Include Story Information in AI Chat
+										(Slow)
 									</div>
 								</Tooltip>
-								
+
 								<Switch
 									defaultValue={includeStoryInfo}
-									onClick={() => setIncludeStoryInfo(!includeStoryInfo)}
+									onClick={() =>
+										setIncludeStoryInfo(!includeStoryInfo)
+									}
 								/>
 							</div>
+							<Tooltip
+								className="flex items-center gap-1 select-none"
+								title="Each message costs 1 coin"
+								placement="top"
+								color="purple"
+							>
+								<img
+									alt="Ai Genaration Icon"
+									src={require("../../Assets/AI/coin_icon.png")}
+									width={20}
+									height={20}
+									className="inline-block"
+								/>
+								<span className="text-text-muted">1</span>
+							</Tooltip>
 						</div>
-
 					</div>
-
 				</div>
 			</Drawer>
 		</ConfigProvider>
