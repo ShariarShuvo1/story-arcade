@@ -40,6 +40,9 @@ function CreatePage() {
 
 	useEffect(() => {
 		if (!jwt) {
+			notification.error({
+				description: "Please login to Edit Story",
+			});
 			navigate("/");
 		}
 	}, [jwt]);

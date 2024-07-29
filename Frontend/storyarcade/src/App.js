@@ -16,6 +16,7 @@ import RouteCreate from "./routes/createRoutes";
 import Profile from "./components/Profile/Profile";
 import RouteView from "./routes/viewRoutes";
 import BuyPoints from "./components/BuyPoints/BuyPoints";
+import ChatPage from "./components/Chat/ChatPage";
 
 function App() {
 	const { jwt } = useAuthContext();
@@ -64,6 +65,10 @@ function App() {
 				{
 					path: "/buyPoints",
 					element: <BuyPoints />,
+				},
+				{
+					path: "/chat",
+					element: <ChatPage />,
 				},
 				...RouteCreate(),
 				...RouteView(),

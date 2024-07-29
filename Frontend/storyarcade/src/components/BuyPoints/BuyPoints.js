@@ -16,6 +16,9 @@ function BuyPoints() {
 
 	useEffect(() => {
 		if (!jwt) {
+			notification.error({
+				description: "Please login to create a story",
+			});
 			navigate("/");
 		}
 	}, [jwt]);
