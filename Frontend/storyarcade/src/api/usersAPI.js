@@ -94,3 +94,14 @@ export const checkIfFollow = async (jwt, author) => {
 		},
 	});
 };
+
+export const getFriendSuggestion = async (jwt) => {
+	return await axios.get(`${BASE_URL}/getFriendSuggestion`, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+		},
+		validateStatus: (status) => {
+			return true;
+		},
+	});
+};

@@ -1,29 +1,28 @@
-import {ConfigProvider, Modal, notification} from "antd";
+import { ConfigProvider, Modal, notification } from "antd";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import upvote_icon from "../../Assets/Icon/upvote.png";
 import downvote_icon from "../../Assets/Icon/downvote.png";
-import {voteHandle} from "../../api/voteAPI";
+import { voteHandle } from "../../api/voteAPI";
 
 function StoryFinishedModal({ isFinished, setIsFinished, storyId }) {
 	const navigate = useNavigate();
-    const jwt = JSON.parse(localStorage.getItem("jwt"));
+	const jwt = JSON.parse(localStorage.getItem("jwt"));
 
-    const voteClick = async (vote) => {
-        const response = await voteHandle(jwt, storyId, vote);
-        if (response.status === 200) {
-            setIsFinished(false);
-            navigate(`/`);
-            notification.success({
-                message: response.data.message,
-            });
-        }
-        else{
-            notification.error({
-                message: response.data.message,
-            });
-        }
-    };
+	const voteClick = async (vote) => {
+		const response = await voteHandle(jwt, storyId, vote);
+		if (response.status === 200) {
+			setIsFinished(false);
+			navigate(`/`);
+			notification.success({
+				message: response.data.message,
+			});
+		} else {
+			notification.error({
+				message: response.data.message,
+			});
+		}
+	};
 
 	return (
 		<ConfigProvider

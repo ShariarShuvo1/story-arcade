@@ -12,7 +12,7 @@ router.route("/getName").get(usersController.getName);
 
 router.route("/addPoints").post(usersController.addPoints);
 
-router.route("/getFriendSuggestion").post(usersController.getFriendSuggestion);
+router.route("/getFriendSuggestion").get(usersController.getFriendSuggestion);
 
 router.route("/followUser").post(usersController.followUser);
 

@@ -73,7 +73,7 @@ function Stories() {
 			}
 		};
 		getStories();
-	}, [currentlySelected]);
+	}, [currentlySelected, jwt]);
 
 	const fetchMoreStories = async () => {
 		if (isLoading || !hasMore) return;
