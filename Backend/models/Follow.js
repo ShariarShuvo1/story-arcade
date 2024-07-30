@@ -1,21 +1,21 @@
 const mongoose = require("mongoose");
 
-const downvoteSchema = new mongoose.Schema({
-	downvoter: {
+const followSchema = new mongoose.Schema({
+	follow: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "User",
 		required: true,
 	},
-	story: {
+	follower: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "Story",
+		ref: "User",
 		required: true,
 	},
-	vote_time: {
+	follow_time: {
 		type: Date,
 		default: Date.now,
 		required: true,
 	},
 });
 
-module.exports = mongoose.model("Downvote", downvoteSchema);
+module.exports = mongoose.model("Follow", followSchema);

@@ -64,3 +64,44 @@ export const addPoints = async (jwt, package_name) => {
 		},
 	});
 };
+
+export const followUser = async (jwt, to_follow) => {
+	const body = {
+		to_follow: to_follow,
+	};
+
+	return await axios.post(`${BASE_URL}/followUser`, body, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+		},
+		validateStatus: (status) => {
+			return true;
+		},
+	});
+};
+
+export const checkIfFollow = async (jwt, author) => {
+	const body = {
+		author: author,
+	};
+
+	return await axios.post(`${BASE_URL}/checkIfFollow`, body, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+		},
+		validateStatus: (status) => {
+			return true;
+		},
+	});
+};
+
+export const getFriendSuggestion = async (jwt) => {
+	return await axios.get(`${BASE_URL}/getFriendSuggestion`, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+		},
+		validateStatus: (status) => {
+			return true;
+		},
+	});
+};

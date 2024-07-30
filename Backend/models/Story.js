@@ -44,6 +44,10 @@ const storySchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	tags: {
+		type: [String],
+		required: true,
+	},
 });
 
 module.exports = mongoose.model("Story", storySchema);

@@ -12,4 +12,10 @@ router.route("/getName").get(usersController.getName);
 
 router.route("/addPoints").post(usersController.addPoints);
 
+router.route("/getFriendSuggestion").get(usersController.getFriendSuggestion);
+
+router.route("/followUser").post(usersController.followUser);
+
+router.route("/checkIfFollow").post(usersController.checkIfFollow);
+
 module.exports = router;

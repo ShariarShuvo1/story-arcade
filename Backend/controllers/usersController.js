@@ -1,4 +1,8 @@
+const mongoose = require("mongoose");
 const User = require("../models/User");
+const StoryAccess = require("../models/StoryAccess");
+const Story = require("../models/Story");
+const Follow = require("../models/Follow");
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -161,6 +165,185 @@ const getName = asyncHandler(async (req, res) => {
 	return res.status(200).json({ name: user.name });
 });
 
+const checkIfFollow = asyncHandler(async (req, res) => {
+	const token = req.headers.authorization.split(" ")[1];
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+	if (!decoded) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+	const user_id = decoded._id;
+	const user = await User.findById(user_id).lean().exec();
+	if (!user) {
+		return res.status(404).json({ message: "User not found" });
+	}
+	const author_id = req.body.author;
+	const author = await User.findById(author_id).lean().exec();
+	if (!author) {
+		return res.status(404).json({ message: "Author not found" });
+	}
+	const follow = await Follow.findOne({
+		follow: author_id,
+		follower: user_id,
+	})
+		.lean()
+		.exec();
+
+	if (!follow) {
+		return res.status(404).json({ follow: false });
+	}
+
+	return res.status(200).json({ follow: true });
+});
+
+const followUser = asyncHandler(async (req, res) => {
+	const token = req.headers.authorization.split(" ")[1];
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+	if (!decoded) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+	const user_id = decoded._id;
+	const user = await User.findById(user_id).lean().exec();
+	if (!user) {
+		return res.status(404).json({ message: "User not found" });
+	}
+	const to_follow_id = req.body.to_follow;
+	const toFollow = await User.findById(to_follow_id).lean().exec();
+	if (!toFollow) {
+		return res.status(404).json({ message: "User not found" });
+	}
+	let follow = await Follow.findOne({
+		follow: to_follow_id,
+		follower: user_id,
+	})
+		.lean()
+		.exec();
+
+	if (follow) {
+		return res
+			.status(404)
+			.json({ message: "You already follow this User" });
+	}
+	follow = await Follow.create({ follow: to_follow_id, follower: user_id });
+
+	return res.status(200).json({ follow: true });
+});
+
+const getFriendSuggestion = asyncHandler(async (req, res) => {
+	const token = req.headers.authorization.split(" ")[1];
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+	if (!decoded) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+	const user_id = new mongoose.Types.ObjectId(decoded._id);
+
+	const user = await User.findById(user_id).lean().exec();
+	if (!user) {
+		return res.status(404).json({ message: "User not found" });
+	}
+
+	const friends = await Follow.find({ follower: user_id })
+		.distinct("follow")
+		.exec();
+
+	let potentialFriends = await StoryAccess.aggregate([
+		{ $match: { user: user_id } },
+		{
+			$lookup: {
+				from: "stories",
+				localField: "story",
+				foreignField: "_id",
+				as: "storyDetails",
+			},
+		},
+		{ $unwind: "$storyDetails" },
+		{
+			$group: {
+				_id: "$storyDetails.uploader",
+				nonPrivateStoryCount: {
+					$sum: {
+						$cond: [
+							{ $ne: ["$storyDetails.access_level", "private"] },
+							1,
+							0,
+						],
+					},
+				},
+			},
+		},
+		{ $match: { _id: { $ne: user_id, $nin: friends } } },
+		{
+			$lookup: {
+				from: "users",
+				localField: "_id",
+				foreignField: "_id",
+				as: "userDetails",
+			},
+		},
+		{ $unwind: "$userDetails" },
+		{
+			$project: {
+				_id: 1,
+				name: "$userDetails.name",
+				avatar: "$userDetails.avatar",
+				nonPrivateStoryCount: 1,
+			},
+		},
+		{ $limit: 10 },
+	]).exec();
+
+	if (potentialFriends.length < 10) {
+		const additionalUsers = await User.aggregate([
+			{ $match: { _id: { $ne: user_id, $nin: friends } } },
+			{ $sample: { size: 10 - potentialFriends.length } },
+			{
+				$lookup: {
+					from: "stories",
+					localField: "_id",
+					foreignField: "uploader",
+					as: "stories",
+				},
+			},
+			{
+				$project: {
+					_id: 1,
+					name: 1,
+					avatar: 1,
+					nonPrivateStoryCount: {
+						$size: {
+							$filter: {
+								input: "$stories",
+								as: "story",
+								cond: {
+									$ne: ["$$story.access_level", "private"],
+								},
+							},
+						},
+					},
+				},
+			},
+		]).exec();
+
+		potentialFriends = potentialFriends.concat(additionalUsers);
+	}
+
+	return res.status(200).json({ suggestions: potentialFriends });
+});
+
 // This is a dummy and insecure function
 const addPoints = asyncHandler(async (req, res) => {
 	const token = req.headers.authorization.split(" ")[1];
@@ -207,4 +390,7 @@ module.exports = {
 	getPointsLeft,
 	getName,
 	addPoints,
+	getFriendSuggestion,
+	checkIfFollow,
+	followUser,
 };
