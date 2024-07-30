@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-const upvoteSchema = new mongoose.Schema({
-	upvoter: {
+const voteSchema = new mongoose.Schema({
+	voter: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "User",
 		required: true,
@@ -16,6 +16,11 @@ const upvoteSchema = new mongoose.Schema({
 		default: Date.now,
 		required: true,
 	},
+	vote_type: {
+		type: String,
+		enum: ["upvote", "downvote"],
+		required: true,
+	},
 });
 
-module.exports = mongoose.model("Upvote", upvoteSchema);
+module.exports = mongoose.model("Vote", voteSchema);

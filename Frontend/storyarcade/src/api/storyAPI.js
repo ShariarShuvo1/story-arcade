@@ -12,6 +12,16 @@ export const createStory = async (jwt, body) => {
 		},
 	});
 };
+export const updateStory = async (jwt, body) => {
+	return await axios.post(`${BASE_URL}/updateStory`, body, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+		},
+		validateStatus: (status) => {
+			return true;
+		},
+	});
+};
 
 export const getStory = async (jwt, story_id) => {
 	const body = {
@@ -93,6 +103,62 @@ export const pageDelete = async (jwt, page_number, story_id) => {
 		story_id: story_id,
 	};
 	return await axios.post(`${BASE_URL}/pageDelete`, body, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+		},
+		validateStatus: (status) => {
+			return true;
+		},
+	});
+};
+
+export const buyStory = async (jwt, story_id) => {
+	const body = {
+		story_id: story_id,
+	};
+	return await axios.post(`${BASE_URL}/buyStory`, body, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+		},
+		validateStatus: (status) => {
+			return true;
+		},
+	});
+};
+
+export const deleteStory = async (jwt, story_id) => {
+	const body = {
+		story_id: story_id,
+	};
+	return await axios.post(`${BASE_URL}/deleteStory`, body, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+		},
+		validateStatus: (status) => {
+			return true;
+		},
+	});
+};
+
+export const cloneStory = async (jwt, story_id) => {
+	const body = {
+		story_id: story_id,
+	};
+	return await axios.post(`${BASE_URL}/cloneStory`, body, {
+		headers: {
+			Authorization: `Bearer ${jwt}`,
+		},
+		validateStatus: (status) => {
+			return true;
+		},
+	});
+};
+
+export const storyExist = async (jwt, story_id) => {
+	const body = {
+		story_id: story_id,
+	};
+	return await axios.post(`${BASE_URL}/storyExist`, body, {
 		headers: {
 			Authorization: `Bearer ${jwt}`,
 		},

@@ -1,4 +1,7 @@
 const User = require("../models/User");
+const StoryAccess = require("../models/StoryAccess");
+const Story = require("../models/Story");
+const Follow = require("../models/Follow");
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -201,10 +204,105 @@ const addPoints = asyncHandler(async (req, res) => {
 	return res.status(200).json({ message: "Points added to your account" });
 });
 
+const checkIfFollow = asyncHandler(async (req, res) => {
+	const token = req.headers.authorization.split(" ")[1];
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+	if (!decoded) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+	const user_id = decoded._id;
+	const user = await User.findById(user_id).lean().exec();
+	if (!user) {
+		return res.status(404).json({ message: "User not found" });
+	}
+	const author_id = req.body.author;
+	const author = await User.findById(author_id).lean().exec();
+	if (!author) {
+		return res.status(404).json({ message: "Author not found" });
+	}
+	const follow = await Follow.findOne({
+		follow: author_id,
+		follower: user_id,
+	})
+		.lean()
+		.exec();
+
+	if (!follow) {
+		return res.status(404).json({ follow: false });
+	}
+
+	return res.status(200).json({ follow: true });
+});
+
+const followUser = asyncHandler(async (req, res) => {
+	const token = req.headers.authorization.split(" ")[1];
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+	if (!decoded) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+	const user_id = decoded._id;
+	const user = await User.findById(user_id).lean().exec();
+	if (!user) {
+		return res.status(404).json({ message: "User not found" });
+	}
+	const to_follow_id = req.body.to_follow;
+	const toFollow = await User.findById(to_follow_id).lean().exec();
+	if (!toFollow) {
+		return res.status(404).json({ message: "User not found" });
+	}
+	let follow = await Follow.findOne({
+		follow: to_follow_id,
+		follower: user_id,
+	})
+		.lean()
+		.exec();
+
+	if (follow) {
+		return res
+			.status(404)
+			.json({ message: "You already follow this User" });
+	}
+	follow = await Follow.create({ follow: to_follow_id, follower: user_id });
+
+	return res.status(200).json({ follow: true });
+});
+
+const getFriendSuggestion = asyncHandler(async (req, res) => {
+	const token = req.headers.authorization.split(" ")[1];
+	let decoded = null;
+	try {
+		decoded = jwt.verify(token, process.env.JWT_SECRET);
+	} catch (err) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+	if (!decoded) {
+		return res.status(401).json({ message: "Invalid Request" });
+	}
+	const user_id = decoded._id;
+	const user = await User.findById(user_id).lean().exec();
+	if (!user) {
+		return res.status(404).json({ message: "User not found" });
+	}
+	return res.status(200).json({ name: user.name });
+});
+
 module.exports = {
 	loginUser,
 	createNewUser,
 	getPointsLeft,
 	getName,
 	addPoints,
+	getFriendSuggestion,
+	checkIfFollow,
+	followUser,
 };

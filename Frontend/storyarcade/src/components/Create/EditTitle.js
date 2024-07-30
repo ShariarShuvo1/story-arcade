@@ -3,12 +3,13 @@ import LoadingFullscreen from "../../Tools/Loading";
 import { getPointsLeft } from "../../api/usersAPI";
 import { ConfigProvider, Modal, notification, Tooltip, Image } from "antd";
 import { llamaGetTitle, sdGetImage } from "../../api/aiAPI";
-import { createStory } from "../../api/storyAPI";
-import { useNavigate } from "react-router-dom";
+import { createStory, getStory, updateStory } from "../../api/storyAPI";
+import { useNavigate, useParams } from "react-router-dom";
 import cross_icon from "../../Assets/Icon/cross.png";
 
-function CreateTitle() {
+function EditTitle() {
 	const navigate = useNavigate();
+	const { storyId } = useParams();
 	const jwt = JSON.parse(localStorage.getItem("jwt"));
 	const [is_loading, setIsLoading] = useState(false);
 	const [title, setTitle] = useState("");
@@ -33,7 +34,40 @@ function CreateTitle() {
 			});
 			navigate("/");
 		}
-	}, [jwt]);
+		if (!storyId) {
+			notification.error({
+				description: "Please select a story to edit",
+			});
+			navigate("/");
+		}
+	}, [jwt, storyId]);
+
+	useEffect(() => {
+		const getInitialStory = async () => {
+			const response = await getStory(jwt, storyId);
+			if (response.status === 200) {
+				const story = response.data.story;
+				setTitle(story.title);
+				setBase64String(story.cover_image);
+				let access_level =
+					story.access_level.charAt(0).toUpperCase() +
+					story.access_level.slice(1);
+				if (access_level === "Followers_only") {
+					access_level = "Followers only";
+				}
+
+				setSelectedPrivacy(access_level);
+				setCoinNeeded(story.points_required);
+				setAllowCopy(story.allow_copy);
+				setTags(story.tags);
+			} else {
+				notification.error({
+					description: response.data.message,
+				});
+			}
+		};
+		getInitialStory();
+	}, []);
 
 	useEffect(() => {
 		if (selectedPrivacy === "Paid") {
@@ -111,8 +145,9 @@ function CreateTitle() {
 			points_required: coinNeeded,
 			allow_copy: allowCopy,
 			tags: tags,
+			story_id: storyId,
 		};
-		const response = await createStory(jwt, body);
+		const response = await updateStory(jwt, body);
 
 		if (response.status !== 201) {
 			notification.error({
@@ -528,7 +563,7 @@ function CreateTitle() {
 						className="w-full px-4 py-2 bg-button-primary hover:bg-button-hover_primary hover:scale-105 text-black text-xl font-bold rounded-md transition-transform duration-300"
 						onClick={handleSubmit}
 					>
-						Create Story
+						Continue
 					</button>
 				</div>
 			</div>
@@ -536,4 +571,4 @@ function CreateTitle() {
 	);
 }
 
-export default CreateTitle;
+export default EditTitle;

@@ -28,6 +28,7 @@ app.use("/", express.static(path.join(__dirname, "public")));
 
 app.use("/", require("./routes/root"));
 app.use("/users", require("./routes/userRoutes"));
+app.use("/getStory", require("./routes/homepageStoryRouter"));
 app.use("/story", require("./routes/storyRoutes"));
 app.use("/storyView", require("./routes/storyViewRoutes"));
 app.use("/aiChats", require("./routes/aiChatRoutes"));
