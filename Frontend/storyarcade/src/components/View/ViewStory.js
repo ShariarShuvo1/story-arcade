@@ -5,6 +5,7 @@ import { getInitialPages, getNextPages } from "../../api/storyViewAPI";
 import LoadingFullscreen from "../../Tools/Loading";
 import page from "../../Models/Page";
 import SwipeableButton from "../SwipeableButton/SwipeableButton";
+import StoryFinishedModal from "./StoryFinishedModal";
 
 function ViewStory() {
 	const jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -24,6 +25,7 @@ function ViewStory() {
 	const [listOfChoices, setListOfChoices] = useState([]);
 	const [listOfTasks, setListOfTasks] = useState([]);
 	const [listOfMover, setListOfMover] = useState([]);
+	const [isFinished, setIsFinished] = useState(false);
 
 	useEffect(() => {
 		if (!jwt || !storyId) {
@@ -230,6 +232,9 @@ function ViewStory() {
 				current_found = true;
 			}
 		}
+		if (!temp_new_step) {
+			setIsFinished(true);
+		}
 		return temp_new_step;
 	};
 
@@ -338,6 +343,11 @@ function ViewStory() {
 			onClick={handleClick}
 		>
 			{is_loading && <LoadingFullscreen />}
+			<StoryFinishedModal
+				isFinished={isFinished}
+				setIsFinished={setIsFinished}
+				storyId={storyId}
+			/>
 
 			{currentStep &&
 				currentStep.step_type === "story" &&
