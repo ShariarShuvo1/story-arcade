@@ -5,6 +5,7 @@ import add_option_image from "../../Assets/Icon/insert_option_hover.png";
 import add_button_image from "../../Assets/Icon/insert_button_hover.png";
 import add_slider_image from "../../Assets/Icon/insert_slider_hover.png";
 import add_mover_image_hover from "../../Assets/Icon/insert_mover_hover.png";
+import add_game_image from "../../Assets/Icon/game_option_hover.png";
 import link_image from "../../Assets/Icon/link.png";
 import { Tooltip } from "antd";
 import "./style.css";
@@ -79,6 +80,14 @@ function TaskList({
 					<img
 						src={add_mover_image_hover}
 						alt="Add Mover"
+						className="min-w-6 h-6 mr-4"
+					/>
+				)}
+
+				{step.step_type === "game" && (
+					<img
+						src={add_game_image}
+						alt="Add Game"
 						className="min-w-6 h-6 mr-4"
 					/>
 				)}

@@ -34,7 +34,7 @@ const pageSchema = new mongoose.Schema({
 			},
 			step_type: {
 				type: String,
-				enum: ["choice", "task", "story", "mover"],
+				enum: ["choice", "task", "story", "mover", "game"],
 				required: true,
 			},
 			child_step_number: {
@@ -79,6 +79,26 @@ const pageSchema = new mongoose.Schema({
 				required: true,
 			},
 			story_text: {
+				type: String,
+				required: false,
+			},
+		},
+	],
+	games: [
+		{
+			game_number: {
+				type: Number,
+				required: true,
+			},
+			html: {
+				type: String,
+				required: false,
+			},
+			css: {
+				type: String,
+				required: false,
+			},
+			js: {
 				type: String,
 				required: false,
 			},

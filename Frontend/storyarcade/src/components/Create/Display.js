@@ -117,6 +117,14 @@ function Display({
 					</div>
 				)}
 
+			{selectedItem && selectedItem.step_type === "game" && (
+				<div className="flex items-center justify-center h-full">
+					<div className="bg-red-100 p-4 text-3xl font-extrabold text-red-500 rounded-lg mx-4">
+						Game can only be viewed in the PREVIEW mode
+					</div>
+				</div>
+			)}
+
 			{currentSelectedItem &&
 				selectedItem &&
 				selectedItem.step_type === "choice" && (

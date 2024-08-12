@@ -1,10 +1,10 @@
-import React from "react";
 import EditPageStory from "./Edit/EditPageStory";
 import EditButton from "./Edit/EditButton";
 import EditSlider from "./Edit/EditSlider";
 import EditChoice from "./Edit/EditChoice";
 import EditMover from "./Edit/EditMover";
 import "./style.css";
+import EditGame from "./Edit/EditGame";
 
 function Modification({
 	selectedItem,
@@ -23,6 +23,8 @@ function Modification({
 	setListOfChoices,
 	listOfMover,
 	setListOfMover,
+	listOfGames,
+	setListOfGames,
 }) {
 	return (
 		<div className="mt-4 lg:mt-0">
@@ -84,6 +86,19 @@ function Modification({
 						setIsLoading={setIsLoading}
 						listOfMover={listOfMover}
 						setListOfMover={setListOfMover}
+					/>
+
+					<EditGame
+						selectedItem={selectedItem}
+						listOfSteps={listOfSteps}
+						setListOfSteps={setListOfSteps}
+						setSelectedItem={setSelectedItem}
+						jwt={jwt}
+						selected_page={selected_page}
+						storyId={storyId}
+						setIsLoading={setIsLoading}
+						listOfGames={listOfGames}
+						setListOfGames={setListOfGames}
 					/>
 
 					<EditChoice

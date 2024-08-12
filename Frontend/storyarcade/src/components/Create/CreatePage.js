@@ -26,6 +26,7 @@ function CreatePage() {
 	const [listOfChoices, setListOfChoices] = useState([]);
 	const [listOfTasks, setListOfTasks] = useState([]);
 	const [listOfMover, setListOfMover] = useState([]);
+	const [listOfGames, setListOfGames] = useState([]);
 
 	const [selected_page, setSelectedPage] = useState(0);
 	const [currentPage, setCurrentPage] = useState(null);
@@ -83,6 +84,7 @@ function CreatePage() {
 							[],
 							[],
 							[],
+							[],
 							[]
 						);
 						setListOfSteps(tempPage.steps);
@@ -90,6 +92,7 @@ function CreatePage() {
 						setListOfChoices(tempPage.choices);
 						setListOfTasks(tempPage.tasks);
 						setListOfMover(tempPage.mover);
+						setListOfGames(tempPage.games);
 						setSelectedImage(tempPage.background_image);
 						setCurrentPage(tempPage);
 						setStory([...story, selected_page]);
@@ -99,6 +102,7 @@ function CreatePage() {
 						setListOfChoices(response_page.choices);
 						setListOfTasks(response_page.tasks);
 						setListOfMover(response_page.mover);
+						setListOfGames(response_page.games);
 						setSelectedImage(response_page.background_image);
 						setCurrentPage(response_page);
 						setStory(response_story);
@@ -135,6 +139,7 @@ function CreatePage() {
 					setListOfChoices(response_page.choices);
 					setListOfTasks(response_page.tasks);
 					setListOfMover(response_page.mover);
+					setListOfGames(response_page.games);
 					setSelectedImage(response_page.background_image);
 					setSelectedPage(response_page.page_number);
 					setCurrentPage(response_page);
@@ -196,6 +201,8 @@ function CreatePage() {
 					setTitle={setTitle}
 					pointsLeft={pointsLeft}
 					setPointsLeft={setPointsLeft}
+					listOfGames={listOfGames}
+					setListOfGames={setListOfGames}
 				/>
 				<div className="lg:flex gap-4 justify-between my-1 me-1">
 					<TaskList
@@ -216,6 +223,7 @@ function CreatePage() {
 						setListOfTasks={setListOfTasks}
 						listOfChoices={listOfChoices}
 						listOfSteps={listOfSteps}
+						listOfGames={listOfGames}
 					/>
 
 					{selectedItem && (
@@ -236,6 +244,8 @@ function CreatePage() {
 							setListOfChoices={setListOfChoices}
 							listOfMover={listOfMover}
 							setListOfMover={setListOfMover}
+							listOfGames={listOfGames}
+							setListOfGames={setListOfGames}
 						/>
 					)}
 				</div>
@@ -257,6 +267,8 @@ function CreatePage() {
 					setListOfChoices={setListOfChoices}
 					listOfMover={listOfMover}
 					setListOfMover={setListOfMover}
+					listOfGames={listOfGames}
+					setListOfGames={setListOfGames}
 				/>
 
 				<PageList
@@ -284,6 +296,8 @@ function CreatePage() {
 					listOfMover={listOfMover}
 					setListOfMover={setListOfMover}
 					setTitle={setTitle}
+					listOfGames={listOfGames}
+					setListOfGames={setListOfGames}
 				/>
 			</div>
 		</DndProvider>
