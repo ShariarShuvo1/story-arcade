@@ -6,6 +6,7 @@ import LoadingFullscreen from "../../Tools/Loading";
 import page from "../../Models/Page";
 import SwipeableButton from "../SwipeableButton/SwipeableButton";
 import StoryFinishedModal from "./StoryFinishedModal";
+import GameComponent from "./GameComponent";
 
 function ViewStory() {
 	const jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -25,6 +26,7 @@ function ViewStory() {
 	const [listOfChoices, setListOfChoices] = useState([]);
 	const [listOfTasks, setListOfTasks] = useState([]);
 	const [listOfMover, setListOfMover] = useState([]);
+	const [listOfGames, setListOfGames] = useState([]);
 	const [isFinished, setIsFinished] = useState(false);
 
 	useEffect(() => {
@@ -51,6 +53,7 @@ function ViewStory() {
 				setListOfChoices(tempCurrentPage.choices);
 				setListOfTasks(tempCurrentPage.tasks);
 				setListOfMover(tempCurrentPage.mover);
+				setListOfGames(tempCurrentPage.games);
 			} else {
 				notification.error({
 					message: "Failed to get pages",
@@ -172,6 +175,11 @@ function ViewStory() {
 				(item) => item.mover_number === currentStep.child_step_number
 			);
 			setCurrentItem(tempItem);
+		} else if (currentStep && currentStep.step_type === "game") {
+			const tempItem = listOfGames.find(
+				(item) => item.game_number === currentStep.child_step_number
+			);
+			setCurrentItem(tempItem);
 		} else {
 			setCurrentItem(null);
 		}
@@ -253,6 +261,7 @@ function ViewStory() {
 			setListOfChoices(next_page.choices);
 			setListOfTasks(next_page.tasks);
 			setListOfMover(next_page.mover);
+			setListOfGames(next_page.games);
 		}
 	};
 
@@ -327,9 +336,21 @@ function ViewStory() {
 		}
 	};
 
+	const gameWin = () => {
+		if (currentStep.next_type === "step") {
+			let temp_new_step = getNextStep();
+			if (temp_new_step) {
+				setCurrentStep(temp_new_step);
+			}
+		} else if (currentStep.next_type === "page") {
+			let page_id = currentStep.next_page;
+			changePage(page_id);
+		}
+	};
+
 	return (
 		<div
-			className={`h-full p-4 ps-0 ${
+			className={`h-full p-4 ps-0 max-h-screen overflow-y-hidden ${
 				currentPage && currentPage.background_image
 					? "bg-cover bg-center"
 					: ""
@@ -358,6 +379,15 @@ function ViewStory() {
 						</div>
 					</div>
 				)}
+
+			{currentStep && currentStep.step_type === "game" && currentItem && (
+				<GameComponent
+					gameWin={gameWin}
+					htmlString={currentItem.html}
+					cssString={currentItem.css}
+					jsString={currentItem.js}
+				/>
+			)}
 
 			{currentStep &&
 				currentStep.step_type === "task" &&

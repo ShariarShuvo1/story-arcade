@@ -2,7 +2,7 @@ class Step {
 	/**
 	 * @param {number} step_number - The step number.
 	 * @param {string} step_name - The step name.
-	 * @param {"choice"|"task"|"story"|"mover"} step_type - The step type.
+	 * @param {"choice"|"task"|"story"|"mover"|"game"} step_type - The step type.
 	 * @param {number} [child_step_number] - The child step number.
 	 * @param {"step"|"page"} [next_type = "step"] - The next type.
 	 * @param {string} [next_page] - The next page.

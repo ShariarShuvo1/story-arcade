@@ -5,6 +5,7 @@ import { getInitialPages, getNextPages } from "../../api/storyViewAPI";
 import LoadingFullscreen from "../../Tools/Loading";
 import page from "../../Models/Page";
 import SwipeableButton from "../SwipeableButton/SwipeableButton";
+import GameComponent from "./GameComponent";
 
 function Preview() {
 	const jwt = JSON.parse(localStorage.getItem("jwt"));
@@ -24,6 +25,7 @@ function Preview() {
 	const [listOfChoices, setListOfChoices] = useState([]);
 	const [listOfTasks, setListOfTasks] = useState([]);
 	const [listOfMover, setListOfMover] = useState([]);
+	const [listOfGames, setListOfGames] = useState([]);
 
 	useEffect(() => {
 		if (!jwt || !storyId || !pageId) {
@@ -49,6 +51,7 @@ function Preview() {
 				setListOfChoices(tempCurrentPage.choices);
 				setListOfTasks(tempCurrentPage.tasks);
 				setListOfMover(tempCurrentPage.mover);
+				setListOfGames(tempCurrentPage.games);
 			} else {
 				notification.error({
 					message: "Failed to get pages",
@@ -170,6 +173,11 @@ function Preview() {
 				(item) => item.mover_number === currentStep.child_step_number
 			);
 			setCurrentItem(tempItem);
+		} else if (currentStep && currentStep.step_type === "game") {
+			const tempItem = listOfGames.find(
+				(item) => item.game_number === currentStep.child_step_number
+			);
+			setCurrentItem(tempItem);
 		} else {
 			setCurrentItem(null);
 		}
@@ -248,6 +256,7 @@ function Preview() {
 			setListOfChoices(next_page.choices);
 			setListOfTasks(next_page.tasks);
 			setListOfMover(next_page.mover);
+			setListOfGames(next_page.games);
 		}
 	};
 
@@ -322,9 +331,21 @@ function Preview() {
 		}
 	};
 
+	const gameWin = () => {
+		if (currentStep.next_type === "step") {
+			let temp_new_step = getNextStep();
+			if (temp_new_step) {
+				setCurrentStep(temp_new_step);
+			}
+		} else if (currentStep.next_type === "page") {
+			let page_id = currentStep.next_page;
+			changePage(page_id);
+		}
+	};
+
 	return (
 		<div
-			className={`h-full p-4 ps-0 ${
+			className={`h-full max-h-screen overflow-y-hidden p-4 ps-0 ${
 				currentPage && currentPage.background_image
 					? "bg-cover bg-center"
 					: ""
@@ -348,6 +369,15 @@ function Preview() {
 						</div>
 					</div>
 				)}
+
+			{currentStep && currentStep.step_type === "game" && currentItem && (
+				<GameComponent
+					gameWin={gameWin}
+					htmlString={currentItem.html}
+					cssString={currentItem.css}
+					jsString={currentItem.js}
+				/>
+			)}
 
 			{currentStep &&
 				currentStep.step_type === "task" &&

@@ -9,12 +9,15 @@ import add_option_image from "../../Assets/Icon/insert_option.png";
 import add_option_image_hover from "../../Assets/Icon/insert_option_hover.png";
 import add_mover_image from "../../Assets/Icon/insert_mover.png";
 import add_mover_image_hover from "../../Assets/Icon/insert_mover_hover.png";
+import add_game_image from "../../Assets/Icon/game_option.png";
+import add_game_image_hover from "../../Assets/Icon/game_option_hover.png";
 import React from "react";
 import PageStory from "../../Models/PageStory";
 import Step from "../../Models/Step";
 import Task from "../../Models/Task";
 import Choice from "../../Models/Choice";
 import Mover from "../../Models/Mover";
+import Game from "../../Models/Game";
 
 function ToolBar({
 	selected_page,
@@ -33,6 +36,8 @@ function ToolBar({
 	setListOfChoices,
 	listOfMover,
 	setListOfMover,
+	listOfGames,
+	setListOfGames,
 }) {
 	const handleAddText = () => {
 		if (!selected_page) {
@@ -151,6 +156,36 @@ function ToolBar({
 			"New Mover",
 			"mover",
 			newMover.mover_number
+		);
+
+		let tempSteps = [...listOfSteps, newStep];
+		setListOfSteps(tempSteps);
+		setSelectedItem(newStep);
+	};
+
+	const handleAddGame = () => {
+		if (!selected_page) {
+			return;
+		}
+		let max_game_number = Math.max(
+			...listOfGames.map((o) => o.game_number),
+			0
+		);
+
+		const newGame = new Game(max_game_number + 1);
+		let tempGame = [...listOfGames, newGame];
+		setListOfGames(tempGame);
+
+		const max_step_number = Math.max(
+			...listOfSteps.map((o) => o.step_number),
+			0
+		);
+
+		let newStep = new Step(
+			max_step_number + 1,
+			"New Game",
+			"game",
+			newGame.game_number
 		);
 
 		let tempSteps = [...listOfSteps, newStep];
@@ -312,6 +347,29 @@ function ToolBar({
 							}
 							onMouseOut={(e) =>
 								(e.currentTarget.src = add_mover_image)
+							}
+						/>
+					</button>
+				</Tooltip>
+
+				<Tooltip
+					title="Add Game (require code)"
+					placement="top"
+					color="purple"
+				>
+					<button
+						className="border-2 border-fuchsia-500 hover:border-fuchsia-600 hover:bg-fuchsia-100 rounded-lg p-1"
+						onClick={handleAddGame}
+					>
+						<img
+							src={add_game_image}
+							alt="Add Option"
+							className="min-w-8 h-8 cursor-pointer"
+							onMouseOver={(e) =>
+								(e.currentTarget.src = add_game_image_hover)
+							}
+							onMouseOut={(e) =>
+								(e.currentTarget.src = add_game_image)
 							}
 						/>
 					</button>

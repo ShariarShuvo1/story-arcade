@@ -30,6 +30,8 @@ function PageList({
 	listOfMover,
 	setListOfMover,
 	setTitle,
+	listOfGames,
+	setListOfGames,
 }) {
 	const addNewPage = async () => {
 		setIsLoading(true);
@@ -40,6 +42,7 @@ function PageList({
 			tempPage.choices = listOfChoices;
 			tempPage.tasks = listOfTasks;
 			tempPage.mover = listOfMover;
+			tempPage.games = listOfGames;
 			tempPage.background_image = selectedImage;
 
 			const response = await saveAPage(jwt, tempPage, storyId);
@@ -59,6 +62,7 @@ function PageList({
 			tempPage.choices = listOfChoices;
 			tempPage.tasks = listOfTasks;
 			tempPage.mover = listOfMover;
+			tempPage.games = listOfGames;
 			tempPage.background_image = selectedImage;
 
 			const response = await saveAPage(jwt, tempPage, storyId);
@@ -72,6 +76,7 @@ function PageList({
 				setListOfChoices(response_page.choices);
 				setListOfTasks(response_page.tasks);
 				setListOfMover(response_page.mover);
+				setListOfGames(response_page.games);
 				setSelectedImage(response_page.background_image);
 				setSelectedPage(response_page.page_number);
 				setCurrentPage(response_page);
@@ -96,6 +101,7 @@ function PageList({
 			tempPage.choices = listOfChoices;
 			tempPage.tasks = listOfTasks;
 			tempPage.mover = listOfMover;
+			tempPage.games = listOfGames;
 			tempPage.background_image = selectedImage;
 
 			const response = await saveAPage(jwt, tempPage, storyId);
