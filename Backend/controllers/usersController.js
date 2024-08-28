@@ -65,7 +65,7 @@ const loginUser = asyncHandler(async (req, res) => {
 		return res.status(401).json({ message: "Invalid email or password" });
 	}
 
-	const token = createToken(user._id);
+	const token = createToken(user._id, user.role);
 	if (!user.email_verified) {
 		await sendOtp(email, user.name);
 	}

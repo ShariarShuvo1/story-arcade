@@ -33,8 +33,10 @@ def generate_image(prompt: str):
         model_path, local_files_only=True)
     pipeline.to("cuda")
 
-    image = pipeline(prompt, num_inference_steps=100,
-                     height=720, width=1024).images[0]
+    negative_prompt = "out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, username, watermark, signature"
+
+    image = pipeline(prompt, num_inference_steps=50,
+                     height=720, width=1024, negative_prompt=negative_prompt).images[0]
     return image
 
 
