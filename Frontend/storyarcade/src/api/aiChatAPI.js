@@ -1,7 +1,7 @@
 import axios from "axios";
+import BASE_URL_AI from "./BASE_URL_AI";
 
 const BASE_URL = "/aiChats";
-const BASE_URL_AI = "http://127.0.0.1:8000";
 
 export const getPreviousChats = async (jwt, story_id) => {
 	const body = {

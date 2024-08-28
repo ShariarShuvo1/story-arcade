@@ -1,6 +1,5 @@
 import axios from "axios";
-
-const BASE_URL_AI = "http://127.0.0.1:8000";
+import BASE_URL_AI from "./BASE_URL_AI";
 
 export const llamaGetTitle = async (jwt, story) => {
 	const body = {
