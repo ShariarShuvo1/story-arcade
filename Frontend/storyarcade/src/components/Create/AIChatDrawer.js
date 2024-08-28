@@ -18,6 +18,7 @@ import {
 	llamaStoryChat,
 } from "../../api/aiChatAPI";
 import { getName } from "../../api/usersAPI";
+import ReactMarkdown from "react-markdown";
 
 function AIChatDrawer({
 	openDrawer,
@@ -213,7 +214,9 @@ function AIChatDrawer({
 												/>
 												<div className="flex flex-col gap-1">
 													<div className="bg-slate-950 p-2 rounded-lg font-semibold text-purple-400">
-														{chat.text}
+														<ReactMarkdown>
+															{chat.text}
+														</ReactMarkdown>
 													</div>
 												</div>
 											</div>

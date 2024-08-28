@@ -59,7 +59,7 @@ function EditPageStory({
 									}}
 									className="bg-transparent border-2 mt-1 w-full border-slate-500 p-2 rounded-lg text-text-light"
 									placeholder={"Enter Story Text"}
-									maxLength={120}
+									maxLength={256}
 								/>
 
 								<NextSelector
