@@ -16,7 +16,8 @@ connectDB();
 
 app.use(logger);
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
@@ -37,6 +38,7 @@ app.use(
 	"/emailVerification",
 	require("./routes/functionRoutes/emailVerificationRoutes")
 );
+app.use("", require("./routes/complainRoutes"));
 
 app.all("*", (req, res) => {
 	res.status(404);
