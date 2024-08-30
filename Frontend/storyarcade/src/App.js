@@ -19,6 +19,7 @@ import BuyPoints from "./components/BuyPoints/BuyPoints";
 import ChatPage from "./components/Chat/ChatPage";
 import CreatePage from "./components/Create/CreatePage";
 import EditTitle from "./components/Create/EditTitle";
+import Support from "./components/Support/Support";
 
 function App() {
 	const { jwt } = useAuthContext();
@@ -75,6 +76,10 @@ function App() {
 				{
 					path: "/chat",
 					element: <ChatPage />,
+				},
+				{
+					path: "/support",
+					element: <Support/>,
 				},
 				{
 					path: "/edit/:storyId",
