@@ -14,5 +14,9 @@ router.post("/buyStory", storyController.buyStory);
 router.post("/deleteStory", storyController.deleteStory);
 router.post("/cloneStory", storyController.cloneStory);
 router.post("/storyExist", storyController.storyExist);
+router.get("/getAllStories", storyController.getAllStories);
+router.delete("/adminDelete/:id", storyController.adminDelete);
+router.get("/getTotalStories", storyController.getTotalStories);
+router.get("/getStoryViewsOverTime", storyController.getStoryViewsOverTime);
 
 module.exports = router;

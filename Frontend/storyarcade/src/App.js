@@ -1,8 +1,8 @@
 import React from "react";
 import {
-	createBrowserRouter,
-	RouterProvider,
-	Navigate,
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
 } from "react-router-dom";
 import Homepage from "./components/Homepage/Homepage";
 import Login from "./components/Auth/Login";
@@ -20,78 +20,83 @@ import ChatPage from "./components/Chat/ChatPage";
 import CreatePage from "./components/Create/CreatePage";
 import EditTitle from "./components/Create/EditTitle";
 import Support from "./components/Support/Support";
+import AdminPage from "./components/Admin/AdminPage";
 
 function App() {
-	const { jwt } = useAuthContext();
+  const { jwt } = useAuthContext();
 
-	const router = createBrowserRouter([
-		{
-			path: "/",
-			element: <RoutingPage />,
-			children: [
-				{
-					path: "/login",
-					element: <Login />,
-				},
-				{
-					path: "/signup",
-					element: <Signup />,
-				},
-				{
-					path: "/home",
-					element: <Homepage />,
-				},
-				{
-					path: "/",
-					element: <Homepage />,
-				},
-				{
-					path: "/homepage",
-					element: <Homepage />,
-				},
-				{
-					path: "/emailVerify",
-					element: <EmailVerify />,
-				},
-				{
-					path: "/forgetPassword",
-					element: <ForgetPassword />,
-				},
-				{
-					path: "/forgetPasswordOtp/:email",
-					element: <ForgetPasswordOtp />,
-				},
-				{
-					path: "/profile",
-					element: <Profile />,
-				},
-				{
-					path: "/profile/:id",
-					element: <Profile />,
-				},
-				{
-					path: "/buyPoints",
-					element: <BuyPoints />,
-				},
-				{
-					path: "/chat",
-					element: <ChatPage />,
-				},
-				{
-					path: "/support",
-					element: <Support/>,
-				},
-				{
-					path: "/edit/:storyId",
-					element: <EditTitle />,
-				},
-				...RouteCreate(),
-				...RouteView(),
-			],
-		},
-	]);
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <RoutingPage />,
+      children: [
+        {
+          path: "/login",
+          element: <Login />,
+        },
+        {
+          path: "/signup",
+          element: <Signup />,
+        },
+        {
+          path: "/home",
+          element: <Homepage />,
+        },
+        {
+          path: "/",
+          element: <Homepage />,
+        },
+        {
+          path: "/homepage",
+          element: <Homepage />,
+        },
+        {
+          path: "/emailVerify",
+          element: <EmailVerify />,
+        },
+        {
+          path: "/forgetPassword",
+          element: <ForgetPassword />,
+        },
+        {
+          path: "/forgetPasswordOtp/:email",
+          element: <ForgetPasswordOtp />,
+        },
+        {
+          path: "/profile",
+          element: <Profile />,
+        },
+        {
+          path: "/profile/:id",
+          element: <Profile />,
+        },
+        {
+          path: "/buyPoints",
+          element: <BuyPoints />,
+        },
+        {
+          path: "/chat",
+          element: <ChatPage />,
+        },
+        {
+          path: "/support",
+          element: <Support />,
+        },
+        {
+          path: "/edit/:storyId",
+          element: <EditTitle />,
+        },
+        {
+          path: "/dashboard",
+          element: <AdminPage />,
+        },
+        ...RouteCreate(),
+        ...RouteView(),
+      ],
+    },
+  ]);
 
-	return <RouterProvider router={router}></RouterProvider>;
+  return <RouterProvider router={router}></RouterProvider>;
 }
 
 export default App;

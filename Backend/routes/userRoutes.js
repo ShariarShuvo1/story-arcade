@@ -18,4 +18,6 @@ router.route("/followUser").post(usersController.followUser);
 
 router.route("/checkIfFollow").post(usersController.checkIfFollow);
 
+router.route("/getTotalUsers").get(usersController.getTotalUsers);
+
 module.exports = router;
