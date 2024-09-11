@@ -13,7 +13,7 @@ function Stories() {
 	const [myId, setMyId] = useState(jwt ? jwtDecode(jwt)._id : null);
 	const [stories, setStories] = useState([]);
 	const [currentlySelected, setCurrentlySelected] = useState(
-		`${jwt ? "recommended" : "popular"}`
+		`${jwt ? "popular" : "popular"}`
 	);
 	const [availablePoints, setAvailablePoints] = useState(0);
 	const [isLoading, setIsLoading] = useState(false);
